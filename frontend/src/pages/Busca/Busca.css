@@ -1,0 +1,406 @@
+.perfil-page,
+.home-page,
+.busca-page,
+.local-page,
+.favoritos-page,
+.config-page,
+.login-page,
+.cadastro-page,
+.novo-status-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.busca-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(155, 124, 255, 0.11), transparent 30%),
+    #070711;
+  color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  padding-bottom: 120px;
+}
+
+.busca-content {
+  padding: 18px;
+}
+
+/* VOLTAR */
+
+.busca-back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 17, 31, 0.72);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 0 18px;
+  padding: 0;
+
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.busca-back-btn svg {
+  color: #d8d8e8;
+}
+
+/* HEADER */
+
+.busca-header {
+  margin-bottom: 22px;
+}
+
+.busca-header h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.busca-header p {
+  margin: 10px 0 0;
+  color: #c7c7d8;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* BUSCA */
+
+.busca-search-box {
+  height: 54px;
+  background: #11111f;
+  border: 1px solid #24243a;
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.busca-search-box svg {
+  color: #7fffd4;
+  flex-shrink: 0;
+}
+
+.busca-search-box input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.busca-search-box input::placeholder {
+  color: #8f8fa4;
+}
+
+/* FILTROS */
+
+.busca-filters {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  scrollbar-width: none;
+}
+
+.busca-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.busca-filters button {
+  border: none;
+  background: #11111f;
+  color: #b9b9c8;
+
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.busca-filters button.active {
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+  color: #070711;
+  font-weight: 800;
+}
+
+/* LISTA */
+
+.busca-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.busca-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #11111f;
+  border: 1px solid #23233a;
+  border-radius: 22px;
+
+  padding: 10px;
+  text-decoration: none;
+  color: #ffffff;
+
+  overflow: hidden;
+}
+
+.busca-card-image {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 16px;
+  flex-shrink: 0;
+
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.busca-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* FAVORITO */
+
+.busca-favorite {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(7, 7, 17, 0.68);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+.busca-favorite.active {
+  color: #ff5c9f;
+  border-color: rgba(255, 92, 159, 0.45);
+  background: rgba(255, 92, 159, 0.14);
+}
+
+/* PLACEHOLDERS */
+
+.image-stage {
+  background: linear-gradient(135deg, #7b2cff, #ff2f7d);
+}
+
+.image-gym {
+  background: linear-gradient(135deg, #25d4ff, #7b5cff);
+}
+
+.image-cafe {
+  background: linear-gradient(135deg, #f5a623, #7b5cff);
+}
+
+.image-restaurant {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.image-bar {
+  background: linear-gradient(135deg, #06b6d4, #7b5cff);
+}
+
+.image-shopping {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+}
+
+/* INFO DO CARD */
+
+.busca-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.busca-card-top {
+  display: flex;
+  align-items: flex-start;
+}
+
+.busca-card-top h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.25;
+
+  max-width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.busca-category {
+  margin: 6px 0 10px;
+  color: #aaaac0;
+  font-size: 13px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.busca-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.busca-bottom small {
+  color: #bcaeff;
+  background: rgba(155, 124, 255, 0.16);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+
+  max-width: 68%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* AVALIAÇÃO AMARELA */
+
+.busca-bottom span,
+.busca-rating-bottom {
+  color: #ffd166;
+  font-size: 13px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  flex-shrink: 0;
+}
+
+.busca-bottom span svg,
+.busca-rating-bottom svg {
+  color: #ffd166;
+  flex-shrink: 0;
+}
+
+/* VAZIO */
+
+.busca-empty {
+  padding: 26px 18px;
+  border-radius: 22px;
+  background: #11111f;
+  border: 1px solid #23233a;
+  text-align: center;
+}
+
+.busca-empty h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.busca-empty p {
+  margin: 0;
+  color: #aaaac0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 480px) {
+  .busca-content {
+    padding: 18px;
+  }
+
+  .busca-card {
+    align-items: flex-start;
+  }
+
+  .busca-card-image {
+    width: 82px;
+    height: 82px;
+  }
+
+  .busca-card-top h3 {
+    font-size: 15px;
+  }
+
+  .busca-category {
+    font-size: 12px;
+  }
+
+  .busca-bottom {
+    gap: 8px;
+  }
+
+  .busca-bottom small {
+    max-width: 68%;
+  }
+}
+
+.busca-search-box input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.busca-search-box input::placeholder {
+  color: #8f8fa4 !important;
+  -webkit-text-fill-color: #8f8fa4 !important;
+  opacity: 1 !important;
+}

@@ -1,0 +1,335 @@
+.perfil-page,
+.home-page,
+.busca-page,
+.local-page,
+.favoritos-page,
+.config-page,
+.login-page,
+.cadastro-page,
+.novo-status-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.favoritos-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(155, 124, 255, 0.12), transparent 30%),
+    #070711;
+  color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  padding-bottom: 120px;
+}
+
+.favoritos-content {
+  padding: 18px;
+}
+
+/* VOLTAR */
+
+.favoritos-back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 17, 31, 0.72);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 0 18px;
+  padding: 0;
+
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.favoritos-back-btn svg {
+  color: #d8d8e8;
+}
+
+/* HEADER */
+
+.favoritos-header {
+  margin-bottom: 24px;
+}
+
+.favoritos-header h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 32px;
+  line-height: 1.05;
+}
+
+.favoritos-header p {
+  margin: 10px 0 0;
+  color: #c7c7d8;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* LISTA */
+
+.favoritos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.favorito-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #11111f;
+  border: 1px solid #23233a;
+  border-radius: 22px;
+
+  padding: 10px;
+  text-decoration: none;
+  color: #ffffff;
+
+  overflow: hidden;
+}
+
+/* IMAGEM */
+
+.favorito-image {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 16px;
+  flex-shrink: 0;
+
+  background: rgba(155, 124, 255, 0.16);
+  background-size: cover;
+  background-position: center;
+  color: #7fffd4;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorito-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* CORAÇÃO */
+
+.favorito-heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 11px;
+
+  border: 1px solid rgba(255, 92, 159, 0.45);
+  background: rgba(255, 92, 159, 0.14);
+  color: #ff5c9f;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backdrop-filter: blur(8px);
+  z-index: 2;
+
+  cursor: pointer;
+  padding: 0;
+}
+
+.favorito-heart:active {
+  transform: scale(0.94);
+}
+
+/* INFO */
+
+.favorito-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.favorito-top {
+  display: flex;
+  align-items: flex-start;
+}
+
+.favorito-top h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.25;
+
+  max-width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.favorito-info p {
+  margin: 6px 0 10px;
+  color: #aaaac0;
+  font-size: 13px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorito-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.favorito-bottom small {
+  color: #bcaeff;
+  background: rgba(155, 124, 255, 0.16);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+
+  max-width: 68%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* AVALIAÇÃO AMARELA */
+
+.favorito-bottom span,
+.favorito-rating-bottom {
+  color: #ffd166;
+  font-size: 13px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  flex-shrink: 0;
+}
+
+.favorito-bottom span svg,
+.favorito-rating-bottom svg {
+  color: #ffd166;
+  flex-shrink: 0;
+}
+
+/* PLACEHOLDERS SEM FOTO */
+
+.image-stage {
+  background: linear-gradient(135deg, #7b2cff, #ff2f7d);
+}
+
+.image-gym {
+  background: linear-gradient(135deg, #25d4ff, #7b5cff);
+}
+
+.image-cafe {
+  background: linear-gradient(135deg, #f5a623, #7b5cff);
+}
+
+.image-restaurant {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.image-bar {
+  background: linear-gradient(135deg, #06b6d4, #7b5cff);
+}
+
+.image-shopping {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+}
+
+/* ESTADOS */
+
+.favoritos-empty {
+  color: #aaaac0;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.favoritos-empty-box {
+  margin-top: 30px;
+  background: #11111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.favoritos-empty-box svg {
+  color: #ff5c9f;
+}
+
+.favoritos-empty-box h2 {
+  color: #ffffff;
+  margin: 14px 0 8px;
+  font-size: 22px;
+}
+
+.favoritos-empty-box p {
+  color: #aaaac0;
+  line-height: 1.5;
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+.favoritos-empty-box a {
+  display: inline-flex;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+  color: #070711;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 480px) {
+  .favorito-card {
+    align-items: flex-start;
+  }
+
+  .favorito-image {
+    width: 82px;
+    height: 82px;
+  }
+
+  .favorito-top h3 {
+    font-size: 15px;
+  }
+
+  .favorito-info p {
+    font-size: 12px;
+  }
+
+  .favorito-bottom {
+    gap: 8px;
+  }
+
+  .favorito-bottom small {
+    max-width: 68%;
+  }
+}

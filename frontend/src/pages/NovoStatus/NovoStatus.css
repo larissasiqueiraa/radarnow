@@ -1,0 +1,378 @@
+.perfil-page,
+.home-page,
+.busca-page,
+.local-page,
+.favoritos-page,
+.config-page,
+.login-page,
+.cadastro-page,
+.novo-status-page,
+.editar-perfil-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.novo-status-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(155, 124, 255, 0.12), transparent 30%),
+    #070711;
+  color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  padding-bottom: 120px;
+}
+
+.novo-status-content {
+  padding: 18px;
+}
+
+/* VOLTAR */
+
+.novo-status-back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 17, 31, 0.72);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 0 18px;
+  padding: 0;
+
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.novo-status-back-btn svg {
+  color: #d8d8e8;
+}
+
+/* HEADER */
+
+.novo-status-header {
+  padding: 20px;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(155, 124, 255, 0.14), rgba(94, 231, 223, 0.05)),
+    #11111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 26px;
+}
+
+.novo-status-header > span {
+  color: #7fffd4;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.novo-status-header h1 {
+  color: #ffffff;
+  font-size: 30px;
+  line-height: 1.05;
+  margin: 12px 0 14px;
+}
+
+.novo-status-header > p {
+  color: #c7c7d8;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* LOCAL SELECIONADO */
+
+.local-selected-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-top: 12px;
+  padding: 10px;
+
+  border-radius: 18px;
+  background: rgba(7, 7, 17, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.local-selected-image {
+  width: 58px;
+  height: 58px;
+  border-radius: 15px;
+  flex-shrink: 0;
+
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.local-selected-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* PLACEHOLDERS SEM FOTO */
+
+.image-stage {
+  background: linear-gradient(135deg, #7b2cff, #ff2f7d);
+}
+
+.image-gym {
+  background: linear-gradient(135deg, #25d4ff, #7b5cff);
+}
+
+.image-cafe {
+  background: linear-gradient(135deg, #f5a623, #7b5cff);
+}
+
+.image-restaurant {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.image-bar {
+  background: linear-gradient(135deg, #06b6d4, #7b5cff);
+}
+
+.image-shopping {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+}
+
+.local-selected-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.local-selected-card p {
+  margin: 0;
+  color: #aaaac0;
+  font-size: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.local-selected-card p svg {
+  color: #7fffd4;
+  flex-shrink: 0;
+}
+
+/* FORM */
+
+.novo-status-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 14px;
+
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.form-group label svg {
+  color: #7fffd4;
+}
+
+/* STATUS */
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.status-option {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #11111e;
+  color: #ffffff;
+
+  min-height: 50px;
+  border-radius: 16px;
+
+  font-size: 14px;
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+.status-option.active {
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+  color: #070711;
+  font-weight: 900;
+}
+
+/* ESTRELAS */
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.star {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+
+  background: #11111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #55556a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.star.active {
+  color: #ffd166;
+  border-color: rgba(255, 209, 102, 0.45);
+}
+
+/* UPLOAD */
+
+.upload-box {
+  min-height: 104px;
+  border-radius: 20px;
+
+  background: #11111e;
+  border: 1px dashed rgba(155, 124, 255, 0.45);
+  color: #c7c7d8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.upload-box input {
+  display: none;
+}
+
+.upload-box span {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* TEXTAREA */
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #11111e;
+  color: #ffffff;
+
+  padding: 16px;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+textarea::placeholder {
+  color: #77778c;
+}
+
+/* BOTÃO */
+
+.submit-status {
+  width: 100%;
+  min-height: 56px;
+
+  border: none;
+  border-radius: 18px;
+
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+  color: #070711;
+
+  font-weight: 900;
+  font-size: 15px;
+  font-family: inherit;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  cursor: pointer;
+
+  box-shadow: 0 14px 28px rgba(155, 124, 255, 0.18);
+}
+
+.submit-status:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 480px) {
+  .novo-status-content {
+    padding: 18px;
+  }
+
+  .novo-status-header {
+    padding: 18px;
+  }
+
+  .novo-status-header h1 {
+    font-size: 28px;
+  }
+
+  .local-selected-card {
+    align-items: flex-start;
+  }
+
+  .local-selected-image {
+    width: 54px;
+    height: 54px;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .star {
+    width: 44px;
+    height: 44px;
+  }
+}

@@ -1,0 +1,226 @@
+.perfil-page,
+.home-page,
+.busca-page,
+.local-page,
+.favoritos-page,
+.config-page,
+.login-page,
+.cadastro-page,
+.novo-status-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.cadastro-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(155, 124, 255, 0.12), transparent 30%),
+    #070711;
+  color: #ffffff;
+  padding: 24px 20px;
+  font-family: Inter, system-ui, sans-serif;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.cadastro-header {
+  margin-top: 50px;
+  margin-bottom: 34px;
+}
+
+.cadastro-header span {
+  color: #9b7cff;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.cadastro-header h1 {
+  margin: 14px 0 10px;
+  color: #ffffff;
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+.cadastro-header p {
+  margin: 0;
+  color: #c7c7d8;
+  line-height: 1.5;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cadastro-form label {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.input-box {
+  margin-top: 9px;
+  min-height: 54px;
+  border-radius: 18px;
+  background: #11111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.input-box svg {
+  color: #7fffd4;
+}
+
+.input-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.input-box input::placeholder {
+  color: #77778c;
+}
+
+.cadastro-btn {
+  margin-top: 8px;
+  min-height: 56px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+  color: #070711;
+  font-weight: 900;
+  font-size: 15px;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.social-divider {
+  position: relative;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.social-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.social-divider span {
+  position: relative;
+  background: #070711;
+  padding: 0 12px;
+  color: #8f8fa4;
+  font-size: 13px;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.social-btn {
+  flex: 1;
+  min-height: 54px;
+  border-radius: 18px;
+  background: #11111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cadastro-footer {
+  margin-top: 26px;
+  text-align: center;
+  color: #aaaac0;
+}
+
+.cadastro-footer a {
+  color: #7fffd4;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.avatar-upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.avatar-upload {
+  width: 96px;
+  height: 96px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.avatar-upload input {
+  display: none;
+}
+
+.avatar-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  color: #070711;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-upload-area span {
+  color: #aaaac0;
+  font-size: 13px;
+}
+
+.google-login-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.google-login-box > div {
+  width: 100% !important;
+}
+
+.google-login-box iframe {
+  width: 100% !important;
+}
