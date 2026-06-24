@@ -8,6 +8,7 @@ import Footer from "../../components/Footer/Footer";
 
 import { getLocation } from "../../utils/gps";
 import { calculateDistance } from "../../utils/distance";
+import { API_URL } from "../../config/api";
 
 function Home() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function Home() {
 
     try {
       const resposta = await fetch(
-        `http://localhost:5001/api/favoritos/${usuarioAtual.id}`
+        `${API_URL}/api/favoritos/${usuarioAtual.id}`
       );
 
       const dados = await resposta.json();
@@ -55,7 +56,7 @@ function Home() {
     try {
       setCarregando(true);
 
-      const resposta = await fetch("http://localhost:5001/api/locais");
+      const resposta = await fetch(`${API_URL}/api/locais`);
       const dados = await resposta.json();
 
       if (!resposta.ok) {
@@ -122,7 +123,7 @@ function Home() {
     try {
       if (jaFavoritado) {
         const resposta = await fetch(
-          `http://localhost:5001/api/favoritos/${usuarioAtual.id}/${id}`,
+          `${API_URL}/api/favoritos/${usuarioAtual.id}/${id}`,
           {
             method: "DELETE",
           }
@@ -139,7 +140,7 @@ function Home() {
           atual.filter((favoritoId) => favoritoId !== id)
         );
       } else {
-        const resposta = await fetch("http://localhost:5001/api/favoritos", {
+        const resposta = await fetch(`${API_URL}/api/favoritos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -214,7 +215,7 @@ function Home() {
       return null;
     }
 
-    return `http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
+    return `${API_URL}/api/google-places/foto?name=${encodeURIComponent(
       fotoGoogle
     )}`;
   }
