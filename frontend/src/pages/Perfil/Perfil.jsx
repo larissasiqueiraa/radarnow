@@ -13,6 +13,10 @@ import "./Perfil.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Perfil() {
   const navigate = useNavigate();
 
@@ -25,17 +29,25 @@ function Perfil() {
 
   async function carregarPerfil() {
     const usuarioSalvo = localStorage.getItem("radarnow_usuario");
+    const token = localStorage.getItem("radarnow_token");
 
     if (!usuarioSalvo) {
       navigate("/login");
       return;
     }
 
-    const usuario = JSON.parse(usuarioSalvo);
-
     try {
+      const usuario = JSON.parse(usuarioSalvo);
+
       const resposta = await fetch(
-        `http://localhost:5001/api/usuarios/${usuario.id}`
+        `${API_URL}/api/usuarios/${usuario.id}`,
+        {
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
+        }
       );
 
       const dados = await resposta.json();
@@ -52,6 +64,10 @@ function Perfil() {
     } finally {
       setCarregando(false);
     }
+  }
+
+  function tratarErroFoto(event) {
+    event.currentTarget.style.display = "none";
   }
 
   if (carregando) {
@@ -91,6 +107,25 @@ function Perfil() {
     );
   }
 
+  const fotoPerfil =
+    perfil.foto_perfil ||
+    perfil.foto ||
+    perfil.picture ||
+    perfil.avatar ||
+    null;
+
+  const nomePerfil =
+    perfil.nome ||
+    perfil.name ||
+    perfil.email?.split("@")[0] ||
+    "Usuário";
+
+  const nomeUsuario =
+    perfil.usuario ||
+    perfil.username ||
+    perfil.email?.split("@")[0] ||
+    "usuario";
+
   return (
     <main className="perfil-page">
       <Header />
@@ -107,15 +142,19 @@ function Perfil() {
 
         <section className="perfil-header">
           <div className="perfil-avatar">
-            {perfil.foto_perfil ? (
-              <img src={perfil.foto_perfil} alt={`Foto de ${perfil.nome}`} />
+            {fotoPerfil ? (
+              <img
+                src={fotoPerfil}
+                alt={`Foto de ${nomePerfil}`}
+                onError={tratarErroFoto}
+              />
             ) : (
               <User size={42} />
             )}
           </div>
 
-          <h1>{perfil.nome}</h1>
-          <p>@{perfil.usuario}</p>
+          <h1>{nomePerfil}</h1>
+          <p>@{nomeUsuario}</p>
 
           <Link to="/editar-perfil" className="editar-btn">
             Editar perfil
