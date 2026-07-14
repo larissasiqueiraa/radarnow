@@ -4,6 +4,10 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { Mail, Lock, ArrowRight, Apple } from "lucide-react";
 import "./Login.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -18,7 +22,7 @@ function Login() {
     try {
       setCarregando(true);
 
-      const resposta = await fetch("http://localhost:5001/api/auth/login", {
+      const resposta = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,12 +41,15 @@ function Login() {
       }
 
       localStorage.setItem("radarnow_token", dados.token);
-      localStorage.setItem("radarnow_usuario", JSON.stringify(dados.usuario));
+      localStorage.setItem(
+        "radarnow_usuario",
+        JSON.stringify(dados.usuario)
+      );
 
       alert("Login realizado com sucesso!");
       navigate("/");
     } catch (error) {
-      console.error(error);
+      console.error("Erro no login:", error);
       alert("Não foi possível conectar ao servidor.");
     } finally {
       setCarregando(false);
@@ -53,7 +60,7 @@ function Login() {
     try {
       setCarregandoGoogle(true);
 
-      const resposta = await fetch("http://localhost:5001/api/auth/google", {
+      const resposta = await fetch(`${API_URL}/api/auth/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +78,10 @@ function Login() {
       }
 
       localStorage.setItem("radarnow_token", dados.token);
-      localStorage.setItem("radarnow_usuario", JSON.stringify(dados.usuario));
+      localStorage.setItem(
+        "radarnow_usuario",
+        JSON.stringify(dados.usuario)
+      );
 
       alert("Login com Google realizado com sucesso!");
       navigate("/");
@@ -109,6 +119,7 @@ function Login() {
           E-mail
           <div className="input-box">
             <Mail size={18} />
+
             <input
               type="email"
               placeholder="seuemail@email.com"
@@ -123,6 +134,7 @@ function Login() {
           Senha
           <div className="input-box">
             <Lock size={18} />
+
             <input
               type="password"
               placeholder="Sua senha"
@@ -137,7 +149,11 @@ function Login() {
           Esqueci minha senha
         </Link>
 
-        <button type="submit" className="login-btn" disabled={carregando}>
+        <button
+          type="submit"
+          className="login-btn"
+          disabled={carregando}
+        >
           {carregando ? "Entrando..." : "Entrar"}
           <ArrowRight size={18} />
         </button>
@@ -157,7 +173,11 @@ function Login() {
             {carregandoGoogle ? "Entrando..." : "Google"}
           </button>
 
-          <button type="button" className="social-btn" onClick={entrarComApple}>
+          <button
+            type="button"
+            className="social-btn"
+            onClick={entrarComApple}
+          >
             <Apple size={18} />
             Apple
           </button>
