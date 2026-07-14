@@ -321,7 +321,7 @@ function Busca() {
   });
 
   return (
-    <main className="busca-page">
+    <main className="radarnow-busca-page">
       <Header />
 
       <div className="busca-content">

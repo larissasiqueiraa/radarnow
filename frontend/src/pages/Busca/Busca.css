@@ -1,28 +1,24 @@
-.perfil-page,
-.home-page,
-.busca-page,
-.local-page,
-.favoritos-page,
-.config-page,
-.login-page,
-.cadastro-page,
-.novo-status-page {
+.radarnow-busca-page {
   width: 100%;
   max-width: 430px;
   min-height: 100vh;
   margin: 0 auto;
-}
 
-.busca-page {
-  min-height: 100vh;
   background:
-    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
-    radial-gradient(circle at top left, rgba(155, 124, 255, 0.12), transparent 30%),
+    radial-gradient(
+      circle at top right,
+      rgba(94, 231, 223, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top left,
+      rgba(155, 124, 255, 0.12),
+      transparent 30%
+    ),
     #070711;
+
   color: #ffffff;
   font-family: Inter, system-ui, sans-serif;
-  max-width: 430px;
-  margin: 0 auto;
   padding-bottom: 120px;
 }
 
@@ -99,15 +95,27 @@
 .busca-search-box input {
   flex: 1;
   min-width: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #ffffff;
+  width: 100%;
+
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+
   font-size: 14px;
+  font-family: inherit;
+
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .busca-search-box input::placeholder {
-  color: #8f8fa4;
+  color: #8f8fa4 !important;
+  -webkit-text-fill-color: #8f8fa4 !important;
+  opacity: 1 !important;
 }
 
 /* FILTROS */
@@ -305,7 +313,7 @@
   flex-shrink: 0;
 }
 
-/* AVALIAÇÃO AMARELA */
+/* AVALIAÇÃO */
 
 .busca-bottom span,
 .busca-rating-bottom {
@@ -379,30 +387,4 @@
   .busca-bottom small {
     max-width: 68%;
   }
-}
-
-.busca-search-box input {
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  caret-color: #ffffff !important;
-
-  font-size: 14px;
-  font-family: inherit;
-
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.busca-search-box input::placeholder {
-  color: #8f8fa4 !important;
-  -webkit-text-fill-color: #8f8fa4 !important;
-  opacity: 1 !important;
 }
