@@ -1,5 +1,18 @@
 import db from "../config/db.js";
 
+function montarUrlFoto(req, nomeArquivo) {
+  if (!nomeArquivo) {
+    return null;
+  }
+
+  const backendUrl =
+    process.env.BACKEND_URL ||
+    process.env.API_URL ||
+    `${req.protocol}://${req.get("host")}`;
+
+  return `${backendUrl}/uploads/${nomeArquivo}`;
+}
+
 // PEGAR PERFIL
 export async function buscarPerfil(req, res) {
   try {
@@ -11,7 +24,7 @@ export async function buscarPerfil(req, res) {
       FROM usuarios
       WHERE id = ?
       `,
-      [id],
+      [id]
     );
 
     if (usuarios.length === 0) {
@@ -24,75 +37,78 @@ export async function buscarPerfil(req, res) {
 
     const [favoritos] = await db.execute(
       `
-      SELECT COUNT(*) as total
+      SELECT COUNT(*) AS total
       FROM favoritos
       WHERE usuario_id = ?
       `,
-      [id],
+      [id]
     );
 
     const [avaliacoes] = await db.execute(
       `
-      SELECT COUNT(*) as total
+      SELECT COUNT(*) AS total
       FROM avaliacoes
       WHERE usuario_id = ?
       `,
-      [id],
+      [id]
     );
 
-    res.json({
+    return res.json({
       ...usuario,
-      totalFavoritos: favoritos[0].total,
-      totalAvaliacoes: avaliacoes[0].total,
+      totalFavoritos: Number(favoritos[0]?.total || 0),
+      totalAvaliacoes: Number(avaliacoes[0]?.total || 0),
     });
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao buscar perfil:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       erro: "Erro ao buscar perfil",
+      detalhes: error.message,
     });
   }
 }
 
-// ATUALIZAR PERFIL (UPLOAD CORRIGIDO)
+// ATUALIZAR PERFIL
 export async function atualizarUsuario(req, res) {
   try {
     const { id } = req.params;
     const { nome, usuario } = req.body;
 
-    if (!nome || !usuario) {
+    if (!nome?.trim() || !usuario?.trim()) {
       return res.status(400).json({
         erro: "Nome e usuário são obrigatórios",
       });
     }
 
-    // 🔥 pega foto atual do banco
     const [usuarioAtualResult] = await db.execute(
-      "SELECT foto_perfil FROM usuarios WHERE id = ?",
-      [id],
+      `
+      SELECT foto_perfil
+      FROM usuarios
+      WHERE id = ?
+      `,
+      [id]
     );
+
+    if (usuarioAtualResult.length === 0) {
+      return res.status(404).json({
+        erro: "Usuário não encontrado",
+      });
+    }
 
     const usuarioAtual = usuarioAtualResult[0];
 
-    // 🔥 nova foto ou mantém a antiga
-    const foto_perfil = req.file
-      ? `http://localhost:5001/uploads/${req.file.filename}`
+    const fotoPerfil = req.file
+      ? montarUrlFoto(req, req.file.filename)
       : usuarioAtual.foto_perfil;
 
-    const [resultado] = await db.execute(
+    await db.execute(
       `
       UPDATE usuarios
       SET nome = ?, usuario = ?, foto_perfil = ?
       WHERE id = ?
       `,
-      [nome, usuario, foto_perfil, id],
+      [nome.trim(), usuario.trim(), fotoPerfil, id]
     );
-
-    if (resultado.affectedRows === 0) {
-      return res.status(404).json({
-        erro: "Usuário não encontrado",
-      });
-    }
 
     const [usuarios] = await db.execute(
       `
@@ -100,19 +116,19 @@ export async function atualizarUsuario(req, res) {
       FROM usuarios
       WHERE id = ?
       `,
-      [id],
+      [id]
     );
 
-    res.json({
+    return res.json({
       mensagem: "Perfil atualizado com sucesso",
       usuario: usuarios[0],
     });
-
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao atualizar usuário:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       erro: "Erro ao atualizar usuário",
+      detalhes: error.message,
     });
   }
 }
