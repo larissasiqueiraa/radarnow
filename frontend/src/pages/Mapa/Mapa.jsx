@@ -4,7 +4,7 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import { ArrowLeft, MapPin, Star } from "lucide-react";
+import { ArrowLeft, MapPin, Star, LocateFixed } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -23,6 +23,11 @@ const filtros = [
   { label: "Bares", value: "Bar" },
 ];
 
+const centroFloripa = {
+  lat: -27.5954,
+  lng: -48.548,
+};
+
 function Mapa() {
   const navigate = useNavigate();
 
@@ -31,18 +36,26 @@ function Mapa() {
   const [filtroAtivo, setFiltroAtivo] = useState("todos");
   const [carregandoLocais, setCarregandoLocais] = useState(true);
 
+  const [mapa, setMapa] = useState(null);
+  const [centroMapa, setCentroMapa] = useState(centroFloripa);
+  const [localizacaoUsuario, setLocalizacaoUsuario] = useState(null);
+  const [erroLocalizacao, setErroLocalizacao] = useState("");
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   });
 
-  const centroFloripa = {
-    lat: -27.5954,
-    lng: -48.548,
-  };
-
   useEffect(() => {
     carregarLocais();
+    buscarLocalizacaoUsuario();
   }, []);
+
+  useEffect(() => {
+    if (mapa && localizacaoUsuario) {
+      mapa.panTo(localizacaoUsuario);
+      mapa.setZoom(14);
+    }
+  }, [mapa, localizacaoUsuario]);
 
   async function carregarLocais() {
     try {
@@ -64,6 +77,52 @@ function Mapa() {
     } finally {
       setCarregandoLocais(false);
     }
+  }
+
+  function buscarLocalizacaoUsuario() {
+    if (!navigator.geolocation) {
+      setErroLocalizacao("Seu navegador não permite usar localização.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (posicao) => {
+        const localizacao = {
+          lat: posicao.coords.latitude,
+          lng: posicao.coords.longitude,
+        };
+
+        setLocalizacaoUsuario(localizacao);
+        setCentroMapa(localizacao);
+        setErroLocalizacao("");
+      },
+      (error) => {
+        console.log("GPS negado ou indisponível:", error);
+
+        if (error.code === 1) {
+          setErroLocalizacao(
+            "Permita o acesso à localização para ver lugares próximos."
+          );
+        } else {
+          setErroLocalizacao("Não foi possível identificar sua localização.");
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      }
+    );
+  }
+
+  function centralizarNoUsuario() {
+    if (localizacaoUsuario && mapa) {
+      mapa.panTo(localizacaoUsuario);
+      mapa.setZoom(14);
+      return;
+    }
+
+    buscarLocalizacaoUsuario();
   }
 
   function trocarFiltro(filtro) {
@@ -94,7 +153,7 @@ function Mapa() {
       if (Array.isArray(tiposConvertidos)) {
         return tiposConvertidos.join(" ");
       }
-    } catch (error) {
+    } catch {
       return String(tipos);
     }
 
@@ -147,29 +206,19 @@ function Mapa() {
   function getCategoriaConfig(categoria) {
     switch (categoria) {
       case "Balada":
-        return {
-          cor: "#8b5cf6",
-        };
+        return { cor: "#8b5cf6" };
 
       case "Restaurante":
-        return {
-          cor: "#f97316",
-        };
+        return { cor: "#f97316" };
 
       case "Academia":
-        return {
-          cor: "#22c55e",
-        };
+        return { cor: "#22c55e" };
 
       case "Bar":
-        return {
-          cor: "#06b6d4",
-        };
+        return { cor: "#06b6d4" };
 
       default:
-        return {
-          cor: "#7c3aed",
-        };
+        return { cor: "#7c3aed" };
     }
   }
 
@@ -218,6 +267,26 @@ function Mapa() {
     };
   }
 
+  function criarIconeUsuario() {
+    if (!window.google) {
+      return undefined;
+    }
+
+    const svg = `
+      <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="17" cy="17" r="15" fill="#3b82f6" fill-opacity="0.22"/>
+        <circle cx="17" cy="17" r="9" fill="#3b82f6" stroke="white" stroke-width="3"/>
+        <circle cx="17" cy="17" r="3" fill="white"/>
+      </svg>
+    `;
+
+    return {
+      url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+      scaledSize: new window.google.maps.Size(34, 34),
+      anchor: new window.google.maps.Point(17, 17),
+    };
+  }
+
   const locaisSemDuplicados = locais.filter((local, index, array) => {
     const nomeAtual = normalizarTexto(local.nome);
 
@@ -231,13 +300,12 @@ function Mapa() {
     const lat = Number(local.lat);
     const lng = Number(local.lng);
 
-    const coordenadaValida =
+    return (
       !Number.isNaN(lat) &&
       !Number.isNaN(lng) &&
       lat !== 0 &&
-      lng !== 0;
-
-    return coordenadaValida;
+      lng !== 0
+    );
   });
 
   const locaisFiltrados = locaisComCoordenadas.filter((local) => {
@@ -280,7 +348,18 @@ function Mapa() {
 
         <div>
           <h1>Mapa</h1>
-          <p>{locaisFiltrados.length} lugares encontrados</p>
+
+          <p>
+            {localizacaoUsuario
+              ? "Mostrando lugares próximos de você"
+              : `${locaisFiltrados.length} lugares encontrados`}
+          </p>
+
+          {erroLocalizacao && (
+            <small className="mapa-location-error">
+              {erroLocalizacao}
+            </small>
+          )}
         </div>
       </header>
 
@@ -302,10 +381,22 @@ function Mapa() {
       </section>
 
       <section className="mapa-container">
+        <button
+          type="button"
+          className="mapa-location-btn"
+          onClick={centralizarNoUsuario}
+          aria-label="Centralizar na minha localização"
+          title="Minha localização"
+        >
+          <LocateFixed size={21} />
+        </button>
+
         <GoogleMap
           mapContainerClassName="google-map"
-          center={centroFloripa}
-          zoom={11}
+          center={centroMapa}
+          zoom={localizacaoUsuario ? 14 : 11}
+          onLoad={(map) => setMapa(map)}
+          onUnmount={() => setMapa(null)}
           options={{
             fullscreenControl: true,
             streetViewControl: false,
@@ -314,6 +405,15 @@ function Mapa() {
           }}
           onClick={() => setLocalSelecionado(null)}
         >
+          {localizacaoUsuario && (
+            <Marker
+              position={localizacaoUsuario}
+              title="Você está aqui"
+              icon={criarIconeUsuario()}
+              zIndex={9999}
+            />
+          )}
+
           {locaisFiltrados.map((local) => {
             const categoriaNormalizada = getCategoriaNormalizada(local);
 
