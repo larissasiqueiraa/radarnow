@@ -674,3 +674,54 @@
     font-size: 13.5px;
   }
 }
+
+.view-all-btn {
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #7fffd4;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.view-all-btn:hover {
+  color: #5ee7df;
+}
+
+.media-preview-card {
+  position: relative;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.media-preview-card img,
+.media-preview-card video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.media-preview-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(7, 7, 17, 0.72);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.media-preview-play svg {
+  margin-left: 2px;
+}

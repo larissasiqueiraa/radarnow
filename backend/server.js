@@ -11,6 +11,7 @@ import avaliacoesRoutes from "./routes/avaliacoesRoutes.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import googlePlacesRoutes from "./routes/googlePlacesRoutes.js";
 import locaisRoutes from "./routes/locaisRoutes.js";
+import midiasRoutes from "./routes/midiasRoutes.js";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use("/api/avaliacoes", avaliacoesRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/google-places", googlePlacesRoutes);
 app.use("/api/locais", locaisRoutes);
+app.use("/api/midias", midiasRoutes);
 
 async function testarBanco() {
   try {
