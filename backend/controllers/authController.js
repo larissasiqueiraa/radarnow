@@ -29,9 +29,23 @@ function gerarUsuarioPeloEmail(email) {
   return `${base}${Date.now().toString().slice(-4)}`;
 }
 
+function montarUrlFoto(req) {
+  if (!req.file) {
+    return null;
+  }
+
+  return `${req.protocol}://${req.get("host")}/uploads/perfis/${
+    req.file.filename
+  }`;
+}
+
 export async function cadastrar(req, res) {
   try {
-    const { nome, usuario, email, senha } = req.body;
+    let { nome, usuario, email, senha } = req.body;
+
+    nome = nome?.trim();
+    usuario = usuario?.trim().replace(/^@/, "").toLowerCase();
+    email = email?.trim().toLowerCase();
 
     if (!nome || !usuario || !email || !senha) {
       return res.status(400).json({
@@ -39,30 +53,88 @@ export async function cadastrar(req, res) {
       });
     }
 
+    if (senha.length < 6) {
+      return res.status(400).json({
+        erro: "A senha deve ter pelo menos 6 caracteres",
+      });
+    }
+
+    const usuarioValido = /^[a-z0-9_.]+$/;
+
+    if (!usuarioValido.test(usuario)) {
+      return res.status(400).json({
+        erro: "O usuário pode conter apenas letras, números, ponto e underline",
+      });
+    }
+
     const [usuariosExistentes] = await db.execute(
-      "SELECT id FROM usuarios WHERE email = ? OR usuario = ?",
+      `
+      SELECT id, email, usuario
+      FROM usuarios
+      WHERE email = ? OR usuario = ?
+      `,
       [email, usuario]
     );
 
     if (usuariosExistentes.length > 0) {
+      const existente = usuariosExistentes[0];
+
+      if (existente.email === email) {
+        return res.status(400).json({
+          erro: "Este e-mail já está cadastrado",
+        });
+      }
+
       return res.status(400).json({
-        erro: "E-mail ou usuário já cadastrado",
+        erro: "Este nome de usuário já está sendo utilizado",
       });
     }
 
     const senhaHash = await bcrypt.hash(senha, 10);
+    const fotoPerfil = montarUrlFoto(req);
 
-    await db.execute(
+    const [resultado] = await db.execute(
       `
       INSERT INTO usuarios
-      (nome, usuario, email, senha)
-      VALUES (?, ?, ?, ?)
+      (
+        nome,
+        usuario,
+        email,
+        senha,
+        foto_perfil
+      )
+      VALUES (?, ?, ?, ?, ?)
       `,
-      [nome, usuario, email, senhaHash]
+      [nome, usuario, email, senhaHash, fotoPerfil]
     );
+
+    const [usuariosCriados] = await db.execute(
+      `
+      SELECT
+        id,
+        nome,
+        usuario,
+        email,
+        foto_perfil
+      FROM usuarios
+      WHERE id = ?
+      `,
+      [resultado.insertId]
+    );
+
+    const novoUsuario = usuariosCriados[0];
+    const token = gerarToken(novoUsuario);
 
     return res.status(201).json({
       mensagem: "Usuário criado com sucesso",
+      token,
+      usuario: {
+        id: novoUsuario.id,
+        nome: novoUsuario.nome,
+        usuario: novoUsuario.usuario,
+        email: novoUsuario.email,
+        foto_perfil: novoUsuario.foto_perfil,
+      },
     });
   } catch (error) {
     console.error("Erro ao cadastrar usuário:", error);
@@ -76,7 +148,8 @@ export async function cadastrar(req, res) {
 
 export async function login(req, res) {
   try {
-    const { email, senha } = req.body;
+    const email = req.body.email?.trim().toLowerCase();
+    const { senha } = req.body;
 
     if (!email || !senha) {
       return res.status(400).json({
@@ -193,6 +266,8 @@ export async function loginGoogle(req, res) {
       });
     }
 
+    email = email.trim().toLowerCase();
+
     const [usuarios] = await db.execute(
       "SELECT * FROM usuarios WHERE email = ?",
       [email]
@@ -206,7 +281,7 @@ export async function loginGoogle(req, res) {
       await db.execute(
         `
         UPDATE usuarios
-        SET 
+        SET
           google_id = COALESCE(google_id, ?),
           foto_perfil = COALESCE(foto_perfil, ?)
         WHERE id = ?
@@ -226,10 +301,24 @@ export async function loginGoogle(req, res) {
       const [resultado] = await db.execute(
         `
         INSERT INTO usuarios
-        (nome, usuario, email, senha, foto_perfil, google_id)
+        (
+          nome,
+          usuario,
+          email,
+          senha,
+          foto_perfil,
+          google_id
+        )
         VALUES (?, ?, ?, ?, ?, ?)
         `,
-        [nome, usuarioGerado, email, null, fotoGoogle, googleId]
+        [
+          nome,
+          usuarioGerado,
+          email,
+          null,
+          fotoGoogle,
+          googleId,
+        ]
       );
 
       const [novoUsuario] = await db.execute(

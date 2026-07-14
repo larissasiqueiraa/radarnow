@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import {
   User,
@@ -31,11 +31,49 @@ function Cadastro() {
   const [carregando, setCarregando] = useState(false);
   const [carregandoGoogle, setCarregandoGoogle] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      if (previewFoto) {
+        URL.revokeObjectURL(previewFoto);
+      }
+    };
+  }, [previewFoto]);
+
   function selecionarFoto(event) {
     const arquivo = event.target.files?.[0];
 
     if (!arquivo) {
       return;
+    }
+
+    const tiposPermitidos = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (!tiposPermitidos.includes(arquivo.type)) {
+      showToast(
+        "Escolha uma imagem JPG, PNG ou WEBP.",
+        "error"
+      );
+      event.target.value = "";
+      return;
+    }
+
+    const tamanhoMaximo = 5 * 1024 * 1024;
+
+    if (arquivo.size > tamanhoMaximo) {
+      showToast(
+        "A foto deve ter no máximo 5 MB.",
+        "error"
+      );
+      event.target.value = "";
+      return;
+    }
+
+    if (previewFoto) {
+      URL.revokeObjectURL(previewFoto);
     }
 
     setFoto(arquivo);
@@ -53,33 +91,59 @@ function Cadastro() {
     try {
       setCarregando(true);
 
+      const formulario = new FormData();
+
+      formulario.append("nome", nome.trim());
+      formulario.append(
+        "usuario",
+        usuario.trim().replace(/^@/, "")
+      );
+      formulario.append("email", email.trim().toLowerCase());
+      formulario.append("senha", senha);
+
+      if (foto) {
+        formulario.append("foto", foto);
+      }
+
       const resposta = await fetch(`${API_URL}/api/auth/cadastro`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nome,
-          usuario,
-          email,
-          senha,
-        }),
+        body: formulario,
       });
 
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        showToast(dados.erro || "Erro ao criar conta.", "error");
+        showToast(
+          dados.erro || "Erro ao criar conta.",
+          "error"
+        );
         return;
       }
 
-      console.log("Foto escolhida no front:", foto);
+      if (!dados.token || !dados.usuario) {
+        showToast(
+          "A conta foi criada, mas não foi possível entrar automaticamente.",
+          "error"
+        );
+        navigate("/login");
+        return;
+      }
+
+      localStorage.setItem("radarnow_token", dados.token);
+      localStorage.setItem(
+        "radarnow_usuario",
+        JSON.stringify(dados.usuario)
+      );
 
       showToast("Conta criada com sucesso!", "success");
-      navigate("/login");
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("Erro ao criar conta:", error);
-      showToast("Não foi possível conectar ao servidor.", "error");
+
+      showToast(
+        "Não foi possível conectar ao servidor.",
+        "error"
+      );
     } finally {
       setCarregando(false);
     }
@@ -115,11 +179,19 @@ function Cadastro() {
         JSON.stringify(dados.usuario)
       );
 
-      showToast("Entrada com Google realizada com sucesso!", "success");
-      navigate("/");
+      showToast(
+        "Entrada com Google realizada com sucesso!",
+        "success"
+      );
+
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("Erro ao continuar com Google:", error);
-      showToast("Não foi possível conectar ao servidor.", "error");
+
+      showToast(
+        "Não foi possível conectar ao servidor.",
+        "error"
+      );
     } finally {
       setCarregandoGoogle(false);
     }
@@ -130,12 +202,18 @@ function Cadastro() {
       enviarGoogleParaBackend(tokenResponse.access_token);
     },
     onError: () => {
-      showToast("Não foi possível continuar com Google.", "error");
+      showToast(
+        "Não foi possível continuar com Google.",
+        "error"
+      );
     },
   });
 
   function cadastrarComApple() {
-    showToast("Cadastro com Apple estará disponível em breve.", "info");
+    showToast(
+      "Cadastro com Apple estará disponível em breve.",
+      "info"
+    );
   }
 
   return (
@@ -146,7 +224,8 @@ function Cadastro() {
         <h1>Criar conta</h1>
 
         <p>
-          Compartilhe experiências e descubra os melhores lugares em tempo real.
+          Compartilhe experiências e descubra os melhores lugares em
+          tempo real.
         </p>
       </section>
 
@@ -155,7 +234,7 @@ function Cadastro() {
           <label className="avatar-upload">
             <input
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               onChange={selecionarFoto}
             />
 
@@ -226,6 +305,7 @@ function Cadastro() {
               placeholder="Sua senha"
               value={senha}
               onChange={(event) => setSenha(event.target.value)}
+              minLength={6}
               required
             />
           </div>
@@ -240,7 +320,10 @@ function Cadastro() {
               type="password"
               placeholder="Repita sua senha"
               value={confirmarSenha}
-              onChange={(event) => setConfirmarSenha(event.target.value)}
+              onChange={(event) =>
+                setConfirmarSenha(event.target.value)
+              }
+              minLength={6}
               required
             />
           </div>
@@ -249,7 +332,7 @@ function Cadastro() {
         <button
           type="submit"
           className="cadastro-btn"
-          disabled={carregando}
+          disabled={carregando || carregandoGoogle}
         >
           {carregando ? "Criando conta..." : "Criar conta"}
           <ArrowRight size={18} />
@@ -264,9 +347,10 @@ function Cadastro() {
             type="button"
             className="social-btn social-google-btn"
             onClick={() => cadastroGoogle()}
-            disabled={carregandoGoogle}
+            disabled={carregandoGoogle || carregando}
           >
             <span className="google-icon">G</span>
+
             {carregandoGoogle ? "Continuando..." : "Google"}
           </button>
 
@@ -274,6 +358,7 @@ function Cadastro() {
             type="button"
             className="social-btn"
             onClick={cadastrarComApple}
+            disabled={carregando || carregandoGoogle}
           >
             <Apple size={18} />
             Apple

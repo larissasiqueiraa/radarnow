@@ -18,14 +18,16 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// uploads
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
 
-// rota inicial
 app.get("/", (req, res) => {
   res.json({
     status: "online",
@@ -33,7 +35,6 @@ app.get("/", (req, res) => {
   });
 });
 
-// rotas da API
 app.use("/api/auth", authRoutes);
 app.use("/api/favoritos", favoritosRoutes);
 app.use("/api/avaliacoes", avaliacoesRoutes);
@@ -41,14 +42,18 @@ app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/google-places", googlePlacesRoutes);
 app.use("/api/locais", locaisRoutes);
 
-// teste do banco
 async function testarBanco() {
   try {
     const connection = await db.getConnection();
+
     console.log("Banco conectado!");
+
     connection.release();
   } catch (error) {
-    console.error("Erro ao conectar no banco:", error.message);
+    console.error(
+      "Erro ao conectar no banco:",
+      error.message
+    );
   }
 }
 
