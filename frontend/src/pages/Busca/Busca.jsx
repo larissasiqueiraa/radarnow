@@ -6,6 +6,10 @@ import { ArrowLeft, Search, Star, Heart } from "lucide-react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Busca() {
   const navigate = useNavigate();
 
@@ -40,7 +44,7 @@ function Busca() {
 
     try {
       const resposta = await fetch(
-        `http://localhost:5001/api/favoritos/${usuarioAtual.id}`
+        `${API_URL}/api/favoritos/${usuarioAtual.id}`
       );
 
       const dados = await resposta.json();
@@ -61,7 +65,7 @@ function Busca() {
     try {
       setCarregando(true);
 
-      const resposta = await fetch("http://localhost:5001/api/locais");
+      const resposta = await fetch(`${API_URL}/api/locais`);
       const dados = await resposta.json();
 
       if (!resposta.ok) {
@@ -95,7 +99,7 @@ function Busca() {
     try {
       if (jaFavoritado) {
         const resposta = await fetch(
-          `http://localhost:5001/api/favoritos/${usuarioAtual.id}/${id}`,
+          `${API_URL}/api/favoritos/${usuarioAtual.id}/${id}`,
           {
             method: "DELETE",
           }
@@ -112,7 +116,7 @@ function Busca() {
           atual.filter((favoritoId) => favoritoId !== id)
         );
       } else {
-        const resposta = await fetch("http://localhost:5001/api/favoritos", {
+        const resposta = await fetch(`${API_URL}/api/favoritos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +252,7 @@ function Busca() {
       return null;
     }
 
-    return `http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
+    return `${API_URL}/api/google-places/foto?name=${encodeURIComponent(
       fotoGoogle
     )}`;
   }

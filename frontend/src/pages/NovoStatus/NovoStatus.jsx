@@ -13,6 +13,10 @@ import "./NovoStatus.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function NovoStatus() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,7 +56,7 @@ function NovoStatus() {
       setCarregandoLocal(true);
       setErroLocal("");
 
-      const resposta = await fetch(`http://localhost:5001/api/locais/${id}`);
+      const resposta = await fetch(`${API_URL}/api/locais/${id}`);
       const dados = await resposta.json();
 
       if (!resposta.ok) {
@@ -85,6 +89,7 @@ function NovoStatus() {
     }
 
     const usuarioSalvo = localStorage.getItem("radarnow_usuario");
+    const token = localStorage.getItem("radarnow_token");
 
     if (!usuarioSalvo) {
       alert("Você precisa entrar na sua conta para enviar um status.");
@@ -92,22 +97,37 @@ function NovoStatus() {
       return;
     }
 
-    const usuario = JSON.parse(usuarioSalvo);
+    let usuario;
+
+    try {
+      usuario = JSON.parse(usuarioSalvo);
+    } catch (error) {
+      console.error("Erro ao ler usuário salvo:", error);
+      localStorage.removeItem("radarnow_usuario");
+      localStorage.removeItem("radarnow_token");
+      navigate("/login");
+      return;
+    }
 
     try {
       setCarregando(true);
 
-      const resposta = await fetch("http://localhost:5001/api/avaliacoes", {
+      const resposta = await fetch(`${API_URL}/api/avaliacoes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
         },
         body: JSON.stringify({
           usuario_id: usuario.id,
           local_id: Number(id),
           status,
           nota: avaliacao,
-          comentario: comentario || status,
+          comentario: comentario.trim() || status,
         }),
       });
 
@@ -136,6 +156,17 @@ function NovoStatus() {
     } finally {
       setCarregando(false);
     }
+  }
+
+  function selecionarMidia(event) {
+    const arquivo = event.target.files?.[0];
+
+    if (!arquivo) {
+      setMidia(null);
+      return;
+    }
+
+    setMidia(arquivo);
   }
 
   function getImagemClasse(categoria = "") {
@@ -168,7 +199,7 @@ function NovoStatus() {
       return null;
     }
 
-    return `http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
+    return `${API_URL}/api/google-places/foto?name=${encodeURIComponent(
       fotoGoogle
     )}`;
   }
@@ -315,7 +346,7 @@ function NovoStatus() {
               <input
                 type="file"
                 accept="image/*,video/*"
-                onChange={(event) => setMidia(event.target.files[0])}
+                onChange={selecionarMidia}
               />
 
               <span>
@@ -334,7 +365,11 @@ function NovoStatus() {
             />
           </div>
 
-          <button type="submit" className="submit-status" disabled={carregando}>
+          <button
+            type="submit"
+            className="submit-status"
+            disabled={carregando}
+          >
             <Send size={18} />
             <span>{carregando ? "Enviando..." : "Enviar atualização"}</span>
           </button>

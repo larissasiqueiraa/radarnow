@@ -11,6 +11,10 @@ import { useEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import "./Mapa.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 const filtros = [
   { label: "Todos", value: "todos" },
   { label: "Baladas", value: "Balada" },
@@ -44,7 +48,7 @@ function Mapa() {
     try {
       setCarregandoLocais(true);
 
-      const resposta = await fetch("http://localhost:5001/api/locais");
+      const resposta = await fetch(`${API_URL}/api/locais`);
       const dados = await resposta.json();
 
       if (!resposta.ok) {
@@ -182,26 +186,26 @@ function Mapa() {
           <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.35"/>
         </filter>
 
-        <path 
+        <path
           filter="url(#shadow)"
-          d="M11 1.5C6 1.5 2 5.5 2 10.5C2 17.5 11 26.5 11 26.5C11 26.5 20 17.5 20 10.5C20 5.5 16 1.5 11 1.5Z" 
+          d="M11 1.5C6 1.5 2 5.5 2 10.5C2 17.5 11 26.5 11 26.5C11 26.5 20 17.5 20 10.5C20 5.5 16 1.5 11 1.5Z"
           fill="${config.cor}"
         />
 
-        <circle 
-          cx="11" 
-          cy="10.5" 
-          r="4.2" 
-          fill="rgba(255,255,255,0.22)" 
-          stroke="rgba(255,255,255,0.55)" 
+        <circle
+          cx="11"
+          cy="10.5"
+          r="4.2"
+          fill="rgba(255,255,255,0.22)"
+          stroke="rgba(255,255,255,0.55)"
           stroke-width="0.8"
         />
 
-        <circle 
-          cx="11" 
-          cy="10.5" 
-          r="2" 
-          fill="white" 
+        <circle
+          cx="11"
+          cy="10.5"
+          r="2"
+          fill="white"
           fill-opacity="0.9"
         />
       </svg>

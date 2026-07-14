@@ -15,6 +15,10 @@ import "./Local.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Local() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -41,7 +45,7 @@ function Local() {
       setCarregandoLocal(true);
       setErroLocal("");
 
-      const resposta = await fetch(`http://localhost:5001/api/locais/${id}`);
+      const resposta = await fetch(`${API_URL}/api/locais/${id}`);
       const dados = await resposta.json();
 
       if (!resposta.ok) {
@@ -72,7 +76,7 @@ function Local() {
 
     try {
       const resposta = await fetch(
-        `http://localhost:5001/api/favoritos/${usuario.id}`,
+        `${API_URL}/api/favoritos/${usuario.id}`
       );
 
       const dados = await resposta.json();
@@ -83,7 +87,7 @@ function Local() {
       }
 
       const estaFavoritado = dados.some(
-        (item) => Number(item.local_id) === Number(id),
+        (item) => Number(item.local_id) === Number(id)
       );
 
       setFavorito(estaFavoritado);
@@ -106,10 +110,10 @@ function Local() {
     try {
       if (favorito) {
         const resposta = await fetch(
-          `http://localhost:5001/api/favoritos/${usuario.id}/${localId}`,
+          `${API_URL}/api/favoritos/${usuario.id}/${localId}`,
           {
             method: "DELETE",
-          },
+          }
         );
 
         const dados = await resposta.json();
@@ -121,7 +125,7 @@ function Local() {
 
         setFavorito(false);
       } else {
-        const resposta = await fetch("http://localhost:5001/api/favoritos", {
+        const resposta = await fetch(`${API_URL}/api/favoritos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -152,8 +156,9 @@ function Local() {
       setCarregandoAvaliacoes(true);
 
       const resposta = await fetch(
-        `http://localhost:5001/api/avaliacoes/${id}`,
+        `${API_URL}/api/avaliacoes/${id}`
       );
+
       const dados = await resposta.json();
 
       if (!resposta.ok) {
@@ -255,8 +260,8 @@ function Local() {
       return null;
     }
 
-    return `http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
-      fotoGoogle,
+    return `${API_URL}/api/google-places/foto?name=${encodeURIComponent(
+      fotoGoogle
     )}`;
   }
 
@@ -364,7 +369,11 @@ function Local() {
           className={fotoUrl ? "local-hero" : `local-hero ${imagemClasse}`}
         >
           {fotoUrl && (
-            <img className="local-hero-img" src={fotoUrl} alt={local.nome} />
+            <img
+              className="local-hero-img"
+              src={fotoUrl}
+              alt={local.nome}
+            />
           )}
 
           <div className="hero-overlay">
@@ -403,6 +412,7 @@ function Local() {
             <span
               className={`status-dot ${getStatusClass(statusAtual)}`}
             ></span>
+
             <h2>{statusAtual}</h2>
           </div>
 
@@ -502,7 +512,7 @@ function Local() {
                       {avaliacao.status && (
                         <span
                           className={`review-status ${getStatusClass(
-                            avaliacao.status,
+                            avaliacao.status
                           )}`}
                         >
                           {avaliacao.status}
@@ -587,7 +597,9 @@ function Local() {
 
                     <p>Está enchendo aos poucos, vale chegar logo.</p>
 
-                    <small className="review-date">@usuario • há 8 min</small>
+                    <small className="review-date">
+                      @usuario • há 8 min
+                    </small>
                   </div>
                 </article>
               </section>

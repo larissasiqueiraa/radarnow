@@ -14,6 +14,10 @@ import {
 
 import "./Footer.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,14 +39,14 @@ function Footer() {
     try {
       setCarregandoLocais(true);
 
-      const resposta = await fetch("http://localhost:5001/api/locais");
+      const resposta = await fetch(`${API_URL}/api/locais`);
 
       if (!resposta.ok) {
         throw new Error("Erro ao buscar locais.");
       }
 
       const dados = await resposta.json();
-      setLocais(dados);
+      setLocais(Array.isArray(dados) ? dados : []);
     } catch (error) {
       console.error("Erro ao carregar locais no footer:", error);
       setLocais([]);
@@ -196,7 +200,7 @@ function Footer() {
                     <div className="status-modal-image">
                       {place.foto_google ? (
                         <img
-                          src={`http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
+                          src={`${API_URL}/api/google-places/foto?name=${encodeURIComponent(
                             place.foto_google
                           )}`}
                           alt={place.nome}

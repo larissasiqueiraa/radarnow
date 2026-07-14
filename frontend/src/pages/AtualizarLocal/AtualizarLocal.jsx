@@ -6,6 +6,10 @@ import "./AtualizarLocal.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function AtualizarLocal() {
   const navigate = useNavigate();
 
@@ -19,7 +23,7 @@ function AtualizarLocal() {
 
   async function carregarLocais() {
     try {
-      const resposta = await fetch("http://localhost:5001/api/locais");
+      const resposta = await fetch(`${API_URL}/api/locais`);
 
       if (!resposta.ok) {
         throw new Error("Erro ao buscar locais.");
@@ -92,7 +96,7 @@ function AtualizarLocal() {
                 <div className="atualizar-local-image">
                   {place.foto_google ? (
                     <img
-                      src={`http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
+                      src={`${API_URL}/api/google-places/foto?name=${encodeURIComponent(
                         place.foto_google
                       )}`}
                       alt={place.nome}

@@ -6,6 +6,10 @@ import "./Favoritos.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Favoritos() {
   const navigate = useNavigate();
 
@@ -34,26 +38,36 @@ function Favoritos() {
       return null;
     }
 
-    return `http://localhost:5001/api/google-places/foto?name=${encodeURIComponent(
+    return `${API_URL}/api/google-places/foto?name=${encodeURIComponent(
       fotoGoogle
     )}`;
   }
 
   async function carregarFavoritos() {
     const usuarioSalvo = localStorage.getItem("radarnow_usuario");
+    const token = localStorage.getItem("radarnow_token");
 
     if (!usuarioSalvo) {
       navigate("/login");
       return;
     }
 
-    const usuario = JSON.parse(usuarioSalvo);
-
     try {
+      const usuario = JSON.parse(usuarioSalvo);
+
       setCarregando(true);
 
+      const headers = token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {};
+
       const respostaFavoritos = await fetch(
-        `http://localhost:5001/api/favoritos/${usuario.id}`
+        `${API_URL}/api/favoritos/${usuario.id}`,
+        {
+          headers,
+        }
       );
 
       if (!respostaFavoritos.ok) {
@@ -62,7 +76,7 @@ function Favoritos() {
 
       const dadosFavoritos = await respostaFavoritos.json();
 
-      const respostaLocais = await fetch("http://localhost:5001/api/locais");
+      const respostaLocais = await fetch(`${API_URL}/api/locais`);
 
       if (!respostaLocais.ok) {
         throw new Error("Erro ao buscar locais.");
@@ -70,9 +84,17 @@ function Favoritos() {
 
       const locais = await respostaLocais.json();
 
-      const locaisFavoritos = dadosFavoritos
+      const listaFavoritos = Array.isArray(dadosFavoritos)
+        ? dadosFavoritos
+        : [];
+
+      const listaLocais = Array.isArray(locais) ? locais : [];
+
+      const locaisFavoritos = listaFavoritos
         .map((favorito) =>
-          locais.find((local) => Number(local.id) === Number(favorito.local_id))
+          listaLocais.find(
+            (local) => Number(local.id) === Number(favorito.local_id)
+          )
         )
         .filter(Boolean);
 
@@ -90,19 +112,25 @@ function Favoritos() {
     event.stopPropagation();
 
     const usuarioSalvo = localStorage.getItem("radarnow_usuario");
+    const token = localStorage.getItem("radarnow_token");
 
     if (!usuarioSalvo) {
       navigate("/login");
       return;
     }
 
-    const usuario = JSON.parse(usuarioSalvo);
-
     try {
+      const usuario = JSON.parse(usuarioSalvo);
+
       const resposta = await fetch(
-        `http://localhost:5001/api/favoritos/${usuario.id}/${localId}`,
+        `${API_URL}/api/favoritos/${usuario.id}/${localId}`,
         {
           method: "DELETE",
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
         }
       );
 

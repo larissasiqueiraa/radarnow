@@ -6,6 +6,10 @@ import "./EditarPerfil.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function EditarPerfil() {
   const navigate = useNavigate();
 
@@ -23,16 +27,42 @@ function EditarPerfil() {
       return;
     }
 
-    const usuarioLogado = JSON.parse(usuarioSalvo);
+    try {
+      const usuarioLogado = JSON.parse(usuarioSalvo);
 
-    setNome(usuarioLogado.nome || "");
-    setUsuario(usuarioLogado.usuario || "");
-    setPreviewFoto(usuarioLogado.foto_perfil || "");
+      setNome(usuarioLogado.nome || usuarioLogado.name || "");
+      setUsuario(
+        usuarioLogado.usuario ||
+          usuarioLogado.username ||
+          usuarioLogado.email?.split("@")[0] ||
+          ""
+      );
+      setPreviewFoto(
+        usuarioLogado.foto_perfil ||
+          usuarioLogado.foto ||
+          usuarioLogado.picture ||
+          usuarioLogado.avatar ||
+          ""
+      );
+    } catch (error) {
+      console.error("Erro ao ler usuário salvo:", error);
+      localStorage.removeItem("radarnow_usuario");
+      localStorage.removeItem("radarnow_token");
+      navigate("/login");
+    }
   }, [navigate]);
 
   function selecionarFoto(event) {
-    const arquivo = event.target.files[0];
-    if (!arquivo) return;
+    const arquivo = event.target.files?.[0];
+
+    if (!arquivo) {
+      return;
+    }
+
+    if (!arquivo.type.startsWith("image/")) {
+      alert("Selecione um arquivo de imagem.");
+      return;
+    }
 
     setFoto(arquivo);
     setPreviewFoto(URL.createObjectURL(arquivo));
@@ -42,30 +72,44 @@ function EditarPerfil() {
     event.preventDefault();
 
     const usuarioSalvo = localStorage.getItem("radarnow_usuario");
+    const token = localStorage.getItem("radarnow_token");
 
     if (!usuarioSalvo) {
       navigate("/login");
       return;
     }
 
-    const usuarioLogado = JSON.parse(usuarioSalvo);
+    let usuarioLogado;
+
+    try {
+      usuarioLogado = JSON.parse(usuarioSalvo);
+    } catch (error) {
+      console.error("Erro ao ler usuário salvo:", error);
+      navigate("/login");
+      return;
+    }
 
     try {
       setCarregando(true);
 
       const formData = new FormData();
 
-      formData.append("nome", nome);
-      formData.append("usuario", usuario);
+      formData.append("nome", nome.trim());
+      formData.append("usuario", usuario.trim());
 
       if (foto) {
         formData.append("foto", foto);
       }
 
       const resposta = await fetch(
-        `http://localhost:5001/api/usuarios/${usuarioLogado.id}`,
+        `${API_URL}/api/usuarios/${usuarioLogado.id}`,
         {
           method: "PUT",
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
           body: formData,
         }
       );
@@ -77,20 +121,29 @@ function EditarPerfil() {
         return;
       }
 
+      const usuarioAtualizado = dados.usuario || dados;
+
       localStorage.setItem(
         "radarnow_usuario",
         JSON.stringify({
           ...usuarioLogado,
-          nome,
-          usuario,
-          foto_perfil: dados.usuario.foto_perfil,
+          ...usuarioAtualizado,
+          nome: usuarioAtualizado.nome || nome.trim(),
+          usuario: usuarioAtualizado.usuario || usuario.trim(),
+          foto_perfil:
+            usuarioAtualizado.foto_perfil ||
+            usuarioAtualizado.foto ||
+            usuarioAtualizado.picture ||
+            usuarioLogado.foto_perfil ||
+            previewFoto ||
+            "",
         })
       );
 
       alert("Perfil atualizado com sucesso!");
       navigate("/perfil");
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao atualizar perfil:", error);
       alert("Não foi possível conectar ao servidor.");
     } finally {
       setCarregando(false);
@@ -122,7 +175,14 @@ function EditarPerfil() {
               <input type="file" accept="image/*" onChange={selecionarFoto} />
 
               {previewFoto ? (
-                <img src={previewFoto} alt="Foto de perfil" />
+                <img
+                  src={previewFoto}
+                  alt="Foto de perfil"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                    setPreviewFoto("");
+                  }}
+                />
               ) : (
                 <div className="avatar-placeholder">
                   <Camera size={28} />
@@ -137,10 +197,11 @@ function EditarPerfil() {
             Nome
             <div className="input-box">
               <User size={18} />
+
               <input
                 type="text"
                 value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                onChange={(event) => setNome(event.target.value)}
                 required
               />
             </div>
@@ -150,10 +211,11 @@ function EditarPerfil() {
             Usuário
             <div className="input-box">
               <User size={18} />
+
               <input
                 type="text"
                 value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
+                onChange={(event) => setUsuario(event.target.value)}
                 required
               />
             </div>

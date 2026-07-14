@@ -18,6 +18,8 @@ function Configuracoes() {
 
   function sairDaConta() {
     localStorage.removeItem("radarnow_usuario");
+    localStorage.removeItem("radarnow_token");
+
     navigate("/login");
   }
 
@@ -54,7 +56,13 @@ function Configuracoes() {
             <ChevronRight size={18} />
           </button>
 
-          <button type="button" className="config-item">
+          <button
+            type="button"
+            className="config-item"
+            onClick={() =>
+              alert("As configurações de notificações serão adicionadas depois.")
+            }
+          >
             <div>
               <Bell size={18} />
               <span>Notificações</span>
@@ -63,7 +71,13 @@ function Configuracoes() {
             <ChevronRight size={18} />
           </button>
 
-          <button type="button" className="config-item">
+          <button
+            type="button"
+            className="config-item"
+            onClick={() =>
+              alert("As configurações de privacidade serão adicionadas depois.")
+            }
+          >
             <div>
               <Shield size={18} />
               <span>Privacidade</span>
@@ -72,7 +86,15 @@ function Configuracoes() {
             <ChevronRight size={18} />
           </button>
 
-          <button type="button" className="config-item">
+          <button
+            type="button"
+            className="config-item"
+            onClick={() =>
+              alert(
+                "Radar Now: descubra lugares e compartilhe como eles estão em tempo real."
+              )
+            }
+          >
             <div>
               <Info size={18} />
               <span>Sobre o Radar Now</span>

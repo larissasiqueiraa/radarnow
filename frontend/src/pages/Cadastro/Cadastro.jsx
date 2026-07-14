@@ -11,6 +11,10 @@ import {
 } from "lucide-react";
 import "./Cadastro.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://radarnow-production.up.railway.app";
+
 function Cadastro() {
   const navigate = useNavigate();
 
@@ -25,7 +29,7 @@ function Cadastro() {
   const [carregandoGoogle, setCarregandoGoogle] = useState(false);
 
   function selecionarFoto(event) {
-    const arquivo = event.target.files[0];
+    const arquivo = event.target.files?.[0];
 
     if (!arquivo) {
       return;
@@ -46,7 +50,7 @@ function Cadastro() {
     try {
       setCarregando(true);
 
-      const resposta = await fetch("http://localhost:5001/api/auth/cadastro", {
+      const resposta = await fetch(`${API_URL}/api/auth/cadastro`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +75,7 @@ function Cadastro() {
       alert("Conta criada com sucesso!");
       navigate("/login");
     } catch (error) {
-      console.error(error);
+      console.error("Erro ao criar conta:", error);
       alert("Não foi possível conectar ao servidor.");
     } finally {
       setCarregando(false);
@@ -82,7 +86,7 @@ function Cadastro() {
     try {
       setCarregandoGoogle(true);
 
-      const resposta = await fetch("http://localhost:5001/api/auth/google", {
+      const resposta = await fetch(`${API_URL}/api/auth/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +104,10 @@ function Cadastro() {
       }
 
       localStorage.setItem("radarnow_token", dados.token);
-      localStorage.setItem("radarnow_usuario", JSON.stringify(dados.usuario));
+      localStorage.setItem(
+        "radarnow_usuario",
+        JSON.stringify(dados.usuario)
+      );
 
       alert("Conta criada/entrada com Google realizada com sucesso!");
       navigate("/");
@@ -158,6 +165,7 @@ function Cadastro() {
           Nome
           <div className="input-box">
             <User size={18} />
+
             <input
               type="text"
               placeholder="Seu nome"
@@ -172,6 +180,7 @@ function Cadastro() {
           Usuário
           <div className="input-box">
             <User size={18} />
+
             <input
               type="text"
               placeholder="@usuario"
@@ -186,6 +195,7 @@ function Cadastro() {
           E-mail
           <div className="input-box">
             <Mail size={18} />
+
             <input
               type="email"
               placeholder="seuemail@email.com"
@@ -200,6 +210,7 @@ function Cadastro() {
           Senha
           <div className="input-box">
             <Lock size={18} />
+
             <input
               type="password"
               placeholder="Sua senha"
@@ -214,6 +225,7 @@ function Cadastro() {
           Confirmar senha
           <div className="input-box">
             <Lock size={18} />
+
             <input
               type="password"
               placeholder="Repita sua senha"
@@ -224,7 +236,11 @@ function Cadastro() {
           </div>
         </label>
 
-        <button type="submit" className="cadastro-btn" disabled={carregando}>
+        <button
+          type="submit"
+          className="cadastro-btn"
+          disabled={carregando}
+        >
           {carregando ? "Criando conta..." : "Criar conta"}
           <ArrowRight size={18} />
         </button>
