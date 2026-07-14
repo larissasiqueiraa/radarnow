@@ -17,11 +17,38 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://radarnow-production.up.railway.app";
 
+function corrigirUrlFoto(url) {
+  if (!url) {
+    return "";
+  }
+
+  const urlTexto = String(url).trim();
+
+  if (urlTexto.startsWith("blob:") || urlTexto.startsWith("data:")) {
+    return urlTexto;
+  }
+
+  if (urlTexto.startsWith("http://localhost:5001")) {
+    return urlTexto.replace("http://localhost:5001", API_URL);
+  }
+
+  if (urlTexto.startsWith("https://localhost:5001")) {
+    return urlTexto.replace("https://localhost:5001", API_URL);
+  }
+
+  if (urlTexto.startsWith("/")) {
+    return `${API_URL}${urlTexto}`;
+  }
+
+  return urlTexto;
+}
+
 function Perfil() {
   const navigate = useNavigate();
 
   const [perfil, setPerfil] = useState(null);
   const [carregando, setCarregando] = useState(true);
+  const [erroFoto, setErroFoto] = useState(false);
 
   useEffect(() => {
     carregarPerfil();
@@ -50,24 +77,50 @@ function Perfil() {
         }
       );
 
-      const dados = await resposta.json();
+      const textoResposta = await resposta.text();
+
+      let dados = {};
+
+      try {
+        dados = textoResposta ? JSON.parse(textoResposta) : {};
+      } catch {
+        dados = {};
+      }
 
       if (!resposta.ok) {
         alert(dados.erro || "Erro ao carregar perfil.");
         return;
       }
 
-      setPerfil(dados);
+      const fotoRecebida =
+        dados.foto_perfil ||
+        dados.foto ||
+        dados.picture ||
+        dados.avatar ||
+        "";
+
+      const dadosCorrigidos = {
+        ...dados,
+        foto_perfil: corrigirUrlFoto(fotoRecebida),
+      };
+
+      setPerfil(dadosCorrigidos);
+
+      const usuarioAtualizado = {
+        ...usuario,
+        ...dadosCorrigidos,
+      };
+
+      localStorage.setItem(
+        "radarnow_usuario",
+        JSON.stringify(usuarioAtualizado)
+      );
     } catch (error) {
       console.error("Erro ao carregar perfil:", error);
       alert("Não foi possível conectar ao servidor.");
     } finally {
       setCarregando(false);
     }
-  }
-
-  function tratarErroFoto(event) {
-    event.currentTarget.style.display = "none";
   }
 
   if (carregando) {
@@ -107,12 +160,13 @@ function Perfil() {
     );
   }
 
-  const fotoPerfil =
+  const fotoPerfil = corrigirUrlFoto(
     perfil.foto_perfil ||
-    perfil.foto ||
-    perfil.picture ||
-    perfil.avatar ||
-    null;
+      perfil.foto ||
+      perfil.picture ||
+      perfil.avatar ||
+      ""
+  );
 
   const nomePerfil =
     perfil.nome ||
@@ -142,11 +196,11 @@ function Perfil() {
 
         <section className="perfil-header">
           <div className="perfil-avatar">
-            {fotoPerfil ? (
+            {fotoPerfil && !erroFoto ? (
               <img
                 src={fotoPerfil}
                 alt={`Foto de ${nomePerfil}`}
-                onError={tratarErroFoto}
+                onError={() => setErroFoto(true)}
               />
             ) : (
               <User size={42} />

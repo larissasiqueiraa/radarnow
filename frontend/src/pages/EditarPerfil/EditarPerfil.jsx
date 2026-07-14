@@ -10,6 +10,32 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://radarnow-production.up.railway.app";
 
+function corrigirUrlFoto(url) {
+  if (!url) {
+    return "";
+  }
+
+  const urlTexto = String(url).trim();
+
+  if (urlTexto.startsWith("blob:") || urlTexto.startsWith("data:")) {
+    return urlTexto;
+  }
+
+  if (urlTexto.startsWith("http://localhost:5001")) {
+    return urlTexto.replace("http://localhost:5001", API_URL);
+  }
+
+  if (urlTexto.startsWith("https://localhost:5001")) {
+    return urlTexto.replace("https://localhost:5001", API_URL);
+  }
+
+  if (urlTexto.startsWith("/")) {
+    return `${API_URL}${urlTexto}`;
+  }
+
+  return urlTexto;
+}
+
 function EditarPerfil() {
   const navigate = useNavigate();
 
@@ -31,23 +57,28 @@ function EditarPerfil() {
       const usuarioLogado = JSON.parse(usuarioSalvo);
 
       setNome(usuarioLogado.nome || usuarioLogado.name || "");
+
       setUsuario(
         usuarioLogado.usuario ||
           usuarioLogado.username ||
           usuarioLogado.email?.split("@")[0] ||
           ""
       );
-      setPreviewFoto(
+
+      const fotoSalva =
         usuarioLogado.foto_perfil ||
-          usuarioLogado.foto ||
-          usuarioLogado.picture ||
-          usuarioLogado.avatar ||
-          ""
-      );
+        usuarioLogado.foto ||
+        usuarioLogado.picture ||
+        usuarioLogado.avatar ||
+        "";
+
+      setPreviewFoto(corrigirUrlFoto(fotoSalva));
     } catch (error) {
       console.error("Erro ao ler usuário salvo:", error);
+
       localStorage.removeItem("radarnow_usuario");
       localStorage.removeItem("radarnow_token");
+
       navigate("/login");
     }
   }, [navigate]);
@@ -61,6 +92,11 @@ function EditarPerfil() {
 
     if (!arquivo.type.startsWith("image/")) {
       alert("Selecione um arquivo de imagem.");
+      return;
+    }
+
+    if (arquivo.size > 5 * 1024 * 1024) {
+      alert("A imagem deve ter no máximo 5 MB.");
       return;
     }
 
@@ -85,6 +121,10 @@ function EditarPerfil() {
       usuarioLogado = JSON.parse(usuarioSalvo);
     } catch (error) {
       console.error("Erro ao ler usuário salvo:", error);
+
+      localStorage.removeItem("radarnow_usuario");
+      localStorage.removeItem("radarnow_token");
+
       navigate("/login");
       return;
     }
@@ -114,7 +154,15 @@ function EditarPerfil() {
         }
       );
 
-      const dados = await resposta.json();
+      const textoResposta = await resposta.text();
+
+      let dados = {};
+
+      try {
+        dados = textoResposta ? JSON.parse(textoResposta) : {};
+      } catch {
+        dados = {};
+      }
 
       if (!resposta.ok) {
         alert(dados.erro || "Erro ao atualizar perfil.");
@@ -123,21 +171,27 @@ function EditarPerfil() {
 
       const usuarioAtualizado = dados.usuario || dados;
 
+      const fotoRecebida =
+        usuarioAtualizado.foto_perfil ||
+        usuarioAtualizado.foto ||
+        usuarioAtualizado.picture ||
+        usuarioAtualizado.avatar ||
+        usuarioLogado.foto_perfil ||
+        "";
+
+      const fotoPerfilCorrigida = corrigirUrlFoto(fotoRecebida);
+
+      const novoUsuarioSalvo = {
+        ...usuarioLogado,
+        ...usuarioAtualizado,
+        nome: usuarioAtualizado.nome || nome.trim(),
+        usuario: usuarioAtualizado.usuario || usuario.trim(),
+        foto_perfil: fotoPerfilCorrigida,
+      };
+
       localStorage.setItem(
         "radarnow_usuario",
-        JSON.stringify({
-          ...usuarioLogado,
-          ...usuarioAtualizado,
-          nome: usuarioAtualizado.nome || nome.trim(),
-          usuario: usuarioAtualizado.usuario || usuario.trim(),
-          foto_perfil:
-            usuarioAtualizado.foto_perfil ||
-            usuarioAtualizado.foto ||
-            usuarioAtualizado.picture ||
-            usuarioLogado.foto_perfil ||
-            previewFoto ||
-            "",
-        })
+        JSON.stringify(novoUsuarioSalvo)
       );
 
       alert("Perfil atualizado com sucesso!");
@@ -172,16 +226,17 @@ function EditarPerfil() {
         <form className="editar-form" onSubmit={salvarPerfil}>
           <div className="avatar-upload-area">
             <label className="avatar-upload">
-              <input type="file" accept="image/*" onChange={selecionarFoto} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={selecionarFoto}
+              />
 
               {previewFoto ? (
                 <img
                   src={previewFoto}
                   alt="Foto de perfil"
-                  onError={(event) => {
-                    event.currentTarget.style.display = "none";
-                    setPreviewFoto("");
-                  }}
+                  onError={() => setPreviewFoto("")}
                 />
               ) : (
                 <div className="avatar-placeholder">
@@ -227,6 +282,7 @@ function EditarPerfil() {
             disabled={carregando}
           >
             <Save size={18} />
+
             <span>{carregando ? "Salvando..." : "Salvar alterações"}</span>
           </button>
         </form>
