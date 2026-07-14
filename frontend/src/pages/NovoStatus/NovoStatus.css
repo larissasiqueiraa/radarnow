@@ -376,3 +376,55 @@ textarea::placeholder {
     height: 44px;
   }
 }
+
+.media-preview-box {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: #11111e;
+}
+
+.media-preview-box img,
+.media-preview-box video {
+  width: 100%;
+  max-height: 360px;
+  display: block;
+  object-fit: cover;
+}
+
+.remove-media-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(7, 7, 17, 0.8);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.media-file-name {
+  display: block;
+  padding: 12px 14px;
+  overflow: hidden;
+  color: #aaaac0;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.comment-counter {
+  display: block;
+  margin-top: 7px;
+  color: #77778c;
+  font-size: 12px;
+  text-align: right;
+}

@@ -725,3 +725,19 @@
 .media-preview-play svg {
   margin-left: 2px;
 }
+
+.review-media {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #090914;
+}
+
+.review-media img,
+.review-media video {
+  width: 100%;
+  max-height: 360px;
+  display: block;
+  object-fit: cover;
+}

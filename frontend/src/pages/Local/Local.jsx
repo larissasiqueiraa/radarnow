@@ -834,6 +834,27 @@ function Local() {
                           }
                         </p>
 
+                        {avaliacao.midia && (
+                          <div className="review-media">
+                            {avaliacao.midia.tipo === "video" ? (
+                              <video
+                                src={avaliacao.midia.url}
+                                controls
+                                playsInline
+                                preload="metadata"
+                              />
+                            ) : (
+                              <img
+                                src={avaliacao.midia.url}
+                                alt={`Mídia enviada por ${
+                                  avaliacao.nome || "usuário"
+                                }`}
+                                loading="lazy"
+                              />
+                            )}
+                          </div>
+                        )}
+
                         <small className="review-date">
                           @
                           {avaliacao.usuario ||
