@@ -366,14 +366,13 @@ export async function atualizarFotosLocais(req, res) {
 
     const [locais] = await pool.query(
       `
-      SELECT 
+      SELECT
         id,
         nome,
         google_place_id
       FROM locais
-      WHERE 
-        (foto_google IS NULL OR foto_google = '')
-        AND google_place_id IS NOT NULL
+      WHERE
+        google_place_id IS NOT NULL
         AND google_place_id <> ''
       LIMIT ?
       `,
