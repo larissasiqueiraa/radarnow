@@ -57,6 +57,7 @@ function Cadastro() {
         "Escolha uma imagem JPG, PNG ou WEBP.",
         "error"
       );
+
       event.target.value = "";
       return;
     }
@@ -68,6 +69,7 @@ function Cadastro() {
         "A foto deve ter no máximo 5 MB.",
         "error"
       );
+
       event.target.value = "";
       return;
     }
@@ -94,21 +96,30 @@ function Cadastro() {
       const formulario = new FormData();
 
       formulario.append("nome", nome.trim());
+
       formulario.append(
         "usuario",
         usuario.trim().replace(/^@/, "")
       );
-      formulario.append("email", email.trim().toLowerCase());
+
+      formulario.append(
+        "email",
+        email.trim().toLowerCase()
+      );
+
       formulario.append("senha", senha);
 
       if (foto) {
         formulario.append("foto", foto);
       }
 
-      const resposta = await fetch(`${API_URL}/api/auth/cadastro`, {
-        method: "POST",
-        body: formulario,
-      });
+      const resposta = await fetch(
+        `${API_URL}/api/auth/cadastro`,
+        {
+          method: "POST",
+          body: formulario,
+        }
+      );
 
       const dados = await resposta.json();
 
@@ -117,6 +128,7 @@ function Cadastro() {
           dados.erro || "Erro ao criar conta.",
           "error"
         );
+
         return;
       }
 
@@ -125,20 +137,34 @@ function Cadastro() {
           "A conta foi criada, mas não foi possível entrar automaticamente.",
           "error"
         );
+
         navigate("/login");
         return;
       }
 
-      localStorage.setItem("radarnow_token", dados.token);
+      localStorage.setItem(
+        "radarnow_token",
+        dados.token
+      );
+
       localStorage.setItem(
         "radarnow_usuario",
         JSON.stringify(dados.usuario)
       );
 
-      showToast("Conta criada com sucesso!", "success");
-      navigate("/", { replace: true });
+      showToast(
+        "Conta criada com sucesso!",
+        "success"
+      );
+
+      navigate("/", {
+        replace: true,
+      });
     } catch (error) {
-      console.error("Erro ao criar conta:", error);
+      console.error(
+        "Erro ao criar conta:",
+        error
+      );
 
       showToast(
         "Não foi possível conectar ao servidor.",
@@ -153,27 +179,36 @@ function Cadastro() {
     try {
       setCarregandoGoogle(true);
 
-      const resposta = await fetch(`${API_URL}/api/auth/google`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          access_token: accessToken,
-        }),
-      });
+      const resposta = await fetch(
+        `${API_URL}/api/auth/google`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            access_token: accessToken,
+          }),
+        }
+      );
 
       const dados = await resposta.json();
 
       if (!resposta.ok) {
         showToast(
-          dados.erro || "Erro ao continuar com Google.",
+          dados.erro ||
+            "Erro ao continuar com Google.",
           "error"
         );
+
         return;
       }
 
-      localStorage.setItem("radarnow_token", dados.token);
+      localStorage.setItem(
+        "radarnow_token",
+        dados.token
+      );
+
       localStorage.setItem(
         "radarnow_usuario",
         JSON.stringify(dados.usuario)
@@ -184,9 +219,14 @@ function Cadastro() {
         "success"
       );
 
-      navigate("/", { replace: true });
+      navigate("/", {
+        replace: true,
+      });
     } catch (error) {
-      console.error("Erro ao continuar com Google:", error);
+      console.error(
+        "Erro ao continuar com Google:",
+        error
+      );
 
       showToast(
         "Não foi possível conectar ao servidor.",
@@ -199,7 +239,9 @@ function Cadastro() {
 
   const cadastroGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      enviarGoogleParaBackend(tokenResponse.access_token);
+      enviarGoogleParaBackend(
+        tokenResponse.access_token
+      );
     },
     onError: () => {
       showToast(
@@ -224,12 +266,16 @@ function Cadastro() {
         <h1>Criar conta</h1>
 
         <p>
-          Compartilhe experiências e descubra os melhores lugares em
-          tempo real.
+          Compartilhe experiências e descubra os melhores
+          lugares em tempo real.
         </p>
       </section>
 
-      <form className="cadastro-form" onSubmit={cadastrar}>
+      <form
+        className="cadastro-form"
+        onSubmit={cadastrar}
+        autoComplete="off"
+      >
         <div className="avatar-upload-area">
           <label className="avatar-upload">
             <input
@@ -239,7 +285,10 @@ function Cadastro() {
             />
 
             {previewFoto ? (
-              <img src={previewFoto} alt="Foto de perfil" />
+              <img
+                src={previewFoto}
+                alt="Foto de perfil"
+              />
             ) : (
               <div className="avatar-placeholder">
                 <Camera size={28} />
@@ -252,14 +301,19 @@ function Cadastro() {
 
         <label>
           Nome
+
           <div className="input-box">
             <User size={18} />
 
             <input
               type="text"
+              name="nome"
               placeholder="Seu nome"
               value={nome}
-              onChange={(event) => setNome(event.target.value)}
+              onChange={(event) =>
+                setNome(event.target.value)
+              }
+              autoComplete="off"
               required
             />
           </div>
@@ -267,14 +321,19 @@ function Cadastro() {
 
         <label>
           Usuário
+
           <div className="input-box">
             <User size={18} />
 
             <input
               type="text"
+              name="usuario"
               placeholder="@usuario"
               value={usuario}
-              onChange={(event) => setUsuario(event.target.value)}
+              onChange={(event) =>
+                setUsuario(event.target.value)
+              }
+              autoComplete="off"
               required
             />
           </div>
@@ -282,14 +341,19 @@ function Cadastro() {
 
         <label>
           E-mail
+
           <div className="input-box">
             <Mail size={18} />
 
             <input
               type="email"
+              name="cadastro-email"
               placeholder="seuemail@email.com"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
+              autoComplete="off"
               required
             />
           </div>
@@ -297,14 +361,19 @@ function Cadastro() {
 
         <label>
           Senha
+
           <div className="input-box">
             <Lock size={18} />
 
             <input
               type="password"
+              name="cadastro-senha"
               placeholder="Sua senha"
               value={senha}
-              onChange={(event) => setSenha(event.target.value)}
+              onChange={(event) =>
+                setSenha(event.target.value)
+              }
+              autoComplete="new-password"
               minLength={6}
               required
             />
@@ -313,16 +382,21 @@ function Cadastro() {
 
         <label>
           Confirmar senha
+
           <div className="input-box">
             <Lock size={18} />
 
             <input
               type="password"
+              name="confirmar-senha"
               placeholder="Repita sua senha"
               value={confirmarSenha}
               onChange={(event) =>
-                setConfirmarSenha(event.target.value)
+                setConfirmarSenha(
+                  event.target.value
+                )
               }
+              autoComplete="new-password"
               minLength={6}
               required
             />
@@ -332,9 +406,14 @@ function Cadastro() {
         <button
           type="submit"
           className="cadastro-btn"
-          disabled={carregando || carregandoGoogle}
+          disabled={
+            carregando || carregandoGoogle
+          }
         >
-          {carregando ? "Criando conta..." : "Criar conta"}
+          {carregando
+            ? "Criando conta..."
+            : "Criar conta"}
+
           <ArrowRight size={18} />
         </button>
 
@@ -347,18 +426,26 @@ function Cadastro() {
             type="button"
             className="social-btn social-google-btn"
             onClick={() => cadastroGoogle()}
-            disabled={carregandoGoogle || carregando}
+            disabled={
+              carregandoGoogle || carregando
+            }
           >
-            <span className="google-icon">G</span>
+            <span className="google-icon">
+              G
+            </span>
 
-            {carregandoGoogle ? "Continuando..." : "Google"}
+            {carregandoGoogle
+              ? "Continuando..."
+              : "Google"}
           </button>
 
           <button
             type="button"
             className="social-btn"
             onClick={cadastrarComApple}
-            disabled={carregando || carregandoGoogle}
+            disabled={
+              carregando || carregandoGoogle
+            }
           >
             <Apple size={18} />
             Apple
@@ -367,7 +454,8 @@ function Cadastro() {
       </form>
 
       <p className="cadastro-footer">
-        Já possui conta? <Link to="/login">Entrar</Link>
+        Já possui conta?{" "}
+        <Link to="/login">Entrar</Link>
       </p>
     </main>
   );

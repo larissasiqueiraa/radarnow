@@ -224,3 +224,33 @@
 .google-login-box iframe {
   width: 100% !important;
 }
+
+/* Remove o fundo branco do preenchimento automático do navegador */
+.input-box input:-webkit-autofill,
+.input-box input:-webkit-autofill:hover,
+.input-box input:-webkit-autofill:focus,
+.input-box input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px #11111e inset !important;
+  box-shadow: 0 0 0 1000px #11111e inset !important;
+  border-radius: 0;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Impede mudança visual ao clicar ou preencher */
+.input-box input:focus,
+.input-box input:active {
+  background: transparent;
+  color: #ffffff;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Corrige o preenchimento automático no Firefox */
+.input-box input:autofill {
+  background: #11111e;
+  color: #ffffff;
+  box-shadow: 0 0 0 1000px #11111e inset;
+}
