@@ -12,14 +12,17 @@ import {
 import "./Configuracoes.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 function Configuracoes() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   function sairDaConta() {
     localStorage.removeItem("radarnow_usuario");
     localStorage.removeItem("radarnow_token");
 
+    showToast("Você saiu da sua conta.", "success");
     navigate("/login");
   }
 
@@ -60,7 +63,10 @@ function Configuracoes() {
             type="button"
             className="config-item"
             onClick={() =>
-              alert("As configurações de notificações serão adicionadas depois.")
+              showToast(
+                "As configurações de notificações estarão disponíveis em breve.",
+                "info"
+              )
             }
           >
             <div>
@@ -75,7 +81,10 @@ function Configuracoes() {
             type="button"
             className="config-item"
             onClick={() =>
-              alert("As configurações de privacidade serão adicionadas depois.")
+              showToast(
+                "As configurações de privacidade estarão disponíveis em breve.",
+                "info"
+              )
             }
           >
             <div>
@@ -90,8 +99,10 @@ function Configuracoes() {
             type="button"
             className="config-item"
             onClick={() =>
-              alert(
-                "Radar Now: descubra lugares e compartilhe como eles estão em tempo real."
+              showToast(
+                "Radar Now: descubra lugares e compartilhe como eles estão em tempo real.",
+                "info",
+                5000
               )
             }
           >

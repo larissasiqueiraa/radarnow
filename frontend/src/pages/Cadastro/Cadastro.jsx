@@ -9,7 +9,9 @@ import {
   Apple,
   Camera,
 } from "lucide-react";
+
 import "./Cadastro.css";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -17,6 +19,7 @@ const API_URL =
 
 function Cadastro() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [nome, setNome] = useState("");
   const [usuario, setUsuario] = useState("");
@@ -43,7 +46,7 @@ function Cadastro() {
     event.preventDefault();
 
     if (senha !== confirmarSenha) {
-      alert("As senhas não coincidem.");
+      showToast("As senhas não coincidem.", "error");
       return;
     }
 
@@ -66,17 +69,17 @@ function Cadastro() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao criar conta.");
+        showToast(dados.erro || "Erro ao criar conta.", "error");
         return;
       }
 
       console.log("Foto escolhida no front:", foto);
 
-      alert("Conta criada com sucesso!");
+      showToast("Conta criada com sucesso!", "success");
       navigate("/login");
     } catch (error) {
       console.error("Erro ao criar conta:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregando(false);
     }
@@ -99,7 +102,10 @@ function Cadastro() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao continuar com Google.");
+        showToast(
+          dados.erro || "Erro ao continuar com Google.",
+          "error"
+        );
         return;
       }
 
@@ -109,11 +115,11 @@ function Cadastro() {
         JSON.stringify(dados.usuario)
       );
 
-      alert("Conta criada/entrada com Google realizada com sucesso!");
+      showToast("Entrada com Google realizada com sucesso!", "success");
       navigate("/");
     } catch (error) {
       console.error("Erro ao continuar com Google:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregandoGoogle(false);
     }
@@ -124,12 +130,12 @@ function Cadastro() {
       enviarGoogleParaBackend(tokenResponse.access_token);
     },
     onError: () => {
-      alert("Não foi possível continuar com Google.");
+      showToast("Não foi possível continuar com Google.", "error");
     },
   });
 
   function cadastrarComApple() {
-    alert("Cadastro com Apple será configurado depois.");
+    showToast("Cadastro com Apple estará disponível em breve.", "info");
   }
 
   return (
@@ -147,7 +153,11 @@ function Cadastro() {
       <form className="cadastro-form" onSubmit={cadastrar}>
         <div className="avatar-upload-area">
           <label className="avatar-upload">
-            <input type="file" accept="image/*" onChange={selecionarFoto} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={selecionarFoto}
+            />
 
             {previewFoto ? (
               <img src={previewFoto} alt="Foto de perfil" />

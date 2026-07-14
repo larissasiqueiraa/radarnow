@@ -5,6 +5,7 @@ import { ArrowLeft, Search, Star, MapPin } from "lucide-react";
 import "./AtualizarLocal.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -12,6 +13,7 @@ const API_URL =
 
 function AtualizarLocal() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [search, setSearch] = useState("");
   const [locais, setLocais] = useState([]);
@@ -33,7 +35,7 @@ function AtualizarLocal() {
       setLocais(dados);
     } catch (error) {
       console.error("Erro ao carregar locais:", error);
-      alert("Não foi possível carregar os locais.");
+      showToast("Não foi possível carregar os locais.", "error");
     } finally {
       setCarregando(false);
     }

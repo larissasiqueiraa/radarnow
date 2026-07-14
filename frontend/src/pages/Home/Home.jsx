@@ -5,6 +5,7 @@ import { Search, Star, Heart } from "lucide-react";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 import { getLocation } from "../../utils/gps";
 import { calculateDistance } from "../../utils/distance";
@@ -12,6 +13,7 @@ import { API_URL } from "../../config/api";
 
 function Home() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [search, setSearch] = useState("");
   const [favoritos, setFavoritos] = useState([]);
@@ -132,13 +134,15 @@ function Home() {
         const dados = await resposta.json();
 
         if (!resposta.ok) {
-          alert(dados.erro || "Erro ao remover favorito.");
+          showToast(dados.erro || "Erro ao remover favorito.", "error");
           return;
         }
 
         setFavoritos((atual) =>
           atual.filter((favoritoId) => favoritoId !== id)
         );
+
+        showToast("Local removido dos favoritos.", "success");
       } else {
         const resposta = await fetch(`${API_URL}/api/favoritos`, {
           method: "POST",
@@ -154,15 +158,17 @@ function Home() {
         const dados = await resposta.json();
 
         if (!resposta.ok) {
-          alert(dados.erro || "Erro ao adicionar favorito.");
+          showToast(dados.erro || "Erro ao adicionar favorito.", "error");
           return;
         }
 
         setFavoritos((atual) => [...atual, id]);
+
+        showToast("Local adicionado aos favoritos.", "success");
       }
     } catch (error) {
       console.error("Erro ao alterar favorito:", error);
-      alert("Não foi possível atualizar o favorito.");
+      showToast("Não foi possível atualizar o favorito.", "error");
     }
   }
 
@@ -335,6 +341,7 @@ function Home() {
 
               const fotoUrl = getFotoUrl(place.foto_google);
               const bairroLimpo = limparBairro(place.bairro);
+              const localFavoritado = favoritos.includes(Number(place.id));
 
               return (
                 <Link
@@ -344,7 +351,9 @@ function Home() {
                 >
                   <div
                     className={
-                      fotoUrl ? "place-image" : `place-image ${imagemClasse}`
+                      fotoUrl
+                        ? "place-image"
+                        : `place-image ${imagemClasse}`
                     }
                   >
                     {fotoUrl && <img src={fotoUrl} alt={place.nome} />}
@@ -352,19 +361,22 @@ function Home() {
                     <button
                       type="button"
                       className={
-                        favoritos.includes(Number(place.id))
+                        localFavoritado
                           ? "place-favorite active"
                           : "place-favorite"
                       }
-                      onClick={(e) => alternarFavorito(e, Number(place.id))}
+                      onClick={(event) =>
+                        alternarFavorito(event, Number(place.id))
+                      }
+                      aria-label={
+                        localFavoritado
+                          ? "Remover dos favoritos"
+                          : "Adicionar aos favoritos"
+                      }
                     >
                       <Heart
                         size={16}
-                        fill={
-                          favoritos.includes(Number(place.id))
-                            ? "currentColor"
-                            : "none"
-                        }
+                        fill={localFavoritado ? "currentColor" : "none"}
                       />
                     </button>
                   </div>
@@ -379,7 +391,9 @@ function Home() {
                     </p>
 
                     <div className="place-bottom">
-                      <small>{place.status || "Sem atualização agora"}</small>
+                      <small>
+                        {place.status || "Sem atualização agora"}
+                      </small>
 
                       <span className="place-rating-bottom">
                         <Star size={13} fill="currentColor" />

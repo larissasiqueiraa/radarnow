@@ -5,6 +5,7 @@ import { ArrowLeft, Camera, Save, User } from "lucide-react";
 import "./EditarPerfil.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -38,6 +39,7 @@ function corrigirUrlFoto(url) {
 
 function EditarPerfil() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [nome, setNome] = useState("");
   const [usuario, setUsuario] = useState("");
@@ -91,13 +93,19 @@ function EditarPerfil() {
     }
 
     if (!arquivo.type.startsWith("image/")) {
-      alert("Selecione um arquivo de imagem.");
+      showToast("Selecione um arquivo de imagem.", "error");
+      event.target.value = "";
       return;
     }
 
     if (arquivo.size > 5 * 1024 * 1024) {
-      alert("A imagem deve ter no máximo 5 MB.");
+      showToast("A imagem deve ter no máximo 5 MB.", "error");
+      event.target.value = "";
       return;
+    }
+
+    if (previewFoto.startsWith("blob:")) {
+      URL.revokeObjectURL(previewFoto);
     }
 
     setFoto(arquivo);
@@ -165,7 +173,7 @@ function EditarPerfil() {
       }
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao atualizar perfil.");
+        showToast(dados.erro || "Erro ao atualizar perfil.", "error");
         return;
       }
 
@@ -194,11 +202,11 @@ function EditarPerfil() {
         JSON.stringify(novoUsuarioSalvo)
       );
 
-      alert("Perfil atualizado com sucesso!");
+      showToast("Perfil atualizado com sucesso!", "success");
       navigate("/perfil");
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregando(false);
     }

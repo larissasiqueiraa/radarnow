@@ -12,6 +12,7 @@ import {
 import "./NovoStatus.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -20,6 +21,7 @@ const API_URL =
 function NovoStatus() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [local, setLocal] = useState(null);
   const [carregandoLocal, setCarregandoLocal] = useState(true);
@@ -79,12 +81,15 @@ function NovoStatus() {
     event.preventDefault();
 
     if (!local) {
-      alert("Local não encontrado.");
+      showToast("Local não encontrado.", "error");
       return;
     }
 
     if (!status || avaliacao === 0) {
-      alert("Escolha um status e uma avaliação antes de enviar.");
+      showToast(
+        "Escolha um status e uma avaliação antes de enviar.",
+        "error"
+      );
       return;
     }
 
@@ -92,7 +97,10 @@ function NovoStatus() {
     const token = localStorage.getItem("radarnow_token");
 
     if (!usuarioSalvo) {
-      alert("Você precisa entrar na sua conta para enviar um status.");
+      showToast(
+        "Você precisa entrar na sua conta para enviar um status.",
+        "info"
+      );
       navigate("/login");
       return;
     }
@@ -103,8 +111,10 @@ function NovoStatus() {
       usuario = JSON.parse(usuarioSalvo);
     } catch (error) {
       console.error("Erro ao ler usuário salvo:", error);
+
       localStorage.removeItem("radarnow_usuario");
       localStorage.removeItem("radarnow_token");
+
       navigate("/login");
       return;
     }
@@ -142,17 +152,20 @@ function NovoStatus() {
       }
 
       if (!resposta.ok) {
-        alert(dados.erro || dados.mensagem || "Erro ao enviar status.");
+        showToast(
+          dados.erro || dados.mensagem || "Erro ao enviar status.",
+          "error"
+        );
         return;
       }
 
       console.log("Mídia selecionada no front:", midia);
 
-      alert("Status enviado com sucesso!");
+      showToast("Status enviado com sucesso!", "success");
       navigate(`/local/${id}`);
     } catch (error) {
       console.error("Erro ao enviar status:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregando(false);
     }

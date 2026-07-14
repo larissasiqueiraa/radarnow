@@ -5,6 +5,7 @@ import { ArrowLeft, Heart, Star, MapPin } from "lucide-react";
 import "./Favoritos.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -12,6 +13,7 @@ const API_URL =
 
 function Favoritos() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [favoritos, setFavoritos] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -101,7 +103,7 @@ function Favoritos() {
       setFavoritos(locaisFavoritos);
     } catch (error) {
       console.error("Erro ao carregar favoritos:", error);
-      alert("Não foi possível carregar seus favoritos.");
+      showToast("Não foi possível carregar seus favoritos.", "error");
     } finally {
       setCarregando(false);
     }
@@ -137,16 +139,18 @@ function Favoritos() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao remover favorito.");
+        showToast(dados.erro || "Erro ao remover favorito.", "error");
         return;
       }
 
       setFavoritos((listaAtual) =>
         listaAtual.filter((local) => Number(local.id) !== Number(localId))
       );
+
+      showToast("Local removido dos favoritos.", "success");
     } catch (error) {
       console.error("Erro ao remover favorito:", error);
-      alert("Não foi possível remover este favorito.");
+      showToast("Não foi possível remover este favorito.", "error");
     }
   }
 

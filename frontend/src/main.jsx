@@ -5,6 +5,7 @@ import { registerSW } from "virtual:pwa-register";
 
 import "./index.css";
 import App from "./App.jsx";
+import { ToastProvider } from "./components/Toast/Toast.jsx";
 
 registerSW({
   immediate: true,
@@ -13,7 +14,9 @@ registerSW({
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <App />
+      <ToastProvider>
+        <App />
+      </ToastProvider>
     </GoogleOAuthProvider>
   </StrictMode>
 );

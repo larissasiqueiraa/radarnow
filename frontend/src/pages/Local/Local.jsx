@@ -14,6 +14,7 @@ import {
 import "./Local.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -22,6 +23,7 @@ const API_URL =
 function Local() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [local, setLocal] = useState(null);
   const [carregandoLocal, setCarregandoLocal] = useState(true);
@@ -119,11 +121,12 @@ function Local() {
         const dados = await resposta.json();
 
         if (!resposta.ok) {
-          alert(dados.erro || "Erro ao remover favorito.");
+          showToast(dados.erro || "Erro ao remover favorito.", "error");
           return;
         }
 
         setFavorito(false);
+        showToast("Local removido dos favoritos.", "success");
       } else {
         const resposta = await fetch(`${API_URL}/api/favoritos`, {
           method: "POST",
@@ -139,15 +142,16 @@ function Local() {
         const dados = await resposta.json();
 
         if (!resposta.ok) {
-          alert(dados.erro || "Erro ao adicionar favorito.");
+          showToast(dados.erro || "Erro ao adicionar favorito.", "error");
           return;
         }
 
         setFavorito(true);
+        showToast("Local adicionado aos favoritos.", "success");
       }
     } catch (error) {
       console.error("Erro ao alterar favorito:", error);
-      alert("Não foi possível atualizar o favorito.");
+      showToast("Não foi possível atualizar o favorito.", "error");
     }
   }
 

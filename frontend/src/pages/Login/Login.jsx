@@ -2,7 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { Mail, Lock, ArrowRight, Apple } from "lucide-react";
+
 import "./Login.css";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -10,6 +12,7 @@ const API_URL =
 
 function Login() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -36,7 +39,7 @@ function Login() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao fazer login.");
+        showToast(dados.erro || "Erro ao fazer login.", "error");
         return;
       }
 
@@ -46,11 +49,11 @@ function Login() {
         JSON.stringify(dados.usuario)
       );
 
-      alert("Login realizado com sucesso!");
+      showToast("Login realizado com sucesso!", "success");
       navigate("/");
     } catch (error) {
       console.error("Erro no login:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregando(false);
     }
@@ -73,7 +76,7 @@ function Login() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao entrar com Google.");
+        showToast(dados.erro || "Erro ao entrar com Google.", "error");
         return;
       }
 
@@ -83,11 +86,11 @@ function Login() {
         JSON.stringify(dados.usuario)
       );
 
-      alert("Login com Google realizado com sucesso!");
+      showToast("Login com Google realizado com sucesso!", "success");
       navigate("/");
     } catch (error) {
       console.error("Erro no login com Google:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregandoGoogle(false);
     }
@@ -98,12 +101,12 @@ function Login() {
       enviarGoogleParaBackend(tokenResponse.access_token);
     },
     onError: () => {
-      alert("Não foi possível entrar com Google.");
+      showToast("Não foi possível entrar com Google.", "error");
     },
   });
 
   function entrarComApple() {
-    alert("Login com Apple será configurado depois.");
+    showToast("Login com Apple estará disponível em breve.", "info");
   }
 
   return (

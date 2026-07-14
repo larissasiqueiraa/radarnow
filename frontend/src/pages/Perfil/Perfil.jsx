@@ -12,6 +12,7 @@ import {
 import "./Perfil.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -45,6 +46,7 @@ function corrigirUrlFoto(url) {
 
 function Perfil() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [perfil, setPerfil] = useState(null);
   const [carregando, setCarregando] = useState(true);
@@ -88,7 +90,7 @@ function Perfil() {
       }
 
       if (!resposta.ok) {
-        alert(dados.erro || "Erro ao carregar perfil.");
+        showToast(dados.erro || "Erro ao carregar perfil.", "error");
         return;
       }
 
@@ -105,6 +107,7 @@ function Perfil() {
       };
 
       setPerfil(dadosCorrigidos);
+      setErroFoto(false);
 
       const usuarioAtualizado = {
         ...usuario,
@@ -117,7 +120,7 @@ function Perfil() {
       );
     } catch (error) {
       console.error("Erro ao carregar perfil:", error);
-      alert("Não foi possível conectar ao servidor.");
+      showToast("Não foi possível conectar ao servidor.", "error");
     } finally {
       setCarregando(false);
     }
