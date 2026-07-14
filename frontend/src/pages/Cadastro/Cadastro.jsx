@@ -8,6 +8,8 @@ import {
   ArrowRight,
   Apple,
   Camera,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 import "./Cadastro.css";
@@ -26,6 +28,11 @@ function Cadastro() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] =
+    useState(false);
+
   const [foto, setFoto] = useState(null);
   const [previewFoto, setPreviewFoto] = useState("");
   const [carregando, setCarregando] = useState(false);
@@ -243,6 +250,7 @@ function Cadastro() {
         tokenResponse.access_token
       );
     },
+
     onError: () => {
       showToast(
         "Não foi possível continuar com Google.",
@@ -366,7 +374,7 @@ function Cadastro() {
             <Lock size={18} />
 
             <input
-              type="password"
+              type={mostrarSenha ? "text" : "password"}
               name="cadastro-senha"
               placeholder="Sua senha"
               value={senha}
@@ -377,6 +385,30 @@ function Cadastro() {
               minLength={6}
               required
             />
+
+            <button
+              type="button"
+              className="mostrar-senha-btn"
+              onClick={() =>
+                setMostrarSenha((valorAtual) => !valorAtual)
+              }
+              aria-label={
+                mostrarSenha
+                  ? "Ocultar senha"
+                  : "Mostrar senha"
+              }
+              title={
+                mostrarSenha
+                  ? "Ocultar senha"
+                  : "Mostrar senha"
+              }
+            >
+              {mostrarSenha ? (
+                <EyeOff size={19} />
+              ) : (
+                <Eye size={19} />
+              )}
+            </button>
           </div>
         </label>
 
@@ -387,7 +419,11 @@ function Cadastro() {
             <Lock size={18} />
 
             <input
-              type="password"
+              type={
+                mostrarConfirmarSenha
+                  ? "text"
+                  : "password"
+              }
               name="confirmar-senha"
               placeholder="Repita sua senha"
               value={confirmarSenha}
@@ -400,6 +436,32 @@ function Cadastro() {
               minLength={6}
               required
             />
+
+            <button
+              type="button"
+              className="mostrar-senha-btn"
+              onClick={() =>
+                setMostrarConfirmarSenha(
+                  (valorAtual) => !valorAtual
+                )
+              }
+              aria-label={
+                mostrarConfirmarSenha
+                  ? "Ocultar confirmação da senha"
+                  : "Mostrar confirmação da senha"
+              }
+              title={
+                mostrarConfirmarSenha
+                  ? "Ocultar senha"
+                  : "Mostrar senha"
+              }
+            >
+              {mostrarConfirmarSenha ? (
+                <EyeOff size={19} />
+              ) : (
+                <Eye size={19} />
+              )}
+            </button>
           </div>
         </label>
 

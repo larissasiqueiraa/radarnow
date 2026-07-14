@@ -1,7 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import { Mail, Lock, ArrowRight, Apple } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  ArrowRight,
+  Apple,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 
 import "./Login.css";
 import { useToast } from "../../components/Toast/Toast.jsx";
@@ -16,6 +23,7 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [carregandoGoogle, setCarregandoGoogle] = useState(false);
 
@@ -39,7 +47,10 @@ function Login() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        showToast(dados.erro || "Erro ao fazer login.", "error");
+        showToast(
+          dados.erro || "Erro ao fazer login.",
+          "error"
+        );
         return;
       }
 
@@ -49,11 +60,21 @@ function Login() {
         JSON.stringify(dados.usuario)
       );
 
-      showToast("Login realizado com sucesso!", "success");
-      navigate("/");
+      showToast(
+        "Login realizado com sucesso!",
+        "success"
+      );
+
+      navigate("/", {
+        replace: true,
+      });
     } catch (error) {
       console.error("Erro no login:", error);
-      showToast("Não foi possível conectar ao servidor.", "error");
+
+      showToast(
+        "Não foi possível conectar ao servidor.",
+        "error"
+      );
     } finally {
       setCarregando(false);
     }
@@ -76,7 +97,10 @@ function Login() {
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        showToast(dados.erro || "Erro ao entrar com Google.", "error");
+        showToast(
+          dados.erro || "Erro ao entrar com Google.",
+          "error"
+        );
         return;
       }
 
@@ -86,11 +110,24 @@ function Login() {
         JSON.stringify(dados.usuario)
       );
 
-      showToast("Login com Google realizado com sucesso!", "success");
-      navigate("/");
+      showToast(
+        "Login com Google realizado com sucesso!",
+        "success"
+      );
+
+      navigate("/", {
+        replace: true,
+      });
     } catch (error) {
-      console.error("Erro no login com Google:", error);
-      showToast("Não foi possível conectar ao servidor.", "error");
+      console.error(
+        "Erro no login com Google:",
+        error
+      );
+
+      showToast(
+        "Não foi possível conectar ao servidor.",
+        "error"
+      );
     } finally {
       setCarregandoGoogle(false);
     }
@@ -98,36 +135,58 @@ function Login() {
 
   const loginGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      enviarGoogleParaBackend(tokenResponse.access_token);
+      enviarGoogleParaBackend(
+        tokenResponse.access_token
+      );
     },
+
     onError: () => {
-      showToast("Não foi possível entrar com Google.", "error");
+      showToast(
+        "Não foi possível entrar com Google.",
+        "error"
+      );
     },
   });
 
   function entrarComApple() {
-    showToast("Login com Apple estará disponível em breve.", "info");
+    showToast(
+      "Login com Apple estará disponível em breve.",
+      "info"
+    );
   }
 
   return (
     <main className="login-page">
       <section className="login-header">
         <span>Radar Now</span>
+
         <h1>Entre na sua conta</h1>
-        <p>Veja como estão os lugares em tempo real.</p>
+
+        <p>
+          Veja como estão os lugares em tempo real.
+        </p>
       </section>
 
-      <form className="login-form" onSubmit={entrar}>
+      <form
+        className="login-form"
+        onSubmit={entrar}
+        autoComplete="off"
+      >
         <label>
           E-mail
+
           <div className="input-box">
             <Mail size={18} />
 
             <input
               type="email"
+              name="login-email"
               placeholder="seuemail@email.com"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
+              autoComplete="off"
               required
             />
           </div>
@@ -135,29 +194,66 @@ function Login() {
 
         <label>
           Senha
+
           <div className="input-box">
             <Lock size={18} />
 
             <input
-              type="password"
+              type={mostrarSenha ? "text" : "password"}
+              name="login-senha"
               placeholder="Sua senha"
               value={senha}
-              onChange={(event) => setSenha(event.target.value)}
+              onChange={(event) =>
+                setSenha(event.target.value)
+              }
+              autoComplete="current-password"
               required
             />
+
+            <button
+              type="button"
+              className="mostrar-senha-btn"
+              onClick={() =>
+                setMostrarSenha(
+                  (valorAtual) => !valorAtual
+                )
+              }
+              aria-label={
+                mostrarSenha
+                  ? "Ocultar senha"
+                  : "Mostrar senha"
+              }
+              title={
+                mostrarSenha
+                  ? "Ocultar senha"
+                  : "Mostrar senha"
+              }
+            >
+              {mostrarSenha ? (
+                <EyeOff size={19} />
+              ) : (
+                <Eye size={19} />
+              )}
+            </button>
           </div>
         </label>
 
-        <Link to="/recuperar-senha" className="forgot-link">
+        <Link
+          to="/recuperar-senha"
+          className="forgot-link"
+        >
           Esqueci minha senha
         </Link>
 
         <button
           type="submit"
           className="login-btn"
-          disabled={carregando}
+          disabled={
+            carregando || carregandoGoogle
+          }
         >
           {carregando ? "Entrando..." : "Entrar"}
+
           <ArrowRight size={18} />
         </button>
 
@@ -170,16 +266,24 @@ function Login() {
             type="button"
             className="social-btn social-google-btn"
             onClick={() => loginGoogle()}
-            disabled={carregandoGoogle}
+            disabled={
+              carregandoGoogle || carregando
+            }
           >
             <span className="google-icon">G</span>
-            {carregandoGoogle ? "Entrando..." : "Google"}
+
+            {carregandoGoogle
+              ? "Entrando..."
+              : "Google"}
           </button>
 
           <button
             type="button"
             className="social-btn"
             onClick={entrarComApple}
+            disabled={
+              carregando || carregandoGoogle
+            }
           >
             <Apple size={18} />
             Apple
@@ -188,7 +292,8 @@ function Login() {
       </form>
 
       <p className="login-footer">
-        Ainda não tem conta? <Link to="/cadastro">Criar conta</Link>
+        Ainda não tem conta?{" "}
+        <Link to="/cadastro">Criar conta</Link>
       </p>
     </main>
   );

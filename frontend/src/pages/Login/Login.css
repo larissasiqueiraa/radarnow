@@ -193,3 +193,36 @@
 .google-login-box iframe {
   width: 100% !important;
 }
+
+.mostrar-senha-btn {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #8f8fa4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.mostrar-senha-btn:hover {
+  color: #7fffd4;
+  background: rgba(127, 255, 212, 0.08);
+}
+
+.mostrar-senha-btn:focus-visible {
+  color: #7fffd4;
+  outline: 2px solid rgba(127, 255, 212, 0.45);
+}
+
+.mostrar-senha-btn svg {
+  color: inherit;
+}
