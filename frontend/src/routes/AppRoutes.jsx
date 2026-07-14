@@ -12,6 +12,7 @@ import Configuracoes from "../pages/Configuracoes/Configuracoes";
 import EditarPerfil from "../pages/EditarPerfil/EditarPerfil";
 import Mapa from "../pages/Mapa/Mapa";
 import Midias from "../pages/Midias/Midias";
+import RecuperarSenha from "../pages/RecuperarSenha/RecuperarSenha";
 
 function AppRoutes() {
   return (
@@ -21,6 +22,10 @@ function AppRoutes() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route
+          path="/recuperar-senha"
+          element={<RecuperarSenha />}
+        />
 
         <Route path="/busca" element={<Busca />} />
         <Route path="/local/:id" element={<Local />} />
