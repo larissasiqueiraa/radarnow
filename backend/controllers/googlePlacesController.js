@@ -5,6 +5,58 @@ function mostrarChaveParcial(apiKey) {
   return `${apiKey.slice(0, 10)}...${apiKey.slice(-6)}`;
 }
 
+function normalizarTexto(texto = "") {
+  return String(texto)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function localAdultBloqueado(place = {}) {
+  const nomeNormalizado = normalizarTexto(place.name || "");
+
+  const termosBloqueados = [
+    "bokarra",
+    "mansao 147",
+    "casa de massagem",
+    "casa de massagens",
+    "casa adulta",
+    "entretenimento adulto",
+    "adult entertainment",
+    "strip club",
+    "stripclub",
+    "sex club",
+    "puteiro",
+    "bordel",
+    "prostibulo",
+    "casa de prostituicao",
+    "prive",
+  ];
+
+  if (
+    termosBloqueados.some((termo) =>
+      nomeNormalizado.includes(termo)
+    )
+  ) {
+    return true;
+  }
+
+  const tipos = Array.isArray(place.types)
+    ? place.types.map((tipo) => normalizarTexto(tipo))
+    : [];
+
+  const tiposBloqueados = [
+    "adult_entertainment",
+    "strip_club",
+    "sex_shop",
+  ];
+
+  return tipos.some((tipo) =>
+    tiposBloqueados.includes(tipo)
+  );
+}
+
 function extrairBairro(endereco) {
   if (!endereco) {
     return "Florianópolis";
@@ -138,17 +190,31 @@ export async function buscarLugaresGoogle(req, res) {
       });
     }
 
-    const lugares = (dados.results || []).map((place) => ({
-      google_place_id: place.place_id,
-      nome: place.name || "Sem nome",
-      endereco: place.vicinity || "",
-      bairro: extrairBairro(place.vicinity || ""),
-      nota: place.rating || null,
-      lat: place.geometry?.location?.lat || null,
-      lng: place.geometry?.location?.lng || null,
-      tipos: place.types || [],
-      foto_google: place.photos?.[0]?.photo_reference || null,
-    }));
+    const lugares = (dados.results || [])
+      .filter((place) => {
+        if (localAdultBloqueado(place)) {
+          console.log(
+            `Ignorando local adulto na busca: ${
+              place.name || "Sem nome"
+            }`
+          );
+
+          return false;
+        }
+
+        return true;
+      })
+      .map((place) => ({
+        google_place_id: place.place_id,
+        nome: place.name || "Sem nome",
+        endereco: place.vicinity || "",
+        bairro: extrairBairro(place.vicinity || ""),
+        nota: place.rating || null,
+        lat: place.geometry?.location?.lat || null,
+        lng: place.geometry?.location?.lng || null,
+        tipos: place.types || [],
+        foto_google: place.photos?.[0]?.photo_reference || null,
+      }));
 
     return res.json(lugares);
   } catch (error) {
@@ -263,6 +329,11 @@ export async function importarLugaresGoogle(req, res) {
       const lat = place.geometry?.location?.lat || null;
       const lng = place.geometry?.location?.lng || null;
       const tipos = JSON.stringify(place.types || []);
+
+      if (localAdultBloqueado(place)) {
+        console.log(`Ignorando local adulto na importação: ${nome}`);
+        continue;
+      }
 
       if (!googlePlaceId || !nome || !lat || !lng) {
         continue;
