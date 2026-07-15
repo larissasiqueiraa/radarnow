@@ -789,3 +789,77 @@
     align-items: flex-start;
   }
 }
+
+/* Opções da avaliação */
+.review-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.review-header-actions > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-options {
+  position: relative;
+  display: inline-flex;
+}
+
+.review-options-trigger {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.review-options-trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.review-options-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 132px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: #171717;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.review-delete-btn {
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.review-delete-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.review-delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
