@@ -55,11 +55,31 @@ export async function criarAvaliacao(req, res) {
       });
     }
 
-    const textoParaModerar =
-      comentario?.trim() || status;
+    const notaNumerica = Number(nota);
+
+    if (
+      !Number.isInteger(notaNumerica) ||
+      notaNumerica < 1 ||
+      notaNumerica > 5
+    ) {
+      return res.status(400).json({
+        erro: "A nota deve ser um número inteiro de 1 a 5.",
+      });
+    }
+
+    const statusLimpo = String(status).trim();
+
+    const comentarioLimpo =
+      comentario?.trim() || statusLimpo;
+
+    if (!statusLimpo) {
+      return res.status(400).json({
+        erro: "O status é obrigatório.",
+      });
+    }
 
     const resultadoModeracao =
-      moderarTexto(textoParaModerar);
+      moderarTexto(comentarioLimpo);
 
     if (!resultadoModeracao.aprovado) {
       return res.status(400).json({
@@ -71,33 +91,37 @@ export async function criarAvaliacao(req, res) {
 
     await connection.beginTransaction();
 
-    const [resultadoAvaliacao] = await connection.execute(
-      `
-      INSERT INTO avaliacoes
-      (
-        usuario_id,
-        local_id,
-        status,
-        nota,
-        comentario
-      )
-      VALUES (?, ?, ?, ?, ?)
-      `,
-      [
-        Number(usuario_id),
-        Number(local_id),
-        status,
-        Number(nota),
-        comentario?.trim() || status,
-      ]
-    );
+    const [resultadoAvaliacao] =
+      await connection.execute(
+        `
+        INSERT INTO avaliacoes
+        (
+          usuario_id,
+          local_id,
+          status,
+          nota,
+          comentario
+        )
+        VALUES (?, ?, ?, ?, ?)
+        `,
+        [
+          Number(usuario_id),
+          Number(local_id),
+          statusLimpo,
+          notaNumerica,
+          comentarioLimpo,
+        ]
+      );
 
-    const avaliacaoId = resultadoAvaliacao.insertId;
+    const avaliacaoId =
+      resultadoAvaliacao.insertId;
 
     let midiaCriada = null;
 
     if (req.file) {
-      const tipo = descobrirTipoMidia(req.file);
+      const tipo =
+        descobrirTipoMidia(req.file);
+
       const url = montarUrlMidia(req);
 
       const [resultadoMidia] =
@@ -138,15 +162,15 @@ export async function criarAvaliacao(req, res) {
     await connection.commit();
 
     return res.status(201).json({
-      mensagem: "Avaliação criada com sucesso",
+      mensagem:
+        "Avaliação criada com sucesso",
       avaliacao: {
         id: avaliacaoId,
         usuario_id: Number(usuario_id),
         local_id: Number(local_id),
-        status,
-        nota: Number(nota),
-        comentario:
-          comentario?.trim() || status,
+        status: statusLimpo,
+        nota: notaNumerica,
+        comentario: comentarioLimpo,
         midia: midiaCriada,
       },
     });
@@ -167,7 +191,10 @@ export async function criarAvaliacao(req, res) {
   }
 }
 
-export async function listarAvaliacoes(req, res) {
+export async function listarAvaliacoes(
+  req,
+  res
+) {
   try {
     const { local_id } = req.params;
 
@@ -246,8 +273,178 @@ export async function listarAvaliacoes(req, res) {
   }
 }
 
-export async function excluirAvaliacao(req, res) {
-  const connection = await db.getConnection();
+export async function atualizarAvaliacao(
+  req,
+  res
+) {
+  try {
+    const { id } = req.params;
+
+    const {
+      usuario_id,
+      status,
+      nota,
+      comentario,
+    } = req.body;
+
+    if (
+      !id ||
+      !usuario_id ||
+      !status ||
+      nota === undefined ||
+      nota === null
+    ) {
+      return res.status(400).json({
+        erro:
+          "Avaliação, usuário, status e nota são obrigatórios.",
+      });
+    }
+
+    const avaliacaoId = Number(id);
+    const usuarioId = Number(usuario_id);
+    const notaNumerica = Number(nota);
+    const statusLimpo = String(status).trim();
+
+    const comentarioLimpo =
+      comentario?.trim() || statusLimpo;
+
+    if (
+      !Number.isInteger(avaliacaoId) ||
+      avaliacaoId <= 0 ||
+      !Number.isInteger(usuarioId) ||
+      usuarioId <= 0
+    ) {
+      return res.status(400).json({
+        erro:
+          "Avaliação ou usuário inválido.",
+      });
+    }
+
+    if (!statusLimpo) {
+      return res.status(400).json({
+        erro: "O status é obrigatório.",
+      });
+    }
+
+    if (
+      !Number.isInteger(notaNumerica) ||
+      notaNumerica < 1 ||
+      notaNumerica > 5
+    ) {
+      return res.status(400).json({
+        erro:
+          "A nota deve ser um número inteiro de 1 a 5.",
+      });
+    }
+
+    const resultadoModeracao =
+      moderarTexto(comentarioLimpo);
+
+    if (!resultadoModeracao.aprovado) {
+      return res.status(400).json({
+        erro:
+          resultadoModeracao.motivo ||
+          "Conteúdo não permitido.",
+      });
+    }
+
+    const [avaliacoes] = await db.execute(
+      `
+      SELECT
+        id,
+        usuario_id,
+        local_id
+      FROM avaliacoes
+      WHERE id = ?
+      LIMIT 1
+      `,
+      [avaliacaoId]
+    );
+
+    if (avaliacoes.length === 0) {
+      return res.status(404).json({
+        erro: "Avaliação não encontrada.",
+      });
+    }
+
+    const avaliacaoExistente =
+      avaliacoes[0];
+
+    if (
+      Number(
+        avaliacaoExistente.usuario_id
+      ) !== usuarioId
+    ) {
+      return res.status(403).json({
+        erro:
+          "Você não pode editar a avaliação de outra pessoa.",
+      });
+    }
+
+    const [resultadoAtualizacao] =
+      await db.execute(
+        `
+        UPDATE avaliacoes
+        SET
+          status = ?,
+          nota = ?,
+          comentario = ?
+        WHERE id = ?
+          AND usuario_id = ?
+        `,
+        [
+          statusLimpo,
+          notaNumerica,
+          comentarioLimpo,
+          avaliacaoId,
+          usuarioId,
+        ]
+      );
+
+    if (
+      resultadoAtualizacao.affectedRows ===
+      0
+    ) {
+      return res.status(404).json({
+        erro:
+          "Não foi possível atualizar a avaliação.",
+      });
+    }
+
+    return res.json({
+      mensagem:
+        "Avaliação atualizada com sucesso.",
+      avaliacao: {
+        id: avaliacaoId,
+        usuario_id: usuarioId,
+        local_id: Number(
+          avaliacaoExistente.local_id
+        ),
+        status: statusLimpo,
+        nota: notaNumerica,
+        comentario: comentarioLimpo,
+      },
+    });
+  } catch (error) {
+    console.error(
+      "Erro ao atualizar avaliação:",
+      error
+    );
+
+    return res.status(500).json({
+      erro:
+        "Erro ao atualizar avaliação.",
+      detalhe: error.message,
+    });
+  }
+}
+
+export async function excluirAvaliacao(
+  req,
+  res
+) {
+  const connection =
+    await db.getConnection();
 
   let transacaoIniciada = false;
 
@@ -298,6 +495,7 @@ export async function excluirAvaliacao(req, res) {
     }
 
     await connection.beginTransaction();
+
     transacaoIniciada = true;
 
     await connection.execute(
@@ -315,11 +513,15 @@ export async function excluirAvaliacao(req, res) {
         WHERE id = ?
           AND usuario_id = ?
         `,
-        [Number(id), Number(usuario_id)]
+        [
+          Number(id),
+          Number(usuario_id),
+        ]
       );
 
     if (resultado.affectedRows === 0) {
       await connection.rollback();
+
       transacaoIniciada = false;
 
       return res.status(404).json({
@@ -329,6 +531,7 @@ export async function excluirAvaliacao(req, res) {
     }
 
     await connection.commit();
+
     transacaoIniciada = false;
 
     if (avaliacao.midia_url) {
@@ -346,7 +549,9 @@ export async function excluirAvaliacao(req, res) {
           nomeArquivo
         );
 
-        if (fs.existsSync(caminhoArquivo)) {
+        if (
+          fs.existsSync(caminhoArquivo)
+        ) {
           await fs.promises.unlink(
             caminhoArquivo
           );

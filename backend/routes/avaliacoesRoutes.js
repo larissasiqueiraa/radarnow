@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import {
   criarAvaliacao,
   listarAvaliacoes,
+  atualizarAvaliacao,
   excluirAvaliacao,
 } from "../controllers/avaliacoesController.js";
 
@@ -16,7 +17,9 @@ const __filename = fileURLToPath(
   import.meta.url
 );
 
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(
+  __filename
+);
 
 const pastaMidias = path.join(
   __dirname,
@@ -32,11 +35,19 @@ if (!fs.existsSync(pastaMidias)) {
 }
 
 const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
+  destination: (
+    req,
+    file,
+    callback
+  ) => {
     callback(null, pastaMidias);
   },
 
-  filename: (req, file, callback) => {
+  filename: (
+    req,
+    file,
+    callback
+  ) => {
     const extensao = path
       .extname(file.originalname)
       .toLowerCase();
@@ -61,7 +72,10 @@ const filtroArquivo = (
   const videoPermitido =
     file.mimetype.startsWith("video/");
 
-  if (!imagemPermitida && !videoPermitido) {
+  if (
+    !imagemPermitida &&
+    !videoPermitido
+  ) {
     return callback(
       new Error(
         "Envie apenas uma foto ou vídeo."
@@ -89,6 +103,11 @@ router.post(
 router.get(
   "/:local_id",
   listarAvaliacoes
+);
+
+router.put(
+  "/:id",
+  atualizarAvaliacao
 );
 
 router.delete(
