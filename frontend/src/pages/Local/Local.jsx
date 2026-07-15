@@ -714,7 +714,7 @@ function Local() {
                                 />
                               ) : (
                                 <video
-                                  src={midia.url}
+                                  src={`${midia.url}#t=0.1`}
                                   muted
                                   playsInline
                                   preload="metadata"
@@ -838,7 +838,7 @@ function Local() {
                           <div className="review-media">
                             {avaliacao.midia.tipo === "video" ? (
                               <video
-                                src={avaliacao.midia.url}
+                                src={`${avaliacao.midia.url}#t=0.1`}
                                 controls
                                 playsInline
                                 preload="metadata"
