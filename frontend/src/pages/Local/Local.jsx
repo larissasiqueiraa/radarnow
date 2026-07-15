@@ -880,26 +880,71 @@ function Local() {
                   <span>Ver todas</span>
                 </div>
 
-                <div className="photo-grid">
-                  <div
-                    className={
-                      fotoUrl
-                        ? "photo-card"
-                        : `photo-card ${imagemClasse}`
-                    }
-                  >
-                    {fotoUrl && (
-                      <img
-                        src={fotoUrl}
-                        alt={local.nome}
-                      />
-                    )}
-                  </div>
+                {carregandoMidias && (
+                  <p className="reviews-empty">
+                    Carregando mídias...
+                  </p>
+                )}
 
-                  <div className="photo-card photo-alt-one"></div>
+                {!carregandoMidias &&
+                  midiasRecentes.length === 0 && (
+                    <p className="reviews-empty">
+                      Nenhuma foto ou vídeo
+                      recente.
+                    </p>
+                  )}
 
-                  <div className="photo-card photo-alt-two"></div>
-                </div>
+                {!carregandoMidias &&
+                  midiasRecentes.length > 0 && (
+                    <div className="photo-grid">
+                      {midiasRecentes.map(
+                        (midia) => (
+                          <div
+                            className={
+                              "photo-card " +
+                              "media-preview-card"
+                            }
+                            key={midia.id}
+                          >
+                            {midia.tipo ===
+                            "video" ? (
+                              <>
+                                {midia.thumbnail ? (
+                                  <img
+                                    src={
+                                      midia.thumbnail
+                                    }
+                                    alt="Prévia do vídeo"
+                                    loading="lazy"
+                                  />
+                                ) : (
+                                  <video
+                                    src={`${midia.url}#t=0.1`}
+                                    muted
+                                    playsInline
+                                    preload="metadata"
+                                  />
+                                )}
+
+                                <span className="media-preview-play">
+                                  <Play
+                                    size={18}
+                                    fill="currentColor"
+                                  />
+                                </span>
+                              </>
+                            ) : (
+                              <img
+                                src={midia.url}
+                                alt="Mídia recente"
+                                loading="lazy"
+                              />
+                            )}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  )}
               </section>
 
               <section className="updates-feed">
@@ -909,83 +954,125 @@ function Local() {
                   </h3>
 
                   <span>
-                    {avaliacoes.length ||
-                      12}{" "}
-                    avaliações
+                    {avaliacoes.length}{" "}
+                    {avaliacoes.length === 1
+                      ? "avaliação"
+                      : "avaliações"}
                   </span>
                 </div>
 
-                <article className="comment-card">
-                  <div className="avatar">
-                    L
-                  </div>
+                {carregandoAvaliacoes && (
+                  <p className="reviews-empty">
+                    Carregando avaliações...
+                  </p>
+                )}
 
-                  <div className="comment-content">
-                    <div className="comment-header">
-                      <strong>
-                        Larissa
-                      </strong>
-
-                      <span>
-                        <Star
-                          size={13}
-                          fill="currentColor"
-                        />
-                        5
-                      </span>
-                    </div>
-
-                    <span className="review-status status-red">
-                      Lotado
-                    </span>
-
-                    <p>
-                      Fila grande agora, mas
-                      o ambiente está muito
-                      bom.
+                {!carregandoAvaliacoes &&
+                  avaliacoes.length === 0 && (
+                    <p className="reviews-empty">
+                      Nenhuma avaliação ainda.
                     </p>
+                  )}
 
-                    <small className="review-date">
-                      @usuario • agora
-                    </small>
-                  </div>
-                </article>
+                {!carregandoAvaliacoes &&
+                  avaliacoes.map(
+                    (avaliacao) => (
+                      <article
+                        className="comment-card"
+                        key={avaliacao.id}
+                      >
+                        <div className="avatar">
+                          {avaliacao.foto_perfil ? (
+                            <img
+                              src={
+                                avaliacao.foto_perfil
+                              }
+                              alt={
+                                avaliacao.nome ||
+                                "Usuário"
+                              }
+                            />
+                          ) : avaliacao.nome ? (
+                            avaliacao.nome
+                              .charAt(0)
+                              .toUpperCase()
+                          ) : (
+                            "U"
+                          )}
+                        </div>
 
-                <article className="comment-card">
-                  <div className="avatar">
-                    M
-                  </div>
+                        <div className="comment-content">
+                          <div className="comment-header">
+                            <strong>
+                              {avaliacao.nome ||
+                                "Usuário"}
+                            </strong>
 
-                  <div className="comment-content">
-                    <div className="comment-header">
-                      <strong>
-                        Marina
-                      </strong>
+                            <span>
+                              <Star
+                                size={13}
+                                fill="currentColor"
+                              />
 
-                      <span>
-                        <Star
-                          size={13}
-                          fill="currentColor"
-                        />
-                        4
-                      </span>
-                    </div>
+                              {avaliacao.nota}
+                            </span>
+                          </div>
 
-                    <span className="review-status status-yellow">
-                      Movimentado
-                    </span>
+                          {avaliacao.status && (
+                            <span
+                              className={
+                                `review-status ` +
+                                getStatusClass(
+                                  avaliacao.status
+                                )
+                              }
+                            >
+                              {avaliacao.status}
+                            </span>
+                          )}
 
-                    <p>
-                      Está enchendo aos
-                      poucos, vale chegar
-                      logo.
-                    </p>
+                          <p>
+                            {avaliacao.comentario}
+                          </p>
 
-                    <small className="review-date">
-                      @usuario • há 8 min
-                    </small>
-                  </div>
-                </article>
+                          {avaliacao.midia && (
+                            <div className="review-media">
+                              {avaliacao.midia.tipo ===
+                              "video" ? (
+                                <video
+                                  src={`${avaliacao.midia.url}#t=0.1`}
+                                  muted
+                                  playsInline
+                                  preload="metadata"
+                                />
+                              ) : (
+                                <img
+                                  src={
+                                    avaliacao.midia.url
+                                  }
+                                  alt={`Mídia enviada por ${
+                                    avaliacao.nome ||
+                                    "usuário"
+                                  }`}
+                                  loading="lazy"
+                                />
+                              )}
+                            </div>
+                          )}
+
+                          <small className="review-date">
+                            @
+                            {avaliacao.usuario ||
+                              "usuario"}{" "}
+                            •{" "}
+                            {formatarData(
+                              avaliacao.criado_em
+                            )}
+                          </small>
+                        </div>
+                      </article>
+                    )
+                  )}
               </section>
             </div>
 

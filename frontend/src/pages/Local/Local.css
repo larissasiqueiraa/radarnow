@@ -741,3 +741,51 @@
   display: block;
   object-fit: cover;
 }
+
+/* Botão Excluir da avaliação */
+.review-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.review-footer .review-date {
+  margin: 0;
+}
+
+.review-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #ef4444;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.review-delete-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.review-delete-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+  .review-footer {
+    align-items: flex-start;
+  }
+}
