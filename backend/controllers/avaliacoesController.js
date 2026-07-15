@@ -1,5 +1,19 @@
 import db from "../config/db.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
 import { moderarTexto } from "../utils/moderacaoTexto.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const pastaMidias = path.join(
+  __dirname,
+  "..",
+  "uploads",
+  "midias"
+);
 
 function montarUrlMidia(req) {
   if (!req.file) {
@@ -86,28 +100,29 @@ export async function criarAvaliacao(req, res) {
       const tipo = descobrirTipoMidia(req.file);
       const url = montarUrlMidia(req);
 
-      const [resultadoMidia] = await connection.execute(
-        `
-        INSERT INTO midias
-        (
-          local_id,
-          usuario_id,
-          avaliacao_id,
-          tipo,
-          url,
-          thumbnail
-        )
-        VALUES (?, ?, ?, ?, ?, ?)
-        `,
-        [
-          Number(local_id),
-          Number(usuario_id),
-          avaliacaoId,
-          tipo,
-          url,
-          null,
-        ]
-      );
+      const [resultadoMidia] =
+        await connection.execute(
+          `
+          INSERT INTO midias
+          (
+            local_id,
+            usuario_id,
+            avaliacao_id,
+            tipo,
+            url,
+            thumbnail
+          )
+          VALUES (?, ?, ?, ?, ?, ?)
+          `,
+          [
+            Number(local_id),
+            Number(usuario_id),
+            avaliacaoId,
+            tipo,
+            url,
+            null,
+          ]
+        );
 
       midiaCriada = {
         id: resultadoMidia.insertId,
@@ -130,14 +145,18 @@ export async function criarAvaliacao(req, res) {
         local_id: Number(local_id),
         status,
         nota: Number(nota),
-        comentario: comentario?.trim() || status,
+        comentario:
+          comentario?.trim() || status,
         midia: midiaCriada,
       },
     });
   } catch (error) {
     await connection.rollback();
 
-    console.error("Erro ao criar avaliação:", error);
+    console.error(
+      "Erro ao criar avaliação:",
+      error
+    );
 
     return res.status(500).json({
       erro: "Erro ao criar avaliação",
@@ -187,35 +206,178 @@ export async function listarAvaliacoes(req, res) {
       [local_id]
     );
 
-    const resultado = avaliacoes.map((avaliacao) => ({
-      id: avaliacao.id,
-      usuario_id: avaliacao.usuario_id,
-      local_id: avaliacao.local_id,
-      status: avaliacao.status,
-      nota: avaliacao.nota,
-      comentario: avaliacao.comentario,
-      criado_em: avaliacao.criado_em,
-      nome: avaliacao.nome,
-      usuario: avaliacao.usuario,
-      foto_perfil: avaliacao.foto_perfil,
+    const resultado = avaliacoes.map(
+      (avaliacao) => ({
+        id: avaliacao.id,
+        usuario_id: avaliacao.usuario_id,
+        local_id: avaliacao.local_id,
+        status: avaliacao.status,
+        nota: avaliacao.nota,
+        comentario: avaliacao.comentario,
+        criado_em: avaliacao.criado_em,
+        nome: avaliacao.nome,
+        usuario: avaliacao.usuario,
+        foto_perfil:
+          avaliacao.foto_perfil,
 
-      midia: avaliacao.midia_id
-        ? {
-            id: avaliacao.midia_id,
-            tipo: avaliacao.midia_tipo,
-            url: avaliacao.midia_url,
-            thumbnail: avaliacao.midia_thumbnail,
-          }
-        : null,
-    }));
+        midia: avaliacao.midia_id
+          ? {
+              id: avaliacao.midia_id,
+              tipo: avaliacao.midia_tipo,
+              url: avaliacao.midia_url,
+              thumbnail:
+                avaliacao.midia_thumbnail,
+            }
+          : null,
+      })
+    );
 
     return res.json(resultado);
   } catch (error) {
-    console.error("Erro ao buscar avaliações:", error);
+    console.error(
+      "Erro ao buscar avaliações:",
+      error
+    );
 
     return res.status(500).json({
       erro: "Erro ao buscar avaliações",
       detalhe: error.message,
     });
+  }
+}
+
+export async function excluirAvaliacao(req, res) {
+  const connection = await db.getConnection();
+
+  let transacaoIniciada = false;
+
+  try {
+    const { id } = req.params;
+    const { usuario_id } = req.body;
+
+    if (!id || !usuario_id) {
+      return res.status(400).json({
+        erro:
+          "Avaliação e usuário são obrigatórios.",
+      });
+    }
+
+    const [avaliacoes] =
+      await connection.execute(
+        `
+        SELECT
+          avaliacoes.id,
+          avaliacoes.usuario_id,
+          midias.url AS midia_url
+        FROM avaliacoes
+        LEFT JOIN midias
+          ON midias.avaliacao_id =
+             avaliacoes.id
+        WHERE avaliacoes.id = ?
+        LIMIT 1
+        `,
+        [Number(id)]
+      );
+
+    if (avaliacoes.length === 0) {
+      return res.status(404).json({
+        erro: "Avaliação não encontrada.",
+      });
+    }
+
+    const avaliacao = avaliacoes[0];
+
+    if (
+      Number(avaliacao.usuario_id) !==
+      Number(usuario_id)
+    ) {
+      return res.status(403).json({
+        erro:
+          "Você não pode excluir a avaliação de outra pessoa.",
+      });
+    }
+
+    await connection.beginTransaction();
+    transacaoIniciada = true;
+
+    await connection.execute(
+      `
+      DELETE FROM midias
+      WHERE avaliacao_id = ?
+      `,
+      [Number(id)]
+    );
+
+    const [resultado] =
+      await connection.execute(
+        `
+        DELETE FROM avaliacoes
+        WHERE id = ?
+          AND usuario_id = ?
+        `,
+        [Number(id), Number(usuario_id)]
+      );
+
+    if (resultado.affectedRows === 0) {
+      await connection.rollback();
+      transacaoIniciada = false;
+
+      return res.status(404).json({
+        erro:
+          "Não foi possível excluir a avaliação.",
+      });
+    }
+
+    await connection.commit();
+    transacaoIniciada = false;
+
+    if (avaliacao.midia_url) {
+      try {
+        const urlMidia = new URL(
+          avaliacao.midia_url
+        );
+
+        const nomeArquivo = path.basename(
+          urlMidia.pathname
+        );
+
+        const caminhoArquivo = path.join(
+          pastaMidias,
+          nomeArquivo
+        );
+
+        if (fs.existsSync(caminhoArquivo)) {
+          await fs.promises.unlink(
+            caminhoArquivo
+          );
+        }
+      } catch (errorArquivo) {
+        console.error(
+          "Avaliação apagada, mas houve erro ao remover o arquivo:",
+          errorArquivo
+        );
+      }
+    }
+
+    return res.json({
+      mensagem:
+        "Avaliação excluída com sucesso.",
+    });
+  } catch (error) {
+    if (transacaoIniciada) {
+      await connection.rollback();
+    }
+
+    console.error(
+      "Erro ao excluir avaliação:",
+      error
+    );
+
+    return res.status(500).json({
+      erro: "Erro ao excluir avaliação.",
+      detalhe: error.message,
+    });
+  } finally {
+    connection.release();
   }
 }

@@ -7,11 +7,15 @@ import { fileURLToPath } from "url";
 import {
   criarAvaliacao,
   listarAvaliacoes,
+  excluirAvaliacao,
 } from "../controllers/avaliacoesController.js";
 
 const router = express.Router();
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(
+  import.meta.url
+);
+
 const __dirname = path.dirname(__filename);
 
 const pastaMidias = path.join(
@@ -37,15 +41,20 @@ const storage = multer.diskStorage({
       .extname(file.originalname)
       .toLowerCase();
 
-    const nomeArquivo = `midia-${Date.now()}-${Math.round(
-      Math.random() * 1e9
-    )}${extensao}`;
+    const nomeArquivo =
+      `midia-${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}${extensao}`;
 
     callback(null, nomeArquivo);
   },
 });
 
-const filtroArquivo = (req, file, callback) => {
+const filtroArquivo = (
+  req,
+  file,
+  callback
+) => {
   const imagemPermitida =
     file.mimetype.startsWith("image/");
 
@@ -54,7 +63,9 @@ const filtroArquivo = (req, file, callback) => {
 
   if (!imagemPermitida && !videoPermitido) {
     return callback(
-      new Error("Envie apenas uma foto ou vídeo.")
+      new Error(
+        "Envie apenas uma foto ou vídeo."
+      )
     );
   }
 
@@ -75,6 +86,14 @@ router.post(
   criarAvaliacao
 );
 
-router.get("/:local_id", listarAvaliacoes);
+router.get(
+  "/:local_id",
+  listarAvaliacoes
+);
+
+router.delete(
+  "/:id",
+  excluirAvaliacao
+);
 
 export default router;
