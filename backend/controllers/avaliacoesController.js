@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+import { moderarTexto } from "../utils/moderacaoTexto.js";
 
 function montarUrlMidia(req) {
   if (!req.file) {
@@ -37,6 +38,20 @@ export async function criarAvaliacao(req, res) {
     if (!usuario_id || !local_id || !status || !nota) {
       return res.status(400).json({
         erro: "Dados obrigatórios não enviados.",
+      });
+    }
+
+    const textoParaModerar =
+      comentario?.trim() || status;
+
+    const resultadoModeracao =
+      moderarTexto(textoParaModerar);
+
+    if (!resultadoModeracao.aprovado) {
+      return res.status(400).json({
+        erro:
+          resultadoModeracao.motivo ||
+          "Conteúdo não permitido.",
       });
     }
 
