@@ -10,6 +10,8 @@ import {
   Heart,
   RefreshCcw,
   Play,
+  MoreVertical,
+  Trash2,
 } from "lucide-react";
 
 import "./Local.css";
@@ -40,8 +42,27 @@ function Local() {
   const [carregandoMidias, setCarregandoMidias] =
     useState(true);
 
+  const [menuAvaliacaoAberto, setMenuAvaliacaoAberto] =
+    useState(null);
+  const [avaliacaoExcluindo, setAvaliacaoExcluindo] =
+    useState(null);
+
   const usuarioSalvo = localStorage.getItem("radarnow_usuario");
-  const estaLogado = !!usuarioSalvo;
+
+  const usuarioAtual = (() => {
+    if (!usuarioSalvo) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(usuarioSalvo);
+    } catch (error) {
+      console.error("Erro ao ler usuário salvo:", error);
+      return null;
+    }
+  })();
+
+  const estaLogado = !!usuarioAtual;
 
   useEffect(() => {
     carregarLocal();
@@ -284,6 +305,88 @@ function Local() {
         "Não foi possível atualizar o favorito.",
         "error"
       );
+    }
+  }
+
+  async function excluirAvaliacao(avaliacaoId) {
+    if (!usuarioAtual?.id) {
+      navigate("/login");
+      return;
+    }
+
+    const confirmou = window.confirm(
+      "Tem certeza que deseja excluir esta avaliação?"
+    );
+
+    if (!confirmou) {
+      return;
+    }
+
+    try {
+      setAvaliacaoExcluindo(avaliacaoId);
+
+      const resposta = await fetch(
+        `${API_URL}/api/avaliacoes/${avaliacaoId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            usuario_id: usuarioAtual.id,
+          }),
+        }
+      );
+
+      let dados = {};
+
+      try {
+        dados = await resposta.json();
+      } catch {
+        dados = {};
+      }
+
+      if (!resposta.ok) {
+        showToast(
+          dados.erro || "Não foi possível excluir a avaliação.",
+          "error"
+        );
+        return;
+      }
+
+      setAvaliacoes((avaliacoesAtuais) =>
+        avaliacoesAtuais.filter(
+          (avaliacao) =>
+            Number(avaliacao.id) !== Number(avaliacaoId)
+        )
+      );
+
+      setMidias((midiasAtuais) =>
+        midiasAtuais.filter(
+          (midia) =>
+            Number(midia.avaliacao_id) !==
+            Number(avaliacaoId)
+        )
+      );
+
+      setMenuAvaliacaoAberto(null);
+
+      showToast(
+        "Avaliação excluída com sucesso.",
+        "success"
+      );
+    } catch (error) {
+      console.error(
+        "Erro ao excluir avaliação:",
+        error
+      );
+
+      showToast(
+        "Não foi possível excluir a avaliação.",
+        "error"
+      );
+    } finally {
+      setAvaliacaoExcluindo(null);
     }
   }
 
@@ -803,14 +906,75 @@ function Local() {
                               "Usuário"}
                           </strong>
 
-                          <span>
-                            <Star
-                              size={13}
-                              fill="currentColor"
-                            />
+                          <div className="review-header-actions">
+                            <span>
+                              <Star
+                                size={13}
+                                fill="currentColor"
+                              />
 
-                            {avaliacao.nota}
-                          </span>
+                              {avaliacao.nota}
+                            </span>
+
+                            {Number(
+                              avaliacao.usuario_id
+                            ) ===
+                              Number(
+                                usuarioAtual?.id
+                              ) && (
+                              <div className="review-options">
+                                <button
+                                  type="button"
+                                  className="review-options-trigger"
+                                  aria-label="Abrir opções da avaliação"
+                                  aria-expanded={
+                                    menuAvaliacaoAberto ===
+                                    avaliacao.id
+                                  }
+                                  onClick={() =>
+                                    setMenuAvaliacaoAberto(
+                                      menuAvaliacaoAberto ===
+                                        avaliacao.id
+                                        ? null
+                                        : avaliacao.id
+                                    )
+                                  }
+                                >
+                                  <MoreVertical
+                                    size={18}
+                                  />
+                                </button>
+
+                                {menuAvaliacaoAberto ===
+                                  avaliacao.id && (
+                                  <div className="review-options-menu">
+                                    <button
+                                      type="button"
+                                      className="review-delete-btn"
+                                      disabled={
+                                        avaliacaoExcluindo ===
+                                        avaliacao.id
+                                      }
+                                      onClick={() =>
+                                        excluirAvaliacao(
+                                          avaliacao.id
+                                        )
+                                      }
+                                    >
+                                      <Trash2
+                                        size={15}
+                                      />
+
+                                      {avaliacaoExcluindo ===
+                                      avaliacao.id
+                                        ? "Excluindo..."
+                                        : "Excluir"}
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
 
                         {avaliacao.status && (
