@@ -227,8 +227,8 @@ function Midias() {
   }
 
   const opacidadeFundo = Math.max(
-    0.25,
-    1 - deslocamentoY / 450
+    0.12,
+    0.7 - deslocamentoY / 450
   );
 
   return (

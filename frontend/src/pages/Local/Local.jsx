@@ -798,8 +798,8 @@ function Local() {
   const midiasRecentes = midias.slice(0, 3);
 
   const opacidadeFundoMidia = Math.max(
-    0.25,
-    1 - deslocamentoMidiaY / 450
+    0.12,
+    0.7 - deslocamentoMidiaY / 450
   );
 
   return (

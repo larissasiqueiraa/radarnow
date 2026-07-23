@@ -900,7 +900,9 @@
   border-radius: 50%;
 
   color: #fff;
-  background: rgba(20, 20, 20, 0.68);
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
 }
 
@@ -955,7 +957,7 @@
   );
 
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 8px;
 
   -webkit-user-drag: none;
   user-select: none;
