@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -15,6 +15,9 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://radarnow-production.up.railway.app";
 
+const LIMITE_SWIPE_HORIZONTAL = 55;
+const LIMITE_FECHAR_VERTICAL = 110;
+
 function Midias() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,11 +25,53 @@ function Midias() {
   const [midias, setMidias] = useState([]);
   const [filtro, setFiltro] = useState("todas");
   const [carregando, setCarregando] = useState(true);
-  const [midiaAberta, setMidiaAberta] = useState(null);
+
+  const [indiceAberto, setIndiceAberto] = useState(null);
+  const [deslocamentoY, setDeslocamentoY] = useState(0);
+  const [arrastando, setArrastando] = useState(false);
+
+  const toqueInicial = useRef({
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
     carregarMidias();
   }, [id]);
+
+  const midiasFiltradas = useMemo(() => {
+    return midias.filter((midia) => {
+      if (filtro === "todas") {
+        return true;
+      }
+
+      return midia.tipo === filtro;
+    });
+  }, [midias, filtro]);
+
+  const midiaAberta =
+    indiceAberto !== null
+      ? midiasFiltradas[indiceAberto]
+      : null;
+
+  useEffect(() => {
+    if (indiceAberto !== null) {
+      setIndiceAberto(null);
+    }
+  }, [filtro]);
+
+  useEffect(() => {
+    if (!midiaAberta) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [midiaAberta]);
 
   async function carregarMidias() {
     try {
@@ -56,13 +101,135 @@ function Midias() {
     }
   }
 
-  const midiasFiltradas = midias.filter((midia) => {
-    if (filtro === "todas") {
-      return true;
+  function abrirMidia(indice) {
+    setIndiceAberto(indice);
+    setDeslocamentoY(0);
+    setArrastando(false);
+  }
+
+  function fecharMidia() {
+    setIndiceAberto(null);
+    setDeslocamentoY(0);
+    setArrastando(false);
+  }
+
+  function mostrarProxima() {
+    if (indiceAberto === null) {
+      return;
     }
 
-    return midia.tipo === filtro;
-  });
+    setIndiceAberto((indiceAtual) => {
+      if (indiceAtual >= midiasFiltradas.length - 1) {
+        return 0;
+      }
+
+      return indiceAtual + 1;
+    });
+
+    setDeslocamentoY(0);
+  }
+
+  function mostrarAnterior() {
+    if (indiceAberto === null) {
+      return;
+    }
+
+    setIndiceAberto((indiceAtual) => {
+      if (indiceAtual <= 0) {
+        return midiasFiltradas.length - 1;
+      }
+
+      return indiceAtual - 1;
+    });
+
+    setDeslocamentoY(0);
+  }
+
+  function iniciarToque(event) {
+    const toque = event.touches[0];
+
+    toqueInicial.current = {
+      x: toque.clientX,
+      y: toque.clientY,
+    };
+
+    setArrastando(true);
+  }
+
+  function moverToque(event) {
+    if (!arrastando) {
+      return;
+    }
+
+    const toque = event.touches[0];
+
+    const diferencaX =
+      toque.clientX - toqueInicial.current.x;
+
+    const diferencaY =
+      toque.clientY - toqueInicial.current.y;
+
+    const movimentoMaisVertical =
+      Math.abs(diferencaY) > Math.abs(diferencaX);
+
+    if (!movimentoMaisVertical) {
+      return;
+    }
+
+    if (diferencaY > 0) {
+      setDeslocamentoY(diferencaY);
+    }
+  }
+
+  function finalizarToque(event) {
+    if (!arrastando) {
+      return;
+    }
+
+    const toqueFinal = event.changedTouches[0];
+
+    const diferencaX =
+      toqueFinal.clientX - toqueInicial.current.x;
+
+    const diferencaY =
+      toqueFinal.clientY - toqueInicial.current.y;
+
+    const movimentoHorizontal =
+      Math.abs(diferencaX) > Math.abs(diferencaY);
+
+    const movimentoVertical =
+      Math.abs(diferencaY) > Math.abs(diferencaX);
+
+    if (
+      movimentoVertical &&
+      diferencaY > LIMITE_FECHAR_VERTICAL
+    ) {
+      fecharMidia();
+      return;
+    }
+
+    if (
+      movimentoHorizontal &&
+      Math.abs(diferencaX) > LIMITE_SWIPE_HORIZONTAL
+    ) {
+      if (diferencaX < 0) {
+        mostrarProxima();
+      } else {
+        mostrarAnterior();
+      }
+
+      setArrastando(false);
+      return;
+    }
+
+    setDeslocamentoY(0);
+    setArrastando(false);
+  }
+
+  const opacidadeFundo = Math.max(
+    0.25,
+    1 - deslocamentoY / 450
+  );
 
   return (
     <main className="midias-page">
@@ -132,12 +299,12 @@ function Midias() {
 
         {!carregando && midiasFiltradas.length > 0 && (
           <section className="midias-grid">
-            {midiasFiltradas.map((midia) => (
+            {midiasFiltradas.map((midia, indice) => (
               <button
                 type="button"
                 className="midia-card"
                 key={midia.id}
-                onClick={() => setMidiaAberta(midia)}
+                onClick={() => abrirMidia(indice)}
               >
                 {midia.tipo === "video" ? (
                   <>
@@ -148,8 +315,9 @@ function Midias() {
                       />
                     ) : (
                       <video
-                        src={midia.url}
+                        src={`${midia.url}#t=0.1`}
                         muted
+                        playsInline
                         preload="metadata"
                       />
                     )}
@@ -177,23 +345,44 @@ function Midias() {
       {midiaAberta && (
         <div
           className="midia-modal"
-          onClick={() => setMidiaAberta(null)}
+          style={{
+            backgroundColor: `rgba(0, 0, 0, ${opacidadeFundo})`,
+          }}
+          onClick={fecharMidia}
         >
           <button
             type="button"
             className="midia-modal-close"
-            onClick={() => setMidiaAberta(null)}
+            onClick={(event) => {
+              event.stopPropagation();
+              fecharMidia();
+            }}
             aria-label="Fechar"
           >
             <X size={24} />
           </button>
 
+          <span className="midia-modal-indicador">
+            {indiceAberto + 1}/{midiasFiltradas.length}
+          </span>
+
           <div
-            className="midia-modal-content"
+            className={
+              `midia-modal-content ${
+                arrastando ? "arrastando" : ""
+              }`
+            }
+            style={{
+              transform: `translateY(${deslocamentoY}px)`,
+            }}
             onClick={(event) => event.stopPropagation()}
+            onTouchStart={iniciarToque}
+            onTouchMove={moverToque}
+            onTouchEnd={finalizarToque}
           >
             {midiaAberta.tipo === "video" ? (
               <video
+                key={midiaAberta.id}
                 src={midiaAberta.url}
                 controls
                 autoPlay
@@ -201,8 +390,12 @@ function Midias() {
               />
             ) : (
               <img
+                key={midiaAberta.id}
                 src={midiaAberta.url}
-                alt="Mídia ampliada"
+                alt={`Mídia ${indiceAberto + 1} de ${
+                  midiasFiltradas.length
+                }`}
+                draggable="false"
               />
             )}
           </div>

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Star,
   MapPin,
@@ -12,6 +12,7 @@ import {
   Play,
   MoreVertical,
   Trash2,
+  X,
 } from "lucide-react";
 
 import "./Local.css";
@@ -42,6 +43,23 @@ function Local() {
   const [carregandoMidias, setCarregandoMidias] =
     useState(true);
 
+  const [indiceMidiaAberta, setIndiceMidiaAberta] =
+    useState(null);
+  const [deslocamentoMidiaY, setDeslocamentoMidiaY] =
+    useState(0);
+  const [arrastandoMidia, setArrastandoMidia] =
+    useState(false);
+
+  const toqueInicialMidia = useRef({
+    x: 0,
+    y: 0,
+  });
+
+  const midiaAberta =
+    indiceMidiaAberta !== null
+      ? midias[indiceMidiaAberta]
+      : null;
+
   const [menuAvaliacaoAberto, setMenuAvaliacaoAberto] =
     useState(null);
   const [avaliacaoExcluindo, setAvaliacaoExcluindo] =
@@ -70,6 +88,19 @@ function Local() {
     carregarMidias();
     verificarFavorito();
   }, [id]);
+
+  useEffect(() => {
+    if (!midiaAberta) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [midiaAberta]);
 
   async function carregarLocal() {
     try {
@@ -408,6 +439,141 @@ function Local() {
     navigate(`/local/${id}/midias`);
   }
 
+  function abrirMidia(indice) {
+    if (!estaLogado) {
+      navigate("/cadastro");
+      return;
+    }
+
+    setIndiceMidiaAberta(indice);
+    setDeslocamentoMidiaY(0);
+    setArrastandoMidia(false);
+  }
+
+  function fecharMidia() {
+    setIndiceMidiaAberta(null);
+    setDeslocamentoMidiaY(0);
+    setArrastandoMidia(false);
+  }
+
+  function mostrarProximaMidia() {
+    if (
+      indiceMidiaAberta === null ||
+      midias.length <= 1
+    ) {
+      return;
+    }
+
+    setIndiceMidiaAberta((indiceAtual) =>
+      indiceAtual >= midias.length - 1
+        ? 0
+        : indiceAtual + 1
+    );
+
+    setDeslocamentoMidiaY(0);
+  }
+
+  function mostrarMidiaAnterior() {
+    if (
+      indiceMidiaAberta === null ||
+      midias.length <= 1
+    ) {
+      return;
+    }
+
+    setIndiceMidiaAberta((indiceAtual) =>
+      indiceAtual <= 0
+        ? midias.length - 1
+        : indiceAtual - 1
+    );
+
+    setDeslocamentoMidiaY(0);
+  }
+
+  function iniciarToqueMidia(event) {
+    const toque = event.touches[0];
+
+    toqueInicialMidia.current = {
+      x: toque.clientX,
+      y: toque.clientY,
+    };
+
+    setArrastandoMidia(true);
+  }
+
+  function moverToqueMidia(event) {
+    if (!arrastandoMidia) {
+      return;
+    }
+
+    const toque = event.touches[0];
+
+    const diferencaX =
+      toque.clientX - toqueInicialMidia.current.x;
+
+    const diferencaY =
+      toque.clientY - toqueInicialMidia.current.y;
+
+    const movimentoMaisVertical =
+      Math.abs(diferencaY) > Math.abs(diferencaX);
+
+    if (
+      movimentoMaisVertical &&
+      diferencaY > 0
+    ) {
+      setDeslocamentoMidiaY(diferencaY);
+    }
+  }
+
+  function finalizarToqueMidia(event) {
+    if (!arrastandoMidia) {
+      return;
+    }
+
+    const toqueFinal = event.changedTouches[0];
+
+    const diferencaX =
+      toqueFinal.clientX -
+      toqueInicialMidia.current.x;
+
+    const diferencaY =
+      toqueFinal.clientY -
+      toqueInicialMidia.current.y;
+
+    const movimentoHorizontal =
+      Math.abs(diferencaX) >
+      Math.abs(diferencaY);
+
+    const movimentoVertical =
+      Math.abs(diferencaY) >
+      Math.abs(diferencaX);
+
+    if (
+      movimentoVertical &&
+      diferencaY > 110
+    ) {
+      fecharMidia();
+      return;
+    }
+
+    if (
+      movimentoHorizontal &&
+      Math.abs(diferencaX) > 55
+    ) {
+      if (diferencaX < 0) {
+        mostrarProximaMidia();
+      } else {
+        mostrarMidiaAnterior();
+      }
+
+      setArrastandoMidia(false);
+      return;
+    }
+
+    setDeslocamentoMidiaY(0);
+    setArrastandoMidia(false);
+  }
+
   function abrirRota() {
     if (!local?.lat || !local?.lng) {
       return;
@@ -631,6 +797,11 @@ function Local() {
 
   const midiasRecentes = midias.slice(0, 3);
 
+  const opacidadeFundoMidia = Math.max(
+    0.25,
+    1 - deslocamentoMidiaY / 450
+  );
+
   return (
     <main className="local-page">
       <Header />
@@ -792,7 +963,7 @@ function Local() {
                 midiasRecentes.length > 0 && (
                   <div className="photo-grid">
                     {midiasRecentes.map(
-                      (midia) => (
+                      (midia, indice) => (
                         <button
                           type="button"
                           className={
@@ -800,8 +971,8 @@ function Local() {
                             "media-preview-card"
                           }
                           key={midia.id}
-                          onClick={
-                            abrirTodasMidias
+                          onClick={() =>
+                            abrirMidia(indice)
                           }
                         >
                           {midia.tipo ===
@@ -1286,6 +1457,73 @@ function Local() {
           </section>
         )}
       </div>
+
+
+      {midiaAberta && (
+        <div
+          className="midia-modal"
+          style={{
+            backgroundColor:
+              `rgba(0, 0, 0, ${opacidadeFundoMidia})`,
+          }}
+          onClick={fecharMidia}
+        >
+          <button
+            type="button"
+            className="midia-modal-close"
+            onClick={(event) => {
+              event.stopPropagation();
+              fecharMidia();
+            }}
+            aria-label="Fechar mídia"
+          >
+            <X size={24} />
+          </button>
+
+          <span className="midia-modal-indicador">
+            {indiceMidiaAberta + 1}/{midias.length}
+          </span>
+
+          <div
+            className={
+              `midia-modal-content ${
+                arrastandoMidia
+                  ? "arrastando"
+                  : ""
+              }`
+            }
+            style={{
+              transform:
+                `translateY(${deslocamentoMidiaY}px)`,
+            }}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+            onTouchStart={iniciarToqueMidia}
+            onTouchMove={moverToqueMidia}
+            onTouchEnd={finalizarToqueMidia}
+          >
+            {midiaAberta.tipo === "video" ? (
+              <video
+                key={midiaAberta.id}
+                src={midiaAberta.url}
+                controls
+                autoPlay
+                playsInline
+              />
+            ) : (
+              <img
+                key={midiaAberta.id}
+                src={midiaAberta.url}
+                alt={`Mídia ${
+                  indiceMidiaAberta + 1
+                } de ${midias.length}`}
+                draggable="false"
+              />
+            )}
+          </div>
+        </div>
+      )}
 
       <Footer />
     </main>
