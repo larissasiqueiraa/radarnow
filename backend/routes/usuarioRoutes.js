@@ -1,16 +1,36 @@
 import express from "express";
+
 import {
   buscarPerfil,
   atualizarUsuario,
+  excluirConta,
 } from "../controllers/usuarioController.js";
 
-import { upload } from "../middlewares/upload.js";
+import {
+  upload,
+} from "../middlewares/upload.js";
+
+import {
+  autenticarUsuario,
+} from "../middlewares/autenticacao.js";
 
 const router = express.Router();
 
-router.get("/:id", buscarPerfil);
+router.delete(
+  "/conta",
+  autenticarUsuario,
+  excluirConta
+);
 
-// 👇 AQUI está a correção principal
-router.put("/:id", upload.single("foto"), atualizarUsuario);
+router.get(
+  "/:id",
+  buscarPerfil
+);
+
+router.put(
+  "/:id",
+  upload.single("foto"),
+  atualizarUsuario
+);
 
 export default router;
