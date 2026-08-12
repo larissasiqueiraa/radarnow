@@ -124,32 +124,34 @@ function Avatar({
           : "Avatar do usuário"
       }
     >
-      {mostrarFoto ? (
-        <img
-          src={foto}
-          alt=""
-          className="rn-avatar-image"
-          onError={() =>
-            setErroNaFoto(true)
-          }
-        />
-      ) : inicial ? (
-        <span
-          className="rn-avatar-initial"
-          aria-hidden="true"
-        >
-          {inicial}
-        </span>
-      ) : mostrarIconeSemUsuario ? (
-        <User
-          className="rn-avatar-icon"
-          size={Math.max(
-            18,
-            tamanho * 0.42
-          )}
-          aria-hidden="true"
-        />
-      ) : null}
+      <span className="rn-avatar-content">
+        {mostrarFoto ? (
+          <img
+            src={foto}
+            alt=""
+            className="rn-avatar-image"
+            onError={() =>
+              setErroNaFoto(true)
+            }
+          />
+        ) : inicial ? (
+          <span
+            className="rn-avatar-initial"
+            aria-hidden="true"
+          >
+            {inicial}
+          </span>
+        ) : mostrarIconeSemUsuario ? (
+          <User
+            className="rn-avatar-icon"
+            size={Math.max(
+              18,
+              tamanho * 0.42
+            )}
+            aria-hidden="true"
+          />
+        ) : null}
+      </span>
     </span>
   );
 }

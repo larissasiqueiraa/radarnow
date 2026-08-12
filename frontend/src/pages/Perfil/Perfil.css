@@ -84,29 +84,11 @@
 .perfil-avatar {
   width: 112px;
   height: 112px;
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      #1a1a2a,
-      #1a1a2a
-    )
-    padding-box,
-    linear-gradient(
-      135deg,
-      #9b7cff,
-      #5ee7df
-    )
-    border-box;
-
-  border:
-    3px solid transparent;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;
   margin-bottom: 18px;
 }
 
