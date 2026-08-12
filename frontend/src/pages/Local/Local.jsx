@@ -18,11 +18,11 @@ import {
 import "./Local.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import Avatar from "../../components/Avatar/Avatar";
 import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://radarnow-production.up.railway.app";
+  import.meta.env.VITE_API_URL || "https://radarnow-production.up.railway.app";
 
 function Local() {
   const { id } = useParams();
@@ -36,19 +36,14 @@ function Local() {
   const [favorito, setFavorito] = useState(false);
 
   const [avaliacoes, setAvaliacoes] = useState([]);
-  const [carregandoAvaliacoes, setCarregandoAvaliacoes] =
-    useState(true);
+  const [carregandoAvaliacoes, setCarregandoAvaliacoes] = useState(true);
 
   const [midias, setMidias] = useState([]);
-  const [carregandoMidias, setCarregandoMidias] =
-    useState(true);
+  const [carregandoMidias, setCarregandoMidias] = useState(true);
 
-  const [indiceMidiaAberta, setIndiceMidiaAberta] =
-    useState(null);
-  const [deslocamentoMidiaY, setDeslocamentoMidiaY] =
-    useState(0);
-  const [arrastandoMidia, setArrastandoMidia] =
-    useState(false);
+  const [indiceMidiaAberta, setIndiceMidiaAberta] = useState(null);
+  const [deslocamentoMidiaY, setDeslocamentoMidiaY] = useState(0);
+  const [arrastandoMidia, setArrastandoMidia] = useState(false);
 
   const toqueInicialMidia = useRef({
     x: 0,
@@ -56,14 +51,10 @@ function Local() {
   });
 
   const midiaAberta =
-    indiceMidiaAberta !== null
-      ? midias[indiceMidiaAberta]
-      : null;
+    indiceMidiaAberta !== null ? midias[indiceMidiaAberta] : null;
 
-  const [menuAvaliacaoAberto, setMenuAvaliacaoAberto] =
-    useState(null);
-  const [avaliacaoExcluindo, setAvaliacaoExcluindo] =
-    useState(null);
+  const [menuAvaliacaoAberto, setMenuAvaliacaoAberto] = useState(null);
+  const [avaliacaoExcluindo, setAvaliacaoExcluindo] = useState(null);
 
   const usuarioSalvo = localStorage.getItem("radarnow_usuario");
 
@@ -107,16 +98,12 @@ function Local() {
       setCarregandoLocal(true);
       setErroLocal("");
 
-      const resposta = await fetch(
-        `${API_URL}/api/locais/${id}`
-      );
+      const resposta = await fetch(`${API_URL}/api/locais/${id}`);
 
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        setErroLocal(
-          dados.erro || "Local não encontrado."
-        );
+        setErroLocal(dados.erro || "Local não encontrado.");
 
         setLocal(null);
         return;
@@ -124,14 +111,9 @@ function Local() {
 
       setLocal(dados);
     } catch (error) {
-      console.error(
-        "Erro ao carregar local:",
-        error
-      );
+      console.error("Erro ao carregar local:", error);
 
-      setErroLocal(
-        "Não foi possível carregar este local."
-      );
+      setErroLocal("Não foi possível carregar este local.");
 
       setLocal(null);
     } finally {
@@ -143,30 +125,20 @@ function Local() {
     try {
       setCarregandoAvaliacoes(true);
 
-      const resposta = await fetch(
-        `${API_URL}/api/avaliacoes/${id}`
-      );
+      const resposta = await fetch(`${API_URL}/api/avaliacoes/${id}`);
 
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        console.error(
-          "Erro ao buscar avaliações:",
-          dados
-        );
+        console.error("Erro ao buscar avaliações:", dados);
 
         setAvaliacoes([]);
         return;
       }
 
-      setAvaliacoes(
-        Array.isArray(dados) ? dados : []
-      );
+      setAvaliacoes(Array.isArray(dados) ? dados : []);
     } catch (error) {
-      console.error(
-        "Erro ao carregar avaliações:",
-        error
-      );
+      console.error("Erro ao carregar avaliações:", error);
 
       setAvaliacoes([]);
     } finally {
@@ -178,30 +150,20 @@ function Local() {
     try {
       setCarregandoMidias(true);
 
-      const resposta = await fetch(
-        `${API_URL}/api/midias/local/${id}`
-      );
+      const resposta = await fetch(`${API_URL}/api/midias/local/${id}`);
 
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        console.error(
-          dados.erro ||
-            "Erro ao carregar mídias do local."
-        );
+        console.error(dados.erro || "Erro ao carregar mídias do local.");
 
         setMidias([]);
         return;
       }
 
-      setMidias(
-        Array.isArray(dados) ? dados : []
-      );
+      setMidias(Array.isArray(dados) ? dados : []);
     } catch (error) {
-      console.error(
-        "Erro ao carregar mídias:",
-        error
-      );
+      console.error("Erro ao carregar mídias:", error);
 
       setMidias([]);
     } finally {
@@ -210,9 +172,7 @@ function Local() {
   }
 
   async function verificarFavorito() {
-    const usuarioSalvo = localStorage.getItem(
-      "radarnow_usuario"
-    );
+    const usuarioSalvo = localStorage.getItem("radarnow_usuario");
 
     if (!usuarioSalvo) {
       setFavorito(false);
@@ -222,39 +182,28 @@ function Local() {
     const usuario = JSON.parse(usuarioSalvo);
 
     try {
-      const resposta = await fetch(
-        `${API_URL}/api/favoritos/${usuario.id}`
-      );
+      const resposta = await fetch(`${API_URL}/api/favoritos/${usuario.id}`);
 
       const dados = await resposta.json();
 
       if (!resposta.ok) {
-        console.error(
-          dados.erro ||
-            "Erro ao carregar favoritos"
-        );
+        console.error(dados.erro || "Erro ao carregar favoritos");
 
         return;
       }
 
       const estaFavoritado = dados.some(
-        (item) =>
-          Number(item.local_id) === Number(id)
+        (item) => Number(item.local_id) === Number(id),
       );
 
       setFavorito(estaFavoritado);
     } catch (error) {
-      console.error(
-        "Erro ao verificar favorito:",
-        error
-      );
+      console.error("Erro ao verificar favorito:", error);
     }
   }
 
   async function alternarFavorito() {
-    const usuarioSalvo = localStorage.getItem(
-      "radarnow_usuario"
-    );
+    const usuarioSalvo = localStorage.getItem("radarnow_usuario");
 
     if (!usuarioSalvo) {
       navigate("/cadastro");
@@ -270,72 +219,48 @@ function Local() {
           `${API_URL}/api/favoritos/${usuario.id}/${localId}`,
           {
             method: "DELETE",
-          }
+          },
         );
 
         const dados = await resposta.json();
 
         if (!resposta.ok) {
-          showToast(
-            dados.erro ||
-              "Erro ao remover favorito.",
-            "error"
-          );
+          showToast(dados.erro || "Erro ao remover favorito.", "error");
 
           return;
         }
 
         setFavorito(false);
 
-        showToast(
-          "Local removido dos favoritos.",
-          "success"
-        );
+        showToast("Local removido dos favoritos.", "success");
       } else {
-        const resposta = await fetch(
-          `${API_URL}/api/favoritos`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body: JSON.stringify({
-              usuario_id: usuario.id,
-              local_id: localId,
-            }),
-          }
-        );
+        const resposta = await fetch(`${API_URL}/api/favoritos`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            usuario_id: usuario.id,
+            local_id: localId,
+          }),
+        });
 
         const dados = await resposta.json();
 
         if (!resposta.ok) {
-          showToast(
-            dados.erro ||
-              "Erro ao adicionar favorito.",
-            "error"
-          );
+          showToast(dados.erro || "Erro ao adicionar favorito.", "error");
 
           return;
         }
 
         setFavorito(true);
 
-        showToast(
-          "Local adicionado aos favoritos.",
-          "success"
-        );
+        showToast("Local adicionado aos favoritos.", "success");
       }
     } catch (error) {
-      console.error(
-        "Erro ao alterar favorito:",
-        error
-      );
+      console.error("Erro ao alterar favorito:", error);
 
-      showToast(
-        "Não foi possível atualizar o favorito.",
-        "error"
-      );
+      showToast("Não foi possível atualizar o favorito.", "error");
     }
   }
 
@@ -346,7 +271,7 @@ function Local() {
     }
 
     const confirmou = window.confirm(
-      "Tem certeza que deseja excluir esta avaliação?"
+      "Tem certeza que deseja excluir esta avaliação?",
     );
 
     if (!confirmou) {
@@ -356,18 +281,15 @@ function Local() {
     try {
       setAvaliacaoExcluindo(avaliacaoId);
 
-      const resposta = await fetch(
-        `${API_URL}/api/avaliacoes/${avaliacaoId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            usuario_id: usuarioAtual.id,
-          }),
-        }
-      );
+      const resposta = await fetch(`${API_URL}/api/avaliacoes/${avaliacaoId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          usuario_id: usuarioAtual.id,
+        }),
+      });
 
       let dados = {};
 
@@ -380,42 +302,30 @@ function Local() {
       if (!resposta.ok) {
         showToast(
           dados.erro || "Não foi possível excluir a avaliação.",
-          "error"
+          "error",
         );
         return;
       }
 
       setAvaliacoes((avaliacoesAtuais) =>
         avaliacoesAtuais.filter(
-          (avaliacao) =>
-            Number(avaliacao.id) !== Number(avaliacaoId)
-        )
+          (avaliacao) => Number(avaliacao.id) !== Number(avaliacaoId),
+        ),
       );
 
       setMidias((midiasAtuais) =>
         midiasAtuais.filter(
-          (midia) =>
-            Number(midia.avaliacao_id) !==
-            Number(avaliacaoId)
-        )
+          (midia) => Number(midia.avaliacao_id) !== Number(avaliacaoId),
+        ),
       );
 
       setMenuAvaliacaoAberto(null);
 
-      showToast(
-        "Avaliação excluída com sucesso.",
-        "success"
-      );
+      showToast("Avaliação excluída com sucesso.", "success");
     } catch (error) {
-      console.error(
-        "Erro ao excluir avaliação:",
-        error
-      );
+      console.error("Erro ao excluir avaliação:", error);
 
-      showToast(
-        "Não foi possível excluir a avaliação.",
-        "error"
-      );
+      showToast("Não foi possível excluir a avaliação.", "error");
     } finally {
       setAvaliacaoExcluindo(null);
     }
@@ -457,34 +367,24 @@ function Local() {
   }
 
   function mostrarProximaMidia() {
-    if (
-      indiceMidiaAberta === null ||
-      midias.length <= 1
-    ) {
+    if (indiceMidiaAberta === null || midias.length <= 1) {
       return;
     }
 
     setIndiceMidiaAberta((indiceAtual) =>
-      indiceAtual >= midias.length - 1
-        ? 0
-        : indiceAtual + 1
+      indiceAtual >= midias.length - 1 ? 0 : indiceAtual + 1,
     );
 
     setDeslocamentoMidiaY(0);
   }
 
   function mostrarMidiaAnterior() {
-    if (
-      indiceMidiaAberta === null ||
-      midias.length <= 1
-    ) {
+    if (indiceMidiaAberta === null || midias.length <= 1) {
       return;
     }
 
     setIndiceMidiaAberta((indiceAtual) =>
-      indiceAtual <= 0
-        ? midias.length - 1
-        : indiceAtual - 1
+      indiceAtual <= 0 ? midias.length - 1 : indiceAtual - 1,
     );
 
     setDeslocamentoMidiaY(0);
@@ -508,19 +408,13 @@ function Local() {
 
     const toque = event.touches[0];
 
-    const diferencaX =
-      toque.clientX - toqueInicialMidia.current.x;
+    const diferencaX = toque.clientX - toqueInicialMidia.current.x;
 
-    const diferencaY =
-      toque.clientY - toqueInicialMidia.current.y;
+    const diferencaY = toque.clientY - toqueInicialMidia.current.y;
 
-    const movimentoMaisVertical =
-      Math.abs(diferencaY) > Math.abs(diferencaX);
+    const movimentoMaisVertical = Math.abs(diferencaY) > Math.abs(diferencaX);
 
-    if (
-      movimentoMaisVertical &&
-      diferencaY > 0
-    ) {
+    if (movimentoMaisVertical && diferencaY > 0) {
       setDeslocamentoMidiaY(diferencaY);
     }
   }
@@ -532,34 +426,20 @@ function Local() {
 
     const toqueFinal = event.changedTouches[0];
 
-    const diferencaX =
-      toqueFinal.clientX -
-      toqueInicialMidia.current.x;
+    const diferencaX = toqueFinal.clientX - toqueInicialMidia.current.x;
 
-    const diferencaY =
-      toqueFinal.clientY -
-      toqueInicialMidia.current.y;
+    const diferencaY = toqueFinal.clientY - toqueInicialMidia.current.y;
 
-    const movimentoHorizontal =
-      Math.abs(diferencaX) >
-      Math.abs(diferencaY);
+    const movimentoHorizontal = Math.abs(diferencaX) > Math.abs(diferencaY);
 
-    const movimentoVertical =
-      Math.abs(diferencaY) >
-      Math.abs(diferencaX);
+    const movimentoVertical = Math.abs(diferencaY) > Math.abs(diferencaX);
 
-    if (
-      movimentoVertical &&
-      diferencaY > 110
-    ) {
+    if (movimentoVertical && diferencaY > 110) {
       fecharMidia();
       return;
     }
 
-    if (
-      movimentoHorizontal &&
-      Math.abs(diferencaX) > 55
-    ) {
+    if (movimentoHorizontal && Math.abs(diferencaX) > 55) {
       if (diferencaX < 0) {
         mostrarProximaMidia();
       } else {
@@ -583,11 +463,7 @@ function Local() {
       `https://www.google.com/maps/dir/?api=1&destination=` +
       `${local.lat},${local.lng}`;
 
-    window.open(
-      url,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   function getStatusClass(status = "") {
@@ -668,8 +544,7 @@ function Local() {
     }
 
     return (
-      `${API_URL}/api/google-places/foto?name=` +
-      encodeURIComponent(fotoGoogle)
+      `${API_URL}/api/google-places/foto?name=` + encodeURIComponent(fotoGoogle)
     );
   }
 
@@ -680,10 +555,7 @@ function Local() {
 
     const bairroLimpo = String(bairro)
       .replace(/^\d+\s*-\s*/g, "")
-      .replace(
-        /^loja\s*\d+\s*-\s*/gi,
-        ""
-      )
+      .replace(/^loja\s*\d+\s*-\s*/gi, "")
       .trim();
 
     return bairroLimpo || "Florianópolis";
@@ -696,15 +568,12 @@ function Local() {
 
     const dataAvaliacao = new Date(data);
 
-    return dataAvaliacao.toLocaleDateString(
-      "pt-BR",
-      {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      }
-    );
+    return dataAvaliacao.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 
   if (carregandoLocal) {
@@ -713,9 +582,7 @@ function Local() {
         <Header />
 
         <div className="local-content">
-          <p className="reviews-empty">
-            Carregando local...
-          </p>
+          <p className="reviews-empty">Carregando local...</p>
         </div>
 
         <Footer />
@@ -740,11 +607,7 @@ function Local() {
 
           <h1>Local não encontrado</h1>
 
-          {erroLocal && (
-            <p className="reviews-empty">
-              {erroLocal}
-            </p>
-          )}
+          {erroLocal && <p className="reviews-empty">{erroLocal}</p>}
         </div>
 
         <Footer />
@@ -752,55 +615,33 @@ function Local() {
     );
   }
 
-  const ultimaAvaliacao =
-    avaliacoes.length > 0
-      ? avaliacoes[0]
-      : null;
+  const ultimaAvaliacao = avaliacoes.length > 0 ? avaliacoes[0] : null;
 
   const statusAtual =
-    ultimaAvaliacao?.status ||
-    local?.status ||
-    "Sem atualização agora";
+    ultimaAvaliacao?.status || local?.status || "Sem atualização agora";
 
   const comentarioAtual =
     ultimaAvaliacao?.comentario ||
     local?.descricao ||
     "Ainda não há comentários recentes sobre este local.";
 
-  const notaAtual =
-    ultimaAvaliacao?.nota ||
-    local?.nota ||
-    "—";
+  const notaAtual = ultimaAvaliacao?.nota || local?.nota || "—";
 
-  const tempoAtual =
-    ultimaAvaliacao?.criado_em
-      ? formatarData(
-          ultimaAvaliacao.criado_em
-        )
-      : "agora";
+  const tempoAtual = ultimaAvaliacao?.criado_em
+    ? formatarData(ultimaAvaliacao.criado_em)
+    : "agora";
 
-  const categoriaCor = getCategoriaCor(
-    local.categoria
-  );
+  const categoriaCor = getCategoriaCor(local.categoria);
 
-  const imagemClasse =
-    local.imagem ||
-    getImagemClasse(local.categoria);
+  const imagemClasse = local.imagem || getImagemClasse(local.categoria);
 
-  const fotoUrl = getFotoUrl(
-    local.foto_google
-  );
+  const fotoUrl = getFotoUrl(local.foto_google);
 
-  const bairroLimpo = limparBairro(
-    local.bairro
-  );
+  const bairroLimpo = limparBairro(local.bairro);
 
   const midiasRecentes = midias.slice(0, 3);
 
-  const opacidadeFundoMidia = Math.max(
-    0.12,
-    0.7 - deslocamentoMidiaY / 450
-  );
+  const opacidadeFundoMidia = Math.max(0.12, 0.7 - deslocamentoMidiaY / 450);
 
   return (
     <main className="local-page">
@@ -817,34 +658,21 @@ function Local() {
         </button>
 
         <section
-          className={
-            fotoUrl
-              ? "local-hero"
-              : `local-hero ${imagemClasse}`
-          }
+          className={fotoUrl ? "local-hero" : `local-hero ${imagemClasse}`}
         >
           {fotoUrl && (
-            <img
-              className="local-hero-img"
-              src={fotoUrl}
-              alt={local.nome}
-            />
+            <img className="local-hero-img" src={fotoUrl} alt={local.nome} />
           )}
 
           <div className="hero-overlay">
-            <span
-              className={`categoria ${categoriaCor}`}
-            >
+            <span className={`categoria ${categoriaCor}`}>
               {local.categoria || "Local"}
             </span>
 
             <h1>{local.nome}</h1>
 
             <div className="hero-rating">
-              <Star
-                size={16}
-                fill="currentColor"
-              />
+              <Star size={16} fill="currentColor" />
 
               <span>{notaAtual}</span>
             </div>
@@ -852,11 +680,7 @@ function Local() {
             <div className="local-meta">
               <MapPin size={16} />
 
-              <span>
-                {local.endereco ||
-                  bairroLimpo ||
-                  "Florianópolis"}
-              </span>
+              <span>{local.endereco || bairroLimpo || "Florianópolis"}</span>
             </div>
           </div>
         </section>
@@ -876,10 +700,7 @@ function Local() {
 
           <div className="current-status">
             <span
-              className={
-                `status-dot ` +
-                getStatusClass(statusAtual)
-              }
+              className={`status-dot ` + getStatusClass(statusAtual)}
             ></span>
 
             <h2>{statusAtual}</h2>
@@ -898,35 +719,19 @@ function Local() {
         </section>
 
         <section className="quick-actions compact">
-          <button
-            type="button"
-            onClick={abrirRota}
-          >
+          <button type="button" onClick={abrirRota}>
             <Route size={17} />
             Rota
           </button>
 
           <button
             type="button"
-            className={
-              favorito
-                ? "favorite-active"
-                : ""
-            }
+            className={favorito ? "favorite-active" : ""}
             onClick={alternarFavorito}
           >
-            <Heart
-              size={17}
-              fill={
-                favorito
-                  ? "currentColor"
-                  : "none"
-              }
-            />
+            <Heart size={17} fill={favorito ? "currentColor" : "none"} />
 
-            {favorito
-              ? "Favorito"
-              : "Favoritar"}
+            {favorito ? "Favorito" : "Favoritar"}
           </button>
         </section>
 
@@ -946,74 +751,54 @@ function Local() {
               </div>
 
               {carregandoMidias && (
-                <p className="reviews-empty">
-                  Carregando mídias...
-                </p>
+                <p className="reviews-empty">Carregando mídias...</p>
               )}
 
-              {!carregandoMidias &&
-                midiasRecentes.length === 0 && (
-                  <p className="reviews-empty">
-                    Nenhuma foto ou vídeo
-                    recente.
-                  </p>
-                )}
+              {!carregandoMidias && midiasRecentes.length === 0 && (
+                <p className="reviews-empty">Nenhuma foto ou vídeo recente.</p>
+              )}
 
-              {!carregandoMidias &&
-                midiasRecentes.length > 0 && (
-                  <div className="photo-grid">
-                    {midiasRecentes.map(
-                      (midia, indice) => (
-                        <button
-                          type="button"
-                          className={
-                            "photo-card " +
-                            "media-preview-card"
-                          }
-                          key={midia.id}
-                          onClick={() =>
-                            abrirMidia(indice)
-                          }
-                        >
-                          {midia.tipo ===
-                          "video" ? (
-                            <>
-                              {midia.thumbnail ? (
-                                <img
-                                  src={
-                                    midia.thumbnail
-                                  }
-                                  alt="Prévia do vídeo"
-                                  loading="lazy"
-                                />
-                              ) : (
-                                <video
-                                  src={`${midia.url}#t=0.1`}
-                                  muted
-                                  playsInline
-                                  preload="metadata"
-                                />
-                              )}
-
-                              <span className="media-preview-play">
-                                <Play
-                                  size={18}
-                                  fill="currentColor"
-                                />
-                              </span>
-                            </>
-                          ) : (
+              {!carregandoMidias && midiasRecentes.length > 0 && (
+                <div className="photo-grid">
+                  {midiasRecentes.map((midia, indice) => (
+                    <button
+                      type="button"
+                      className={"photo-card " + "media-preview-card"}
+                      key={midia.id}
+                      onClick={() => abrirMidia(indice)}
+                    >
+                      {midia.tipo === "video" ? (
+                        <>
+                          {midia.thumbnail ? (
                             <img
-                              src={midia.url}
-                              alt="Mídia recente"
+                              src={midia.thumbnail}
+                              alt="Prévia do vídeo"
                               loading="lazy"
                             />
+                          ) : (
+                            <video
+                              src={`${midia.url}#t=0.1`}
+                              muted
+                              playsInline
+                              preload="metadata"
+                            />
                           )}
-                        </button>
-                      )
-                    )}
-                  </div>
-                )}
+
+                          <span className="media-preview-play">
+                            <Play size={18} fill="currentColor" />
+                          </span>
+                        </>
+                      ) : (
+                        <img
+                          src={midia.url}
+                          alt="Mídia recente"
+                          loading="lazy"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </section>
 
             <section className="updates-feed">
@@ -1022,159 +807,251 @@ function Local() {
 
                 <span>
                   {avaliacoes.length}{" "}
-                  {avaliacoes.length === 1
-                    ? "avaliação"
-                    : "avaliações"}
+                  {avaliacoes.length === 1 ? "avaliação" : "avaliações"}
                 </span>
               </div>
 
               {carregandoAvaliacoes && (
+                <p className="reviews-empty">Carregando avaliações...</p>
+              )}
+
+              {!carregandoAvaliacoes && avaliacoes.length === 0 && (
                 <p className="reviews-empty">
-                  Carregando avaliações...
+                  Nenhuma avaliação ainda. Seja a primeira pessoa a atualizar
+                  este local.
                 </p>
               )}
 
               {!carregandoAvaliacoes &&
-                avaliacoes.length === 0 && (
+                avaliacoes.map((avaliacao) => (
+                  <article className="comment-card" key={avaliacao.id}>
+                    <Avatar
+                      foto={avaliacao.foto_perfil || ""}
+                      nome={avaliacao.nome || "Usuário"}
+                      usuario={avaliacao.usuario || ""}
+                      tamanho={46}
+                      className="local-comment-avatar"
+                    />
+
+                    <div className="comment-content">
+                      <div className="comment-header">
+                        <strong>{avaliacao.nome || "Usuário"}</strong>
+
+                        <div className="review-header-actions">
+                          <span>
+                            <Star size={13} fill="currentColor" />
+
+                            {avaliacao.nota}
+                          </span>
+
+                          {Number(avaliacao.usuario_id) ===
+                            Number(usuarioAtual?.id) && (
+                            <div className="review-options">
+                              <button
+                                type="button"
+                                className="review-options-trigger"
+                                aria-label="Abrir opções da avaliação"
+                                aria-expanded={
+                                  menuAvaliacaoAberto === avaliacao.id
+                                }
+                                onClick={() =>
+                                  setMenuAvaliacaoAberto(
+                                    menuAvaliacaoAberto === avaliacao.id
+                                      ? null
+                                      : avaliacao.id,
+                                  )
+                                }
+                              >
+                                <MoreVertical size={18} />
+                              </button>
+
+                              {menuAvaliacaoAberto === avaliacao.id && (
+                                <div className="review-options-menu">
+                                  <button
+                                    type="button"
+                                    className="review-delete-btn"
+                                    disabled={
+                                      avaliacaoExcluindo === avaliacao.id
+                                    }
+                                    onClick={() =>
+                                      excluirAvaliacao(avaliacao.id)
+                                    }
+                                  >
+                                    <Trash2 size={15} />
+
+                                    {avaliacaoExcluindo === avaliacao.id
+                                      ? "Excluindo..."
+                                      : "Excluir"}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {avaliacao.status && (
+                        <span
+                          className={
+                            `review-status ` + getStatusClass(avaliacao.status)
+                          }
+                        >
+                          {avaliacao.status}
+                        </span>
+                      )}
+
+                      <p>{avaliacao.comentario}</p>
+
+                      {avaliacao.midia && (
+                        <div className="review-media">
+                          {avaliacao.midia.tipo === "video" ? (
+                            <video
+                              src={`${avaliacao.midia.url}#t=0.1`}
+                              controls
+                              playsInline
+                              preload="metadata"
+                            />
+                          ) : (
+                            <img
+                              src={avaliacao.midia.url}
+                              alt={`Mídia enviada por ${
+                                avaliacao.nome || "usuário"
+                              }`}
+                              loading="lazy"
+                            />
+                          )}
+                        </div>
+                      )}
+
+                      <small className="review-date">
+                        @{avaliacao.usuario || "usuario"} •{" "}
+                        {formatarData(avaliacao.criado_em)}
+                      </small>
+                    </div>
+                  </article>
+                ))}
+            </section>
+          </>
+        ) : (
+          <section className="locked-local-content">
+            <div className="locked-blur">
+              <section className="photo-preview">
+                <div className="section-title">
+                  <h3>Mídias recentes</h3>
+
+                  <span>Ver todas</span>
+                </div>
+
+                {carregandoMidias && (
+                  <p className="reviews-empty">Carregando mídias...</p>
+                )}
+
+                {!carregandoMidias && midiasRecentes.length === 0 && (
                   <p className="reviews-empty">
-                    Nenhuma avaliação ainda.
-                    Seja a primeira pessoa a
-                    atualizar este local.
+                    Nenhuma foto ou vídeo recente.
                   </p>
                 )}
 
-              {!carregandoAvaliacoes &&
-                avaliacoes.map(
-                  (avaliacao) => (
-                    <article
-                      className="comment-card"
-                      key={avaliacao.id}
-                    >
-                      <div className="avatar">
-                        {avaliacao.foto_perfil ? (
-                          <img
-                            src={
-                              avaliacao.foto_perfil
-                            }
-                            alt={
-                              avaliacao.nome ||
-                              "Usuário"
-                            }
-                          />
-                        ) : avaliacao.nome ? (
-                          avaliacao.nome
-                            .charAt(0)
-                            .toUpperCase()
+                {!carregandoMidias && midiasRecentes.length > 0 && (
+                  <div className="photo-grid">
+                    {midiasRecentes.map((midia) => (
+                      <div
+                        className={"photo-card " + "media-preview-card"}
+                        key={midia.id}
+                      >
+                        {midia.tipo === "video" ? (
+                          <>
+                            {midia.thumbnail ? (
+                              <img
+                                src={midia.thumbnail}
+                                alt="Prévia do vídeo"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <video
+                                src={`${midia.url}#t=0.1`}
+                                muted
+                                playsInline
+                                preload="metadata"
+                              />
+                            )}
+
+                            <span className="media-preview-play">
+                              <Play size={18} fill="currentColor" />
+                            </span>
+                          </>
                         ) : (
-                          "U"
+                          <img
+                            src={midia.url}
+                            alt="Mídia recente"
+                            loading="lazy"
+                          />
                         )}
                       </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              <section className="updates-feed">
+                <div className="section-title">
+                  <h3>Avaliações recentes</h3>
+
+                  <span>
+                    {avaliacoes.length}{" "}
+                    {avaliacoes.length === 1 ? "avaliação" : "avaliações"}
+                  </span>
+                </div>
+
+                {carregandoAvaliacoes && (
+                  <p className="reviews-empty">Carregando avaliações...</p>
+                )}
+
+                {!carregandoAvaliacoes && avaliacoes.length === 0 && (
+                  <p className="reviews-empty">Nenhuma avaliação ainda.</p>
+                )}
+
+                {!carregandoAvaliacoes &&
+                  avaliacoes.map((avaliacao) => (
+                    <article className="comment-card" key={avaliacao.id}>
+                      <Avatar
+                        foto={avaliacao.foto_perfil || ""}
+                        nome={avaliacao.nome || "Usuário"}
+                        usuario={avaliacao.usuario || ""}
+                        tamanho={46}
+                        className="local-comment-avatar"
+                      />
 
                       <div className="comment-content">
                         <div className="comment-header">
-                          <strong>
-                            {avaliacao.nome ||
-                              "Usuário"}
-                          </strong>
+                          <strong>{avaliacao.nome || "Usuário"}</strong>
 
-                          <div className="review-header-actions">
-                            <span>
-                              <Star
-                                size={13}
-                                fill="currentColor"
-                              />
+                          <span>
+                            <Star size={13} fill="currentColor" />
 
-                              {avaliacao.nota}
-                            </span>
-
-                            {Number(
-                              avaliacao.usuario_id
-                            ) ===
-                              Number(
-                                usuarioAtual?.id
-                              ) && (
-                              <div className="review-options">
-                                <button
-                                  type="button"
-                                  className="review-options-trigger"
-                                  aria-label="Abrir opções da avaliação"
-                                  aria-expanded={
-                                    menuAvaliacaoAberto ===
-                                    avaliacao.id
-                                  }
-                                  onClick={() =>
-                                    setMenuAvaliacaoAberto(
-                                      menuAvaliacaoAberto ===
-                                        avaliacao.id
-                                        ? null
-                                        : avaliacao.id
-                                    )
-                                  }
-                                >
-                                  <MoreVertical
-                                    size={18}
-                                  />
-                                </button>
-
-                                {menuAvaliacaoAberto ===
-                                  avaliacao.id && (
-                                  <div className="review-options-menu">
-                                    <button
-                                      type="button"
-                                      className="review-delete-btn"
-                                      disabled={
-                                        avaliacaoExcluindo ===
-                                        avaliacao.id
-                                      }
-                                      onClick={() =>
-                                        excluirAvaliacao(
-                                          avaliacao.id
-                                        )
-                                      }
-                                    >
-                                      <Trash2
-                                        size={15}
-                                      />
-
-                                      {avaliacaoExcluindo ===
-                                      avaliacao.id
-                                        ? "Excluindo..."
-                                        : "Excluir"}
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
+                            {avaliacao.nota}
+                          </span>
                         </div>
 
                         {avaliacao.status && (
                           <span
                             className={
                               `review-status ` +
-                              getStatusClass(
-                                avaliacao.status
-                              )
+                              getStatusClass(avaliacao.status)
                             }
                           >
-                            {
-                              avaliacao.status
-                            }
+                            {avaliacao.status}
                           </span>
                         )}
 
-                        <p>
-                          {
-                            avaliacao.comentario
-                          }
-                        </p>
+                        <p>{avaliacao.comentario}</p>
 
                         {avaliacao.midia && (
                           <div className="review-media">
                             {avaliacao.midia.tipo === "video" ? (
                               <video
                                 src={`${avaliacao.midia.url}#t=0.1`}
-                                controls
+                                muted
                                 playsInline
                                 preload="metadata"
                               />
@@ -1191,255 +1068,31 @@ function Local() {
                         )}
 
                         <small className="review-date">
-                          @
-                          {avaliacao.usuario ||
-                            "usuario"}{" "}
-                          •{" "}
-                          {formatarData(
-                            avaliacao.criado_em
-                          )}
+                          @{avaliacao.usuario || "usuario"} •{" "}
+                          {formatarData(avaliacao.criado_em)}
                         </small>
                       </div>
                     </article>
-                  )
-                )}
-            </section>
-          </>
-        ) : (
-          <section className="locked-local-content">
-            <div className="locked-blur">
-              <section className="photo-preview">
-                <div className="section-title">
-                  <h3>Mídias recentes</h3>
-
-                  <span>Ver todas</span>
-                </div>
-
-                {carregandoMidias && (
-                  <p className="reviews-empty">
-                    Carregando mídias...
-                  </p>
-                )}
-
-                {!carregandoMidias &&
-                  midiasRecentes.length === 0 && (
-                    <p className="reviews-empty">
-                      Nenhuma foto ou vídeo
-                      recente.
-                    </p>
-                  )}
-
-                {!carregandoMidias &&
-                  midiasRecentes.length > 0 && (
-                    <div className="photo-grid">
-                      {midiasRecentes.map(
-                        (midia) => (
-                          <div
-                            className={
-                              "photo-card " +
-                              "media-preview-card"
-                            }
-                            key={midia.id}
-                          >
-                            {midia.tipo ===
-                            "video" ? (
-                              <>
-                                {midia.thumbnail ? (
-                                  <img
-                                    src={
-                                      midia.thumbnail
-                                    }
-                                    alt="Prévia do vídeo"
-                                    loading="lazy"
-                                  />
-                                ) : (
-                                  <video
-                                    src={`${midia.url}#t=0.1`}
-                                    muted
-                                    playsInline
-                                    preload="metadata"
-                                  />
-                                )}
-
-                                <span className="media-preview-play">
-                                  <Play
-                                    size={18}
-                                    fill="currentColor"
-                                  />
-                                </span>
-                              </>
-                            ) : (
-                              <img
-                                src={midia.url}
-                                alt="Mídia recente"
-                                loading="lazy"
-                              />
-                            )}
-                          </div>
-                        )
-                      )}
-                    </div>
-                  )}
-              </section>
-
-              <section className="updates-feed">
-                <div className="section-title">
-                  <h3>
-                    Avaliações recentes
-                  </h3>
-
-                  <span>
-                    {avaliacoes.length}{" "}
-                    {avaliacoes.length === 1
-                      ? "avaliação"
-                      : "avaliações"}
-                  </span>
-                </div>
-
-                {carregandoAvaliacoes && (
-                  <p className="reviews-empty">
-                    Carregando avaliações...
-                  </p>
-                )}
-
-                {!carregandoAvaliacoes &&
-                  avaliacoes.length === 0 && (
-                    <p className="reviews-empty">
-                      Nenhuma avaliação ainda.
-                    </p>
-                  )}
-
-                {!carregandoAvaliacoes &&
-                  avaliacoes.map(
-                    (avaliacao) => (
-                      <article
-                        className="comment-card"
-                        key={avaliacao.id}
-                      >
-                        <div className="avatar">
-                          {avaliacao.foto_perfil ? (
-                            <img
-                              src={
-                                avaliacao.foto_perfil
-                              }
-                              alt={
-                                avaliacao.nome ||
-                                "Usuário"
-                              }
-                            />
-                          ) : avaliacao.nome ? (
-                            avaliacao.nome
-                              .charAt(0)
-                              .toUpperCase()
-                          ) : (
-                            "U"
-                          )}
-                        </div>
-
-                        <div className="comment-content">
-                          <div className="comment-header">
-                            <strong>
-                              {avaliacao.nome ||
-                                "Usuário"}
-                            </strong>
-
-                            <span>
-                              <Star
-                                size={13}
-                                fill="currentColor"
-                              />
-
-                              {avaliacao.nota}
-                            </span>
-                          </div>
-
-                          {avaliacao.status && (
-                            <span
-                              className={
-                                `review-status ` +
-                                getStatusClass(
-                                  avaliacao.status
-                                )
-                              }
-                            >
-                              {avaliacao.status}
-                            </span>
-                          )}
-
-                          <p>
-                            {avaliacao.comentario}
-                          </p>
-
-                          {avaliacao.midia && (
-                            <div className="review-media">
-                              {avaliacao.midia.tipo ===
-                              "video" ? (
-                                <video
-                                  src={`${avaliacao.midia.url}#t=0.1`}
-                                  muted
-                                  playsInline
-                                  preload="metadata"
-                                />
-                              ) : (
-                                <img
-                                  src={
-                                    avaliacao.midia.url
-                                  }
-                                  alt={`Mídia enviada por ${
-                                    avaliacao.nome ||
-                                    "usuário"
-                                  }`}
-                                  loading="lazy"
-                                />
-                              )}
-                            </div>
-                          )}
-
-                          <small className="review-date">
-                            @
-                            {avaliacao.usuario ||
-                              "usuario"}{" "}
-                            •{" "}
-                            {formatarData(
-                              avaliacao.criado_em
-                            )}
-                          </small>
-                        </div>
-                      </article>
-                    )
-                  )}
+                  ))}
               </section>
             </div>
 
             <div className="locked-card">
-              <h2>
-                Entre para ver o radar
-                completo
-              </h2>
+              <h2>Entre para ver o radar completo</h2>
 
               <p>
-                Crie sua conta para ver
-                avaliações recentes, fotos,
-                vídeos, comentários e
-                atualizar o status dos
-                lugares em tempo real.
+                Crie sua conta para ver avaliações recentes, fotos, vídeos,
+                comentários e atualizar o status dos lugares em tempo real.
               </p>
 
-              <button
-                type="button"
-                onClick={() =>
-                  navigate("/cadastro")
-                }
-              >
+              <button type="button" onClick={() => navigate("/cadastro")}>
                 Criar conta grátis
               </button>
 
               <button
                 type="button"
                 className="locked-secondary"
-                onClick={() =>
-                  navigate("/login")
-                }
+                onClick={() => navigate("/login")}
               >
                 Já tenho conta
               </button>
@@ -1447,9 +1100,7 @@ function Local() {
               <button
                 type="button"
                 className="locked-ghost"
-                onClick={() =>
-                  navigate("/")
-                }
+                onClick={() => navigate("/")}
               >
                 Continuar explorando
               </button>
@@ -1458,13 +1109,11 @@ function Local() {
         )}
       </div>
 
-
       {midiaAberta && (
         <div
           className="midia-modal"
           style={{
-            backgroundColor:
-              `rgba(0, 0, 0, ${opacidadeFundoMidia})`,
+            backgroundColor: `rgba(0, 0, 0, ${opacidadeFundoMidia})`,
           }}
           onClick={fecharMidia}
         >
@@ -1485,20 +1134,13 @@ function Local() {
           </span>
 
           <div
-            className={
-              `midia-modal-content ${
-                arrastandoMidia
-                  ? "arrastando"
-                  : ""
-              }`
-            }
+            className={`midia-modal-content ${
+              arrastandoMidia ? "arrastando" : ""
+            }`}
             style={{
-              transform:
-                `translateY(${deslocamentoMidiaY}px)`,
+              transform: `translateY(${deslocamentoMidiaY}px)`,
             }}
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
             onTouchStart={iniciarToqueMidia}
             onTouchMove={moverToqueMidia}
             onTouchEnd={finalizarToqueMidia}
@@ -1515,9 +1157,7 @@ function Local() {
               <img
                 key={midiaAberta.id}
                 src={midiaAberta.url}
-                alt={`Mídia ${
-                  indiceMidiaAberta + 1
-                } de ${midias.length}`}
+                alt={`Mídia ${indiceMidiaAberta + 1} de ${midias.length}`}
                 draggable="false"
               />
             )}

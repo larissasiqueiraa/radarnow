@@ -446,25 +446,8 @@
   border: 1px solid #24243a;
 }
 
-.avatar {
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #9b7cff, #5ee7df);
-  color: #070711;
-  font-weight: 900;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.rn-avatar.local-comment-avatar {
   flex-shrink: 0;
-  overflow: hidden;
-}
-
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .comment-content {
