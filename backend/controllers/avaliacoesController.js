@@ -13,10 +13,20 @@ const __dirname = path.dirname(
   __filename
 );
 
+const estaNoRailway = Boolean(
+  process.env.RAILWAY_PROJECT_ID ||
+  process.env.RAILWAY_ENVIRONMENT_NAME
+);
+
+const pastaUploads = estaNoRailway
+  ? "/app/uploads"
+  : path.resolve(
+      __dirname,
+      "../uploads"
+    );
+
 const pastaMidias = path.join(
-  __dirname,
-  "..",
-  "uploads",
+  pastaUploads,
   "midias"
 );
 

@@ -21,10 +21,20 @@ const __dirname = path.dirname(
   __filename
 );
 
+const estaNoRailway = Boolean(
+  process.env.RAILWAY_PROJECT_ID ||
+  process.env.RAILWAY_ENVIRONMENT_NAME
+);
+
+const pastaUploads = estaNoRailway
+  ? "/app/uploads"
+  : path.resolve(
+      __dirname,
+      "../uploads"
+    );
+
 const pastaMidias = path.join(
-  __dirname,
-  "..",
-  "uploads",
+  pastaUploads,
   "midias"
 );
 
@@ -40,7 +50,10 @@ const storage = multer.diskStorage({
     file,
     callback
   ) => {
-    callback(null, pastaMidias);
+    callback(
+      null,
+      pastaMidias
+    );
   },
 
   filename: (
@@ -49,7 +62,9 @@ const storage = multer.diskStorage({
     callback
   ) => {
     const extensao = path
-      .extname(file.originalname)
+      .extname(
+        file.originalname
+      )
       .toLowerCase();
 
     const nomeArquivo =
@@ -57,7 +72,10 @@ const storage = multer.diskStorage({
         Math.random() * 1e9
       )}${extensao}`;
 
-    callback(null, nomeArquivo);
+    callback(
+      null,
+      nomeArquivo
+    );
   },
 });
 
@@ -67,10 +85,14 @@ const filtroArquivo = (
   callback
 ) => {
   const imagemPermitida =
-    file.mimetype.startsWith("image/");
+    file.mimetype.startsWith(
+      "image/"
+    );
 
   const videoPermitido =
-    file.mimetype.startsWith("video/");
+    file.mimetype.startsWith(
+      "video/"
+    );
 
   if (
     !imagemPermitida &&
@@ -88,15 +110,21 @@ const filtroArquivo = (
 
 const uploadMidia = multer({
   storage,
-  fileFilter: filtroArquivo,
+
+  fileFilter:
+    filtroArquivo,
+
   limits: {
-    fileSize: 30 * 1024 * 1024,
+    fileSize:
+      30 * 1024 * 1024,
   },
 });
 
 router.post(
   "/",
-  uploadMidia.single("midia"),
+  uploadMidia.single(
+    "midia"
+  ),
   criarAvaliacao
 );
 
