@@ -21,13 +21,21 @@
     rgba(255, 255, 255, 0.04);
 }
 
-.app-logo {
+.app-logo,
+.app-logo:visited,
+.app-logo:hover,
+.app-logo:active {
   color: #9b7cff;
+  background: transparent;
+
   text-decoration: none;
+
   font-size: 25px;
   font-weight: 800;
   letter-spacing: 7px;
   text-transform: uppercase;
+
+  transition: none;
 }
 
 .app-profile-btn {
@@ -40,8 +48,8 @@
 
   width: 58px;
   height: 58px;
-  border-radius: 50%;
 
+  border-radius: 50%;
   padding: 3px;
 
   background:
@@ -49,7 +57,9 @@
 
   border:
     2px solid
-    rgba(155, 124, 255, 0.22);
+    rgba(155, 124, 255, 0.28);
+
+  color: #ffffff;
 
   display: flex;
   align-items: center;
@@ -57,4 +67,40 @@
 
   overflow: hidden;
   text-decoration: none;
+
+  transition: none;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+.app-profile-btn:visited,
+.app-profile-btn:hover,
+.app-profile-btn:active,
+.app-profile-btn:focus {
+  background:
+    rgba(155, 124, 255, 0.14);
+
+  border-color:
+    rgba(155, 124, 255, 0.28);
+
+  color: #ffffff;
+
+  transform:
+    translateY(-50%);
+
+  box-shadow: none;
+  filter: none;
+  text-decoration: none;
+}
+
+.app-profile-btn:focus {
+  outline: none;
+}
+
+.app-profile-btn:focus-visible {
+  outline:
+    2px solid #9b7cff;
+
+  outline-offset: 3px;
 }
