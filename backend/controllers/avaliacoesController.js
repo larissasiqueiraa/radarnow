@@ -5,8 +5,13 @@ import { fileURLToPath } from "url";
 
 import { moderarTexto } from "../utils/moderacaoTexto.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(
+  import.meta.url
+);
+
+const __dirname = path.dirname(
+  __filename
+);
 
 const pastaMidias = path.join(
   __dirname,
@@ -15,30 +20,90 @@ const pastaMidias = path.join(
   "midias"
 );
 
+/*
+|--------------------------------------------------------------------------
+| CORRIGIR URL ANTIGA
+|--------------------------------------------------------------------------
+*/
+
+function corrigirUrlMidia(url) {
+  if (!url || typeof url !== "string") {
+    return url;
+  }
+
+  return url.replace(
+    /^http:\/\/radarnow-production\.up\.railway\.app/i,
+    "https://radarnow-production.up.railway.app"
+  );
+}
+
+/*
+|--------------------------------------------------------------------------
+| MONTAR URL DA NOVA MÍDIA
+|--------------------------------------------------------------------------
+*/
+
 function montarUrlMidia(req) {
   if (!req.file) {
     return null;
   }
 
-  return `${req.protocol}://${req.get("host")}/uploads/midias/${
-    req.file.filename
-  }`;
+  const protocoloEncaminhado =
+    req.headers["x-forwarded-proto"];
+
+  const protocolo =
+    protocoloEncaminhado
+      ?.split(",")[0]
+      ?.trim() ||
+    req.protocol;
+
+  const host = req.get("host");
+
+  const protocoloSeguro =
+    protocolo === "http" &&
+    host?.includes("railway.app")
+      ? "https"
+      : protocolo;
+
+  return `${protocoloSeguro}://${host}/uploads/midias/${req.file.filename}`;
 }
+
+/*
+|--------------------------------------------------------------------------
+| DESCOBRIR TIPO DA MÍDIA
+|--------------------------------------------------------------------------
+*/
 
 function descobrirTipoMidia(arquivo) {
   if (!arquivo) {
     return null;
   }
 
-  if (arquivo.mimetype.startsWith("video/")) {
+  if (
+    arquivo.mimetype.startsWith(
+      "video/"
+    )
+  ) {
     return "video";
   }
 
   return "foto";
 }
 
-export async function criarAvaliacao(req, res) {
-  const connection = await db.getConnection();
+/*
+|--------------------------------------------------------------------------
+| CRIAR AVALIAÇÃO
+|--------------------------------------------------------------------------
+*/
+
+export async function criarAvaliacao(
+  req,
+  res
+) {
+  const connection =
+    await db.getConnection();
+
+  let transacaoIniciada = false;
 
   try {
     const {
@@ -49,39 +114,56 @@ export async function criarAvaliacao(req, res) {
       comentario,
     } = req.body;
 
-    if (!usuario_id || !local_id || !status || !nota) {
+    if (
+      !usuario_id ||
+      !local_id ||
+      !status ||
+      !nota
+    ) {
       return res.status(400).json({
-        erro: "Dados obrigatórios não enviados.",
+        erro:
+          "Dados obrigatórios não enviados.",
       });
     }
 
-    const notaNumerica = Number(nota);
+    const notaNumerica =
+      Number(nota);
 
     if (
-      !Number.isInteger(notaNumerica) ||
+      !Number.isInteger(
+        notaNumerica
+      ) ||
       notaNumerica < 1 ||
       notaNumerica > 5
     ) {
       return res.status(400).json({
-        erro: "A nota deve ser um número inteiro de 1 a 5.",
+        erro:
+          "A nota deve ser um número inteiro de 1 a 5.",
       });
     }
 
-    const statusLimpo = String(status).trim();
+    const statusLimpo =
+      String(status).trim();
 
     const comentarioLimpo =
-      comentario?.trim() || statusLimpo;
+      comentario?.trim() ||
+      statusLimpo;
 
     if (!statusLimpo) {
       return res.status(400).json({
-        erro: "O status é obrigatório.",
+        erro:
+          "O status é obrigatório.",
       });
     }
 
     const resultadoModeracao =
-      moderarTexto(comentarioLimpo);
+      moderarTexto(
+        comentarioLimpo
+      );
 
-    if (!resultadoModeracao.aprovado) {
+    if (
+      !resultadoModeracao.aprovado
+    ) {
       return res.status(400).json({
         erro:
           resultadoModeracao.motivo ||
@@ -90,6 +172,8 @@ export async function criarAvaliacao(req, res) {
     }
 
     await connection.beginTransaction();
+
+    transacaoIniciada = true;
 
     const [resultadoAvaliacao] =
       await connection.execute(
@@ -120,9 +204,12 @@ export async function criarAvaliacao(req, res) {
 
     if (req.file) {
       const tipo =
-        descobrirTipoMidia(req.file);
+        descobrirTipoMidia(
+          req.file
+        );
 
-      const url = montarUrlMidia(req);
+      const url =
+        montarUrlMidia(req);
 
       const [resultadoMidia] =
         await connection.execute(
@@ -149,10 +236,18 @@ export async function criarAvaliacao(req, res) {
         );
 
       midiaCriada = {
-        id: resultadoMidia.insertId,
-        avaliacao_id: avaliacaoId,
-        local_id: Number(local_id),
-        usuario_id: Number(usuario_id),
+        id:
+          resultadoMidia.insertId,
+
+        avaliacao_id:
+          avaliacaoId,
+
+        local_id:
+          Number(local_id),
+
+        usuario_id:
+          Number(usuario_id),
+
         tipo,
         url,
         thumbnail: null,
@@ -161,21 +256,35 @@ export async function criarAvaliacao(req, res) {
 
     await connection.commit();
 
+    transacaoIniciada = false;
+
     return res.status(201).json({
       mensagem:
         "Avaliação criada com sucesso",
+
       avaliacao: {
         id: avaliacaoId,
-        usuario_id: Number(usuario_id),
-        local_id: Number(local_id),
+
+        usuario_id:
+          Number(usuario_id),
+
+        local_id:
+          Number(local_id),
+
         status: statusLimpo,
+
         nota: notaNumerica,
-        comentario: comentarioLimpo,
+
+        comentario:
+          comentarioLimpo,
+
         midia: midiaCriada,
       },
     });
   } catch (error) {
-    await connection.rollback();
+    if (transacaoIniciada) {
+      await connection.rollback();
+    }
 
     console.error(
       "Erro ao criar avaliação:",
@@ -183,81 +292,127 @@ export async function criarAvaliacao(req, res) {
     );
 
     return res.status(500).json({
-      erro: "Erro ao criar avaliação",
-      detalhe: error.message,
+      erro:
+        "Erro ao criar avaliação",
+
+      detalhe:
+        error.message,
     });
   } finally {
     connection.release();
   }
 }
 
+/*
+|--------------------------------------------------------------------------
+| LISTAR AVALIAÇÕES
+|--------------------------------------------------------------------------
+*/
+
 export async function listarAvaliacoes(
   req,
   res
 ) {
   try {
-    const { local_id } = req.params;
+    const { local_id } =
+      req.params;
 
-    const [avaliacoes] = await db.execute(
-      `
-      SELECT
-        avaliacoes.id,
-        avaliacoes.usuario_id,
-        avaliacoes.local_id,
-        avaliacoes.status,
-        avaliacoes.nota,
-        avaliacoes.comentario,
-        avaliacoes.criado_em,
+    const [avaliacoes] =
+      await db.execute(
+        `
+        SELECT
+          avaliacoes.id,
+          avaliacoes.usuario_id,
+          avaliacoes.local_id,
+          avaliacoes.status,
+          avaliacoes.nota,
+          avaliacoes.comentario,
+          avaliacoes.criado_em,
 
-        usuarios.nome,
-        usuarios.usuario,
-        usuarios.foto_perfil,
+          usuarios.nome,
+          usuarios.usuario,
+          usuarios.foto_perfil,
 
-        midias.id AS midia_id,
-        midias.tipo AS midia_tipo,
-        midias.url AS midia_url,
-        midias.thumbnail AS midia_thumbnail
+          midias.id AS midia_id,
+          midias.tipo AS midia_tipo,
+          midias.url AS midia_url,
+          midias.thumbnail AS midia_thumbnail
 
-      FROM avaliacoes
+        FROM avaliacoes
 
-      INNER JOIN usuarios
-        ON avaliacoes.usuario_id = usuarios.id
+        INNER JOIN usuarios
+          ON avaliacoes.usuario_id =
+             usuarios.id
 
-      LEFT JOIN midias
-        ON midias.avaliacao_id = avaliacoes.id
+        LEFT JOIN midias
+          ON midias.avaliacao_id =
+             avaliacoes.id
 
-      WHERE avaliacoes.local_id = ?
+        WHERE avaliacoes.local_id = ?
 
-      ORDER BY avaliacoes.criado_em DESC
-      `,
-      [local_id]
-    );
+        ORDER BY
+          avaliacoes.criado_em DESC
+        `,
+        [local_id]
+      );
 
-    const resultado = avaliacoes.map(
-      (avaliacao) => ({
-        id: avaliacao.id,
-        usuario_id: avaliacao.usuario_id,
-        local_id: avaliacao.local_id,
-        status: avaliacao.status,
-        nota: avaliacao.nota,
-        comentario: avaliacao.comentario,
-        criado_em: avaliacao.criado_em,
-        nome: avaliacao.nome,
-        usuario: avaliacao.usuario,
-        foto_perfil:
-          avaliacao.foto_perfil,
+    const resultado =
+      avaliacoes.map(
+        (avaliacao) => ({
+          id:
+            avaliacao.id,
 
-        midia: avaliacao.midia_id
-          ? {
-              id: avaliacao.midia_id,
-              tipo: avaliacao.midia_tipo,
-              url: avaliacao.midia_url,
-              thumbnail:
-                avaliacao.midia_thumbnail,
-            }
-          : null,
-      })
-    );
+          usuario_id:
+            avaliacao.usuario_id,
+
+          local_id:
+            avaliacao.local_id,
+
+          status:
+            avaliacao.status,
+
+          nota:
+            avaliacao.nota,
+
+          comentario:
+            avaliacao.comentario,
+
+          criado_em:
+            avaliacao.criado_em,
+
+          nome:
+            avaliacao.nome,
+
+          usuario:
+            avaliacao.usuario,
+
+          foto_perfil:
+            corrigirUrlMidia(
+              avaliacao.foto_perfil
+            ),
+
+          midia:
+            avaliacao.midia_id
+              ? {
+                  id:
+                    avaliacao.midia_id,
+
+                  tipo:
+                    avaliacao.midia_tipo,
+
+                  url:
+                    corrigirUrlMidia(
+                      avaliacao.midia_url
+                    ),
+
+                  thumbnail:
+                    corrigirUrlMidia(
+                      avaliacao.midia_thumbnail
+                    ),
+                }
+              : null,
+        })
+      );
 
     return res.json(resultado);
   } catch (error) {
@@ -267,18 +422,28 @@ export async function listarAvaliacoes(
     );
 
     return res.status(500).json({
-      erro: "Erro ao buscar avaliações",
-      detalhe: error.message,
+      erro:
+        "Erro ao buscar avaliações",
+
+      detalhe:
+        error.message,
     });
   }
 }
+
+/*
+|--------------------------------------------------------------------------
+| ATUALIZAR AVALIAÇÃO
+|--------------------------------------------------------------------------
+*/
 
 export async function atualizarAvaliacao(
   req,
   res
 ) {
   try {
-    const { id } = req.params;
+    const { id } =
+      req.params;
 
     const {
       usuario_id,
@@ -300,18 +465,30 @@ export async function atualizarAvaliacao(
       });
     }
 
-    const avaliacaoId = Number(id);
-    const usuarioId = Number(usuario_id);
-    const notaNumerica = Number(nota);
-    const statusLimpo = String(status).trim();
+    const avaliacaoId =
+      Number(id);
+
+    const usuarioId =
+      Number(usuario_id);
+
+    const notaNumerica =
+      Number(nota);
+
+    const statusLimpo =
+      String(status).trim();
 
     const comentarioLimpo =
-      comentario?.trim() || statusLimpo;
+      comentario?.trim() ||
+      statusLimpo;
 
     if (
-      !Number.isInteger(avaliacaoId) ||
+      !Number.isInteger(
+        avaliacaoId
+      ) ||
       avaliacaoId <= 0 ||
-      !Number.isInteger(usuarioId) ||
+      !Number.isInteger(
+        usuarioId
+      ) ||
       usuarioId <= 0
     ) {
       return res.status(400).json({
@@ -322,12 +499,15 @@ export async function atualizarAvaliacao(
 
     if (!statusLimpo) {
       return res.status(400).json({
-        erro: "O status é obrigatório.",
+        erro:
+          "O status é obrigatório.",
       });
     }
 
     if (
-      !Number.isInteger(notaNumerica) ||
+      !Number.isInteger(
+        notaNumerica
+      ) ||
       notaNumerica < 1 ||
       notaNumerica > 5
     ) {
@@ -338,9 +518,13 @@ export async function atualizarAvaliacao(
     }
 
     const resultadoModeracao =
-      moderarTexto(comentarioLimpo);
+      moderarTexto(
+        comentarioLimpo
+      );
 
-    if (!resultadoModeracao.aprovado) {
+    if (
+      !resultadoModeracao.aprovado
+    ) {
       return res.status(400).json({
         erro:
           resultadoModeracao.motivo ||
@@ -348,22 +532,26 @@ export async function atualizarAvaliacao(
       });
     }
 
-    const [avaliacoes] = await db.execute(
-      `
-      SELECT
-        id,
-        usuario_id,
-        local_id
-      FROM avaliacoes
-      WHERE id = ?
-      LIMIT 1
-      `,
-      [avaliacaoId]
-    );
+    const [avaliacoes] =
+      await db.execute(
+        `
+        SELECT
+          id,
+          usuario_id,
+          local_id
+        FROM avaliacoes
+        WHERE id = ?
+        LIMIT 1
+        `,
+        [avaliacaoId]
+      );
 
-    if (avaliacoes.length === 0) {
+    if (
+      avaliacoes.length === 0
+    ) {
       return res.status(404).json({
-        erro: "Avaliação não encontrada.",
+        erro:
+          "Avaliação não encontrada.",
       });
     }
 
@@ -402,8 +590,8 @@ export async function atualizarAvaliacao(
       );
 
     if (
-      resultadoAtualizacao.affectedRows ===
-      0
+      resultadoAtualizacao
+        .affectedRows === 0
     ) {
       return res.status(404).json({
         erro:
@@ -414,15 +602,27 @@ export async function atualizarAvaliacao(
     return res.json({
       mensagem:
         "Avaliação atualizada com sucesso.",
+
       avaliacao: {
-        id: avaliacaoId,
-        usuario_id: usuarioId,
-        local_id: Number(
-          avaliacaoExistente.local_id
-        ),
-        status: statusLimpo,
-        nota: notaNumerica,
-        comentario: comentarioLimpo,
+        id:
+          avaliacaoId,
+
+        usuario_id:
+          usuarioId,
+
+        local_id:
+          Number(
+            avaliacaoExistente.local_id
+          ),
+
+        status:
+          statusLimpo,
+
+        nota:
+          notaNumerica,
+
+        comentario:
+          comentarioLimpo,
       },
     });
   } catch (error) {
@@ -434,10 +634,18 @@ export async function atualizarAvaliacao(
     return res.status(500).json({
       erro:
         "Erro ao atualizar avaliação.",
-      detalhe: error.message,
+
+      detalhe:
+        error.message,
     });
   }
 }
+
+/*
+|--------------------------------------------------------------------------
+| EXCLUIR AVALIAÇÃO
+|--------------------------------------------------------------------------
+*/
 
 export async function excluirAvaliacao(
   req,
@@ -449,10 +657,16 @@ export async function excluirAvaliacao(
   let transacaoIniciada = false;
 
   try {
-    const { id } = req.params;
-    const { usuario_id } = req.body;
+    const { id } =
+      req.params;
 
-    if (!id || !usuario_id) {
+    const { usuario_id } =
+      req.body;
+
+    if (
+      !id ||
+      !usuario_id
+    ) {
       return res.status(400).json({
         erro:
           "Avaliação e usuário são obrigatórios.",
@@ -467,25 +681,33 @@ export async function excluirAvaliacao(
           avaliacoes.usuario_id,
           midias.url AS midia_url
         FROM avaliacoes
+
         LEFT JOIN midias
           ON midias.avaliacao_id =
              avaliacoes.id
+
         WHERE avaliacoes.id = ?
         LIMIT 1
         `,
         [Number(id)]
       );
 
-    if (avaliacoes.length === 0) {
+    if (
+      avaliacoes.length === 0
+    ) {
       return res.status(404).json({
-        erro: "Avaliação não encontrada.",
+        erro:
+          "Avaliação não encontrada.",
       });
     }
 
-    const avaliacao = avaliacoes[0];
+    const avaliacao =
+      avaliacoes[0];
 
     if (
-      Number(avaliacao.usuario_id) !==
+      Number(
+        avaliacao.usuario_id
+      ) !==
       Number(usuario_id)
     ) {
       return res.status(403).json({
@@ -519,7 +741,9 @@ export async function excluirAvaliacao(
         ]
       );
 
-    if (resultado.affectedRows === 0) {
+    if (
+      resultado.affectedRows === 0
+    ) {
       await connection.rollback();
 
       transacaoIniciada = false;
@@ -534,29 +758,40 @@ export async function excluirAvaliacao(
 
     transacaoIniciada = false;
 
-    if (avaliacao.midia_url) {
+    if (
+      avaliacao.midia_url
+    ) {
       try {
-        const urlMidia = new URL(
-          avaliacao.midia_url
-        );
+        const urlMidia =
+          new URL(
+            corrigirUrlMidia(
+              avaliacao.midia_url
+            )
+          );
 
-        const nomeArquivo = path.basename(
-          urlMidia.pathname
-        );
+        const nomeArquivo =
+          path.basename(
+            urlMidia.pathname
+          );
 
-        const caminhoArquivo = path.join(
-          pastaMidias,
-          nomeArquivo
-        );
+        const caminhoArquivo =
+          path.join(
+            pastaMidias,
+            nomeArquivo
+          );
 
         if (
-          fs.existsSync(caminhoArquivo)
+          fs.existsSync(
+            caminhoArquivo
+          )
         ) {
           await fs.promises.unlink(
             caminhoArquivo
           );
         }
-      } catch (errorArquivo) {
+      } catch (
+        errorArquivo
+      ) {
         console.error(
           "Avaliação apagada, mas houve erro ao remover o arquivo:",
           errorArquivo
@@ -579,8 +814,11 @@ export async function excluirAvaliacao(
     );
 
     return res.status(500).json({
-      erro: "Erro ao excluir avaliação.",
-      detalhe: error.message,
+      erro:
+        "Erro ao excluir avaliação.",
+
+      detalhe:
+        error.message,
     });
   } finally {
     connection.release();
