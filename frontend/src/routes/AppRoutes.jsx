@@ -20,6 +20,7 @@ import RecuperarSenha from "../pages/RecuperarSenha/RecuperarSenha";
 import Privacidade from "../pages/Privacidade/Privacidade";
 import Sobre from "../pages/Sobre/Sobre";
 import Termos from "../pages/Termos/Termos";
+import Suporte from "../pages/Suporte/Suporte";
 
 function AppRoutes() {
   return (
@@ -100,6 +101,11 @@ function AppRoutes() {
         <Route
           path="/sobre"
           element={<Sobre />}
+        />
+
+        <Route
+          path="/suporte"
+          element={<Suporte />}
         />
 
         <Route
