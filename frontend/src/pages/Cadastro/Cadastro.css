@@ -18,36 +18,37 @@
   max-width: 430px;
   margin: 0 auto;
   padding: 24px 20px 40px;
-
   background:
-    radial-gradient(
-      circle at top right,
-      rgba(94, 231, 223, 0.08),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at top left,
-      rgba(155, 124, 255, 0.12),
-      transparent 30%
-    ),
+    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
+    radial-gradient(circle at top left, rgba(155, 124, 255, 0.12), transparent 30%),
     #070711;
-
   color: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+}
 
-  font-family:
-    Inter,
-    system-ui,
-    sans-serif;
+.cadastro-back-btn {
+  width: 42px;
+  height: 42px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  background: rgba(17, 17, 31, 0.72);
+  color: #d8d8e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
 }
 
 .cadastro-header {
-  margin-top: 50px;
+  margin-top: 28px;
   margin-bottom: 34px;
 }
 
 .cadastro-header span {
   color: #9b7cff;
-
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -56,31 +57,25 @@
 
 .cadastro-header h1 {
   margin: 14px 0 10px;
-
   color: #ffffff;
-
   font-size: 34px;
   line-height: 1.05;
 }
 
 .cadastro-header p {
   margin: 0;
-
   color: #c7c7d8;
-
   line-height: 1.5;
 }
 
 .cadastro-form {
   display: flex;
   flex-direction: column;
-
   gap: 18px;
 }
 
 .cadastro-form label {
   color: #ffffff;
-
   font-weight: 800;
   font-size: 14px;
 }
@@ -89,18 +84,11 @@
   min-height: 54px;
   margin-top: 9px;
   padding: 0 16px;
-
   border-radius: 18px;
-
   background: #11111e;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
-
   gap: 12px;
 }
 
@@ -111,13 +99,10 @@
 .input-box input {
   flex: 1;
   min-width: 0;
-
   border: none;
   outline: none;
-
   background: transparent;
   color: #ffffff;
-
   font-size: 14px;
   font-family: inherit;
 }
@@ -128,9 +113,7 @@
 
 .cadastro-consentimento {
   margin: 0;
-
   color: #8f8fa4;
-
   font-size: 12px;
   line-height: 1.6;
   text-align: center;
@@ -139,7 +122,6 @@
 
 .cadastro-consentimento a {
   color: #c5b8ff;
-
   text-decoration: none;
   font-weight: 700;
 }
@@ -147,29 +129,17 @@
 .cadastro-btn {
   min-height: 56px;
   margin-top: 8px;
-
   border: none;
   border-radius: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #9b7cff,
-      #5ee7df
-    );
-
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
   color: #070711;
-
   font-weight: 900;
   font-size: 15px;
   font-family: inherit;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 10px;
-
   cursor: pointer;
 }
 
@@ -181,68 +151,47 @@
 
 .social-divider {
   position: relative;
-
   margin-top: 10px;
-
   text-align: center;
 }
 
 .social-divider::before {
   content: "";
-
   position: absolute;
   top: 50%;
   right: 0;
   left: 0;
-
   height: 1px;
-
-  background:
-    rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .social-divider span {
   position: relative;
-
   padding: 0 12px;
-
   background: #070711;
   color: #8f8fa4;
-
   font-size: 13px;
 }
 
 .social-buttons {
   display: flex;
-
   gap: 12px;
 }
 
 .social-btn {
   flex: 1;
-
   min-height: 54px;
-
   border-radius: 18px;
-
   background: #11111e;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #ffffff;
-
   font-weight: 700;
   font-size: 14px;
   font-family: inherit;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
   cursor: pointer;
 }
 
@@ -252,15 +201,12 @@
 
 .cadastro-footer {
   margin: 26px 0 0;
-
   color: #aaaac0;
-
   text-align: center;
 }
 
 .cadastro-footer a {
   color: #7fffd4;
-
   font-weight: 800;
   text-decoration: none;
 }
@@ -269,29 +215,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
   margin-bottom: 6px;
 }
 
 .avatar-upload {
   width: 96px;
   height: 96px;
-
   margin-bottom: 10px;
-
   border-radius: 28px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #9b7cff,
-      #5ee7df
-    );
-
+  background: linear-gradient(135deg, #9b7cff, #5ee7df);
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
   overflow: hidden;
 }
@@ -303,13 +238,11 @@
 .avatar-upload img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
 .avatar-placeholder {
   color: #070711;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -317,7 +250,6 @@
 
 .avatar-upload-area span {
   color: #aaaac0;
-
   font-size: 13px;
 }
 
@@ -326,72 +258,47 @@
 .input-box input:-webkit-autofill:focus,
 .input-box input:-webkit-autofill:active {
   border-radius: 0;
-
-  -webkit-text-fill-color:
-    #ffffff !important;
-
+  -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff;
-
-  -webkit-box-shadow:
-    0 0 0 1000px
-    #11111e inset !important;
-
-  box-shadow:
-    0 0 0 1000px
-    #11111e inset !important;
-
-  transition:
-    background-color
-    9999s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0 1000px #11111e inset !important;
+  box-shadow: 0 0 0 1000px #11111e inset !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 .input-box input:focus,
 .input-box input:active {
   border: none;
   outline: none;
-
   background: transparent;
   color: #ffffff;
-
   box-shadow: none;
 }
 
 .input-box input:autofill {
   background: #11111e;
   color: #ffffff;
-
-  box-shadow:
-    0 0 0 1000px
-    #11111e inset;
+  box-shadow: 0 0 0 1000px #11111e inset;
 }
 
 .mostrar-senha-btn {
   flex-shrink: 0;
-
   width: 34px;
   height: 34px;
   padding: 0;
-
   border: none;
   outline: none;
   border-radius: 50%;
-
   background: transparent;
   color: #8f8fa4;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
 }
 
 .mostrar-senha-btn:focus-visible {
   color: #7fffd4;
-
-  outline:
-    2px solid
-    rgba(127, 255, 212, 0.45);
+  outline: 2px solid rgba(127, 255, 212, 0.45);
 }
 
 .mostrar-senha-btn svg {
@@ -400,25 +307,20 @@
 
 .cadastro-legal-links {
   margin: 20px auto 10px;
-
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-
   gap: 8px;
-
   font-size: 12px;
 }
 
 .cadastro-legal-links a {
   color: #8f8fa4;
-
   text-decoration: none;
   font-weight: 600;
 }
 
 .cadastro-legal-links span {
-  color:
-    rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.18);
 }

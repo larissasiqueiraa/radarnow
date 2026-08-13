@@ -74,16 +74,6 @@ function Privacidade() {
             dos dados pessoais realizado
             por meio da plataforma.
           </p>
-
-          <p>
-            Solicitações relacionadas à
-            privacidade e à proteção de
-            dados podem ser enviadas para:
-          </p>
-
-          <a href="mailto:contato.radarnow@gmail.com">
-            contato.radarnow@gmail.com
-          </a>
         </section>
 
         <section className="privacidade-section">

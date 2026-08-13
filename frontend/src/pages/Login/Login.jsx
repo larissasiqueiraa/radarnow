@@ -1,10 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useGoogleLogin } from "@react-oauth/google";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  useState,
+} from "react";
+
+import {
+  useGoogleLogin,
+} from "@react-oauth/google";
 
 import {
   Mail,
   Lock,
+  ArrowLeft,
   ArrowRight,
   Apple,
   Eye,
@@ -228,6 +238,17 @@ function Login() {
 
   return (
     <main className="login-page">
+      <button
+        type="button"
+        className="login-back-btn"
+        onClick={() =>
+          navigate("/")
+        }
+        aria-label="Voltar para o início"
+      >
+        <ArrowLeft size={20} />
+      </button>
+
       <section className="login-header">
         <span>
           Radar Now

@@ -1,21 +1,11 @@
-import {
-  Link,
-  useNavigate,
-} from "react-router-dom";
-
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  useGoogleLogin,
-} from "@react-oauth/google";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 import {
   User,
   Mail,
   Lock,
+  ArrowLeft,
   ArrowRight,
   Apple,
   Camera,
@@ -24,92 +14,41 @@ import {
 } from "lucide-react";
 
 import "./Cadastro.css";
-
-import {
-  useToast,
-} from "../../components/Toast/Toast.jsx";
+import { useToast } from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://radarnow-production.up.railway.app";
 
 function Cadastro() {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
+  const { showToast } = useToast();
 
-  const { showToast } =
-    useToast();
+  const [nome, setNome] = useState("");
+  const [usuario, setUsuario] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
 
-  const [
-    nome,
-    setNome,
-  ] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] =
+    useState(false);
 
-  const [
-    usuario,
-    setUsuario,
-  ] = useState("");
-
-  const [
-    email,
-    setEmail,
-  ] = useState("");
-
-  const [
-    senha,
-    setSenha,
-  ] = useState("");
-
-  const [
-    confirmarSenha,
-    setConfirmarSenha,
-  ] = useState("");
-
-  const [
-    mostrarSenha,
-    setMostrarSenha,
-  ] = useState(false);
-
-  const [
-    mostrarConfirmarSenha,
-    setMostrarConfirmarSenha,
-  ] = useState(false);
-
-  const [
-    foto,
-    setFoto,
-  ] = useState(null);
-
-  const [
-    previewFoto,
-    setPreviewFoto,
-  ] = useState("");
-
-  const [
-    carregando,
-    setCarregando,
-  ] = useState(false);
-
-  const [
-    carregandoGoogle,
-    setCarregandoGoogle,
-  ] = useState(false);
+  const [foto, setFoto] = useState(null);
+  const [previewFoto, setPreviewFoto] = useState("");
+  const [carregando, setCarregando] = useState(false);
+  const [carregandoGoogle, setCarregandoGoogle] = useState(false);
 
   useEffect(() => {
     return () => {
       if (previewFoto) {
-        URL.revokeObjectURL(
-          previewFoto
-        );
+        URL.revokeObjectURL(previewFoto);
       }
     };
   }, [previewFoto]);
 
-  function selecionarFoto(
-    event
-  ) {
-    const arquivo =
-      event.target.files?.[0];
+  function selecionarFoto(event) {
+    const arquivo = event.target.files?.[0];
 
     if (!arquivo) {
       return;
@@ -121,140 +60,93 @@ function Cadastro() {
       "image/webp",
     ];
 
-    if (
-      !tiposPermitidos.includes(
-        arquivo.type
-      )
-    ) {
+    if (!tiposPermitidos.includes(arquivo.type)) {
       showToast(
         "Escolha uma imagem JPG, PNG ou WEBP.",
         "error"
       );
 
       event.target.value = "";
-
       return;
     }
 
-    const tamanhoMaximo =
-      5 * 1024 * 1024;
+    const tamanhoMaximo = 5 * 1024 * 1024;
 
-    if (
-      arquivo.size >
-      tamanhoMaximo
-    ) {
+    if (arquivo.size > tamanhoMaximo) {
       showToast(
         "A foto deve ter no máximo 5 MB.",
         "error"
       );
 
       event.target.value = "";
-
       return;
     }
 
     if (previewFoto) {
-      URL.revokeObjectURL(
-        previewFoto
-      );
+      URL.revokeObjectURL(previewFoto);
     }
 
     setFoto(arquivo);
-
-    setPreviewFoto(
-      URL.createObjectURL(
-        arquivo
-      )
-    );
+    setPreviewFoto(URL.createObjectURL(arquivo));
   }
 
-  async function cadastrar(
-    event
-  ) {
+  async function cadastrar(event) {
     event.preventDefault();
 
-    if (
-      senha !==
-      confirmarSenha
-    ) {
-      showToast(
-        "As senhas não coincidem.",
-        "error"
-      );
-
+    if (senha !== confirmarSenha) {
+      showToast("As senhas não coincidem.", "error");
       return;
     }
 
     try {
       setCarregando(true);
 
-      const formulario =
-        new FormData();
+      const formulario = new FormData();
 
-      formulario.append(
-        "nome",
-        nome.trim()
-      );
+      formulario.append("nome", nome.trim());
 
       formulario.append(
         "usuario",
-        usuario
-          .trim()
-          .replace(/^@/, "")
+        usuario.trim().replace(/^@/, "")
       );
 
       formulario.append(
         "email",
-        email
-          .trim()
-          .toLowerCase()
+        email.trim().toLowerCase()
       );
 
-      formulario.append(
-        "senha",
-        senha
-      );
+      formulario.append("senha", senha);
 
       if (foto) {
-        formulario.append(
-          "foto",
-          foto
-        );
+        formulario.append("foto", foto);
       }
 
-      const resposta =
-        await fetch(
-          `${API_URL}/api/auth/cadastro`,
-          {
-            method: "POST",
-            body: formulario,
-          }
-        );
+      const resposta = await fetch(
+        `${API_URL}/api/auth/cadastro`,
+        {
+          method: "POST",
+          body: formulario,
+        }
+      );
 
-      const dados =
-        await resposta.json();
+      const dados = await resposta.json();
 
       if (!resposta.ok) {
         showToast(
-          dados.erro ||
-            "Erro ao criar conta.",
+          dados.erro || "Erro ao criar conta.",
           "error"
         );
 
         return;
       }
 
-      if (
-        !dados.token ||
-        !dados.usuario
-      ) {
+      if (!dados.token || !dados.usuario) {
         showToast(
           "A conta foi criada, mas não foi possível entrar automaticamente.",
           "error"
         );
 
         navigate("/login");
-
         return;
       }
 
@@ -265,9 +157,7 @@ function Cadastro() {
 
       localStorage.setItem(
         "radarnow_usuario",
-        JSON.stringify(
-          dados.usuario
-        )
+        JSON.stringify(dados.usuario)
       );
 
       showToast(
@@ -293,34 +183,24 @@ function Cadastro() {
     }
   }
 
-  async function enviarGoogleParaBackend(
-    accessToken
-  ) {
+  async function enviarGoogleParaBackend(accessToken) {
     try {
-      setCarregandoGoogle(
-        true
+      setCarregandoGoogle(true);
+
+      const resposta = await fetch(
+        `${API_URL}/api/auth/google`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            access_token: accessToken,
+          }),
+        }
       );
 
-      const resposta =
-        await fetch(
-          `${API_URL}/api/auth/google`,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            body: JSON.stringify({
-              access_token:
-                accessToken,
-            }),
-          }
-        );
-
-      const dados =
-        await resposta.json();
+      const dados = await resposta.json();
 
       if (!resposta.ok) {
         showToast(
@@ -339,9 +219,7 @@ function Cadastro() {
 
       localStorage.setItem(
         "radarnow_usuario",
-        JSON.stringify(
-          dados.usuario
-        )
+        JSON.stringify(dados.usuario)
       );
 
       showToast(
@@ -363,29 +241,24 @@ function Cadastro() {
         "error"
       );
     } finally {
-      setCarregandoGoogle(
-        false
-      );
+      setCarregandoGoogle(false);
     }
   }
 
-  const cadastroGoogle =
-    useGoogleLogin({
-      onSuccess: (
-        tokenResponse
-      ) => {
-        enviarGoogleParaBackend(
-          tokenResponse.access_token
-        );
-      },
+  const cadastroGoogle = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      enviarGoogleParaBackend(
+        tokenResponse.access_token
+      );
+    },
 
-      onError: () => {
-        showToast(
-          "Não foi possível continuar com Google.",
-          "error"
-        );
-      },
-    });
+    onError: () => {
+      showToast(
+        "Não foi possível continuar com Google.",
+        "error"
+      );
+    },
+  });
 
   function cadastrarComApple() {
     showToast(
@@ -396,19 +269,23 @@ function Cadastro() {
 
   return (
     <main className="cadastro-page">
-      <section className="cadastro-header">
-        <span>
-          Radar Now
-        </span>
+      <button
+        type="button"
+        className="cadastro-back-btn"
+        onClick={() => navigate("/")}
+        aria-label="Voltar para o início"
+      >
+        <ArrowLeft size={20} />
+      </button>
 
-        <h1>
-          Criar conta
-        </h1>
+      <section className="cadastro-header">
+        <span>Radar Now</span>
+
+        <h1>Criar conta</h1>
 
         <p>
-          Compartilhe experiências e
-          descubra os melhores lugares
-          em tempo real.
+          Compartilhe experiências e descubra os melhores
+          lugares em tempo real.
         </p>
       </section>
 
@@ -422,9 +299,7 @@ function Cadastro() {
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
-              onChange={
-                selecionarFoto
-              }
+              onChange={selecionarFoto}
             />
 
             {previewFoto ? (
@@ -439,9 +314,7 @@ function Cadastro() {
             )}
           </label>
 
-          <span>
-            Foto de perfil opcional
-          </span>
+          <span>Foto de perfil opcional</span>
         </div>
 
         <label>
@@ -456,9 +329,7 @@ function Cadastro() {
               placeholder="Seu nome"
               value={nome}
               onChange={(event) =>
-                setNome(
-                  event.target.value
-                )
+                setNome(event.target.value)
               }
               autoComplete="off"
               required
@@ -478,9 +349,7 @@ function Cadastro() {
               placeholder="@usuario"
               value={usuario}
               onChange={(event) =>
-                setUsuario(
-                  event.target.value
-                )
+                setUsuario(event.target.value)
               }
               autoComplete="off"
               required
@@ -500,9 +369,7 @@ function Cadastro() {
               placeholder="seuemail@email.com"
               value={email}
               onChange={(event) =>
-                setEmail(
-                  event.target.value
-                )
+                setEmail(event.target.value)
               }
               autoComplete="off"
               required
@@ -517,18 +384,12 @@ function Cadastro() {
             <Lock size={18} />
 
             <input
-              type={
-                mostrarSenha
-                  ? "text"
-                  : "password"
-              }
+              type={mostrarSenha ? "text" : "password"}
               name="cadastro-senha"
               placeholder="Sua senha"
               value={senha}
               onChange={(event) =>
-                setSenha(
-                  event.target.value
-                )
+                setSenha(event.target.value)
               }
               autoComplete="new-password"
               minLength={6}
@@ -539,10 +400,7 @@ function Cadastro() {
               type="button"
               className="mostrar-senha-btn"
               onClick={() =>
-                setMostrarSenha(
-                  (valorAtual) =>
-                    !valorAtual
-                )
+                setMostrarSenha((valorAtual) => !valorAtual)
               }
               aria-label={
                 mostrarSenha
@@ -594,8 +452,7 @@ function Cadastro() {
               className="mostrar-senha-btn"
               onClick={() =>
                 setMostrarConfirmarSenha(
-                  (valorAtual) =>
-                    !valorAtual
+                  (valorAtual) => !valorAtual
                 )
               }
               aria-label={
@@ -619,28 +476,17 @@ function Cadastro() {
         </label>
 
         <p className="cadastro-consentimento">
-          Ao criar sua conta, você
-          declara que leu e concorda
-          com os{" "}
-
-          <Link to="/termos">
-            Termos de Uso
-          </Link>
-
+          Ao criar sua conta, você declara que leu e concorda com os{" "}
+          <Link to="/termos">Termos de Uso</Link>
           {" "}e com a{" "}
-
-          <Link to="/privacidade">
-            Política de Privacidade
-          </Link>
-          .
+          <Link to="/privacidade">Política de Privacidade</Link>.
         </p>
 
         <button
           type="submit"
           className="cadastro-btn"
           disabled={
-            carregando ||
-            carregandoGoogle
+            carregando || carregandoGoogle
           }
         >
           {carregando
@@ -651,21 +497,16 @@ function Cadastro() {
         </button>
 
         <div className="social-divider">
-          <span>
-            ou continue com
-          </span>
+          <span>ou continue com</span>
         </div>
 
         <div className="social-buttons">
           <button
             type="button"
             className="social-btn social-google-btn"
-            onClick={() =>
-              cadastroGoogle()
-            }
+            onClick={() => cadastroGoogle()}
             disabled={
-              carregandoGoogle ||
-              carregando
+              carregandoGoogle || carregando
             }
           >
             <span className="google-icon">
@@ -680,16 +521,12 @@ function Cadastro() {
           <button
             type="button"
             className="social-btn"
-            onClick={
-              cadastrarComApple
-            }
+            onClick={cadastrarComApple}
             disabled={
-              carregando ||
-              carregandoGoogle
+              carregando || carregandoGoogle
             }
           >
             <Apple size={18} />
-
             Apple
           </button>
         </div>
@@ -697,35 +534,18 @@ function Cadastro() {
 
       <p className="cadastro-footer">
         Já possui conta?{" "}
-
-        <Link to="/login">
-          Entrar
-        </Link>
+        <Link to="/login">Entrar</Link>
       </p>
 
       <nav
         className="cadastro-legal-links"
         aria-label="Informações legais e suporte"
       >
-        <Link to="/privacidade">
-          Privacidade
-        </Link>
-
-        <span aria-hidden="true">
-          •
-        </span>
-
-        <Link to="/termos">
-          Termos de Uso
-        </Link>
-
-        <span aria-hidden="true">
-          •
-        </span>
-
-        <Link to="/suporte">
-          Suporte
-        </Link>
+        <Link to="/privacidade">Privacidade</Link>
+        <span aria-hidden="true">•</span>
+        <Link to="/termos">Termos de Uso</Link>
+        <span aria-hidden="true">•</span>
+        <Link to="/suporte">Suporte</Link>
       </nav>
     </main>
   );
