@@ -9,7 +9,6 @@ import {
 import {
   ArrowLeft,
   User,
-  Bell,
   Shield,
   Info,
   LogOut,
@@ -154,9 +153,7 @@ function Configuracoes() {
           }
           aria-label="Voltar para perfil"
         >
-          <ArrowLeft
-            size={20}
-          />
+          <ArrowLeft size={20} />
         </button>
 
         <section className="config-header">
@@ -165,8 +162,8 @@ function Configuracoes() {
           </h1>
 
           <p>
-            Personalize sua experiência
-            no aplicativo.
+            Gerencie sua conta e suas
+            preferências.
           </p>
         </section>
 
@@ -188,41 +185,15 @@ function Configuracoes() {
               </span>
             </div>
 
-            <ChevronRight
-              size={18}
-            />
+            <ChevronRight size={18} />
           </button>
 
           <button
             type="button"
             className="config-item"
             onClick={() =>
-              showToast(
-                "As configurações de notificações estarão disponíveis em breve.",
-                "info"
-              )
-            }
-          >
-            <div>
-              <Bell size={18} />
-
-              <span>
-                Notificações
-              </span>
-            </div>
-
-            <ChevronRight
-              size={18}
-            />
-          </button>
-
-          <button
-            type="button"
-            className="config-item"
-            onClick={() =>
-              showToast(
-                "As configurações de privacidade estarão disponíveis em breve.",
-                "info"
+              navigate(
+                "/privacidade"
               )
             }
           >
@@ -234,9 +205,7 @@ function Configuracoes() {
               </span>
             </div>
 
-            <ChevronRight
-              size={18}
-            />
+            <ChevronRight size={18} />
           </button>
 
           <button
@@ -258,9 +227,7 @@ function Configuracoes() {
               </span>
             </div>
 
-            <ChevronRight
-              size={18}
-            />
+            <ChevronRight size={18} />
           </button>
 
           <button
@@ -287,9 +254,7 @@ function Configuracoes() {
             }
           >
             <div>
-              <Trash2
-                size={18}
-              />
+              <Trash2 size={18} />
 
               <span>
                 Excluir minha conta
@@ -340,9 +305,7 @@ function Configuracoes() {
             </button>
 
             <div className="delete-modal-icon">
-              <Trash2
-                size={24}
-              />
+              <Trash2 size={24} />
             </div>
 
             <h2 id="delete-modal-title">
@@ -398,9 +361,7 @@ function Configuracoes() {
                   </>
                 ) : (
                   <>
-                    <Trash2
-                      size={18}
-                    />
+                    <Trash2 size={18} />
 
                     Excluir permanentemente
                   </>
