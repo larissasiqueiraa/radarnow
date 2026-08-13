@@ -1,4 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
@@ -20,36 +24,83 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-        <Route path="/cadastro" element={<Cadastro />} />
+        <Route
+          path="/cadastro"
+          element={<Cadastro />}
+        />
 
-        <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        <Route
+          path="/recuperar-senha"
+          element={
+            <RecuperarSenha />
+          }
+        />
 
-        <Route path="/busca" element={<Busca />} />
+        <Route
+          path="/busca"
+          element={<Busca />}
+        />
 
-        <Route path="/local/:id" element={<Local />} />
+        <Route
+          path="/local/:id"
+          element={<Local />}
+        />
 
-        <Route path="/local/:id/midias" element={<Midias />} />
+        <Route
+          path="/local/:id/midias"
+          element={<Midias />}
+        />
 
-        <Route path="/novo-status/:id" element={<NovoStatus />} />
+        <Route
+          path="/novo-status/:id"
+          element={<NovoStatus />}
+        />
 
-        <Route path="/perfil" element={<Perfil />} />
+        <Route
+          path="/perfil"
+          element={<Perfil />}
+        />
 
-        <Route path="/favoritos" element={<Favoritos />} />
+        <Route
+          path="/favoritos"
+          element={<Favoritos />}
+        />
 
-        <Route path="/configuracoes" element={<Configuracoes />} />
+        <Route
+          path="/configuracoes"
+          element={<Configuracoes />}
+        />
 
-        <Route path="/editar-perfil" element={<EditarPerfil />} />
+        <Route
+          path="/editar-perfil"
+          element={<EditarPerfil />}
+        />
 
-        <Route path="/privacidade" element={<Privacidade />} />
+        <Route
+          path="/privacidade"
+          element={<Privacidade />}
+        />
 
-        <Route path="/mapa" element={<Mapa />} />
+        <Route
+          path="/sobre"
+          element={<Sobre />}
+        />
+
+        <Route
+          path="/mapa"
+          element={<Mapa />}
+        />
       </Routes>
-
-      <Route path="/sobre" element={<Sobre />} />
     </BrowserRouter>
   );
 }
