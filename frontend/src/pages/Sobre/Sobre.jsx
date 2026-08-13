@@ -3,6 +3,7 @@ import {
   Heart,
   Mail,
   Shield,
+  FileText,
 } from "lucide-react";
 
 import {
@@ -94,6 +95,23 @@ function Sobre() {
 
               <span>
                 Política de Privacidade
+              </span>
+            </div>
+
+            <span aria-hidden="true">
+              ›
+            </span>
+          </Link>
+
+          <Link
+            to="/termos"
+            className="sobre-link"
+          >
+            <div>
+              <FileText size={19} />
+
+              <span>
+                Termos de Uso
               </span>
             </div>
 
