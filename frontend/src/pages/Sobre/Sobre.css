@@ -1,0 +1,234 @@
+.sobre-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-bottom: 120px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(94, 231, 223, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top left,
+      rgba(155, 124, 255, 0.12),
+      transparent 30%
+    ),
+    #070711;
+
+  color: #ffffff;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+.sobre-content {
+  padding: 18px;
+}
+
+.sobre-back-btn {
+  width: 42px;
+  height: 42px;
+
+  margin: 0 0 24px;
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 15px;
+
+  background:
+    rgba(17, 17, 31, 0.72);
+
+  color: #d8d8e8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+}
+
+.sobre-header {
+  margin-bottom: 28px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.sobre-logo {
+  width: 92px;
+  height: 92px;
+
+  margin-bottom: 16px;
+
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9b7cff,
+      #5ee7df
+    );
+
+  color: #070711;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 2px;
+
+  box-shadow:
+    0 16px 38px
+    rgba(155, 124, 255, 0.2);
+}
+
+.sobre-header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 31px;
+  line-height: 1.1;
+}
+
+.sobre-header > span {
+  margin-top: 8px;
+
+  color: #aaaac0;
+
+  font-size: 13px;
+}
+
+.sobre-card {
+  margin-top: 14px;
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 20px;
+
+  background: #11111e;
+}
+
+.sobre-card h2 {
+  margin: 0 0 12px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.sobre-card p {
+  margin: 0;
+
+  color: #c7c7d8;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.sobre-card p + p {
+  margin-top: 12px;
+}
+
+.sobre-links {
+  margin-top: 22px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sobre-link {
+  width: 100%;
+  min-height: 62px;
+  padding: 0 18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  background: #11111e;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  text-decoration: none;
+}
+
+.sobre-link div {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.sobre-link div svg {
+  color: #9b7cff;
+}
+
+.sobre-link > span {
+  color: #8f8fa4;
+
+  font-size: 26px;
+  line-height: 1;
+}
+
+.sobre-footer-message {
+  margin-top: 24px;
+  padding: 18px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(155, 124, 255, 0.08);
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sobre-footer-message svg {
+  flex-shrink: 0;
+
+  color: #ff7b9f;
+}
+
+.sobre-footer-message p {
+  margin: 0;
+
+  color: #c7c7d8;
+
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.sobre-copyright {
+  margin: 24px 0 0;
+
+  color: #77778c;
+
+  font-size: 12px;
+  text-align: center;
+}
