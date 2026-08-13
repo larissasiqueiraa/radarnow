@@ -19,6 +19,7 @@ import Midias from "../pages/Midias/Midias";
 import RecuperarSenha from "../pages/RecuperarSenha/RecuperarSenha";
 import Privacidade from "../pages/Privacidade/Privacidade";
 import Sobre from "../pages/Sobre/Sobre";
+import Termos from "../pages/Termos/Termos";
 
 function AppRoutes() {
   return (
@@ -89,6 +90,11 @@ function AppRoutes() {
         <Route
           path="/privacidade"
           element={<Privacidade />}
+        />
+
+        <Route
+          path="/termos"
+          element={<Termos />}
         />
 
         <Route

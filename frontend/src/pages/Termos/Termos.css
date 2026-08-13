@@ -1,0 +1,202 @@
+.termos-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding-bottom: 120px;
+
+  background: #070711;
+  color: #ffffff;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+.termos-content {
+  padding: 18px;
+}
+
+.termos-back-btn {
+  width: 42px;
+  height: 42px;
+
+  margin: 0 0 24px;
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 15px;
+
+  background:
+    rgba(17, 17, 31, 0.72);
+
+  color: #d8d8e8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+}
+
+.termos-header {
+  margin-bottom: 26px;
+
+  text-align: center;
+}
+
+.termos-icon {
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 16px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(155, 124, 255, 0.12);
+
+  color: #9b7cff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.termos-header h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 30px;
+  line-height: 1.15;
+}
+
+.termos-header p {
+  margin: 10px 0 0;
+
+  color: #aaaac0;
+
+  font-size: 13px;
+}
+
+.termos-intro,
+.termos-section,
+.termos-contact {
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 20px;
+
+  background: #11111e;
+}
+
+.termos-intro {
+  margin-bottom: 14px;
+}
+
+.termos-section {
+  margin-top: 14px;
+}
+
+.termos-section h2,
+.termos-contact h2 {
+  margin: 0 0 12px;
+
+  color: #ffffff;
+
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.termos-intro p,
+.termos-section p,
+.termos-contact p {
+  margin: 0;
+
+  color: #c7c7d8;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.termos-section p + p {
+  margin-top: 12px;
+}
+
+.termos-section ul {
+  margin: 12px 0 0;
+  padding-left: 20px;
+
+  color: #c7c7d8;
+}
+
+.termos-section li {
+  padding-left: 3px;
+
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.termos-section li + li {
+  margin-top: 8px;
+}
+
+.termos-section li::marker {
+  color: #7fffd4;
+}
+
+.termos-section a,
+.termos-contact a {
+  display: inline-block;
+
+  margin-top: 10px;
+
+  color: #7fffd4;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
+}
+
+.termos-path {
+  padding: 12px 14px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(155, 124, 255, 0.1);
+
+  color: #d1c5ff !important;
+
+  font-weight: 700;
+  text-align: center;
+}
+
+.termos-contact {
+  margin-top: 14px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.termos-contact > svg {
+  flex-shrink: 0;
+
+  color: #7fffd4;
+}
+
+.termos-contact h2 {
+  margin-bottom: 7px;
+}
