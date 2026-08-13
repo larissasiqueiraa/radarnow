@@ -5,19 +5,7 @@
   margin: 0 auto;
   padding-bottom: 120px;
 
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(94, 231, 223, 0.08),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at top left,
-      rgba(155, 124, 255, 0.12),
-      transparent 30%
-    ),
-    #070711;
-
+  background: #070711;
   color: #ffffff;
 
   font-family:
@@ -59,6 +47,7 @@
 
 .privacidade-header {
   margin-bottom: 26px;
+
   text-align: center;
 }
 
