@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
+
 import {
   Mail,
   Lock,
@@ -11,21 +12,46 @@ import {
 } from "lucide-react";
 
 import "./Login.css";
-import { useToast } from "../../components/Toast/Toast.jsx";
+
+import {
+  useToast,
+} from "../../components/Toast/Toast.jsx";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://radarnow-production.up.railway.app";
 
 function Login() {
-  const navigate = useNavigate();
-  const { showToast } = useToast();
+  const navigate =
+    useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [carregando, setCarregando] = useState(false);
-  const [carregandoGoogle, setCarregandoGoogle] = useState(false);
+  const { showToast } =
+    useToast();
+
+  const [
+    email,
+    setEmail,
+  ] = useState("");
+
+  const [
+    senha,
+    setSenha,
+  ] = useState("");
+
+  const [
+    mostrarSenha,
+    setMostrarSenha,
+  ] = useState(false);
+
+  const [
+    carregando,
+    setCarregando,
+  ] = useState(false);
+
+  const [
+    carregandoGoogle,
+    setCarregandoGoogle,
+  ] = useState(false);
 
   async function entrar(event) {
     event.preventDefault();
@@ -33,31 +59,47 @@ function Login() {
     try {
       setCarregando(true);
 
-      const resposta = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          senha,
-        }),
-      });
+      const resposta =
+        await fetch(
+          `${API_URL}/api/auth/login`,
+          {
+            method: "POST",
 
-      const dados = await resposta.json();
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify({
+              email,
+              senha,
+            }),
+          }
+        );
+
+      const dados =
+        await resposta.json();
 
       if (!resposta.ok) {
         showToast(
-          dados.erro || "Erro ao fazer login.",
+          dados.erro ||
+            "Erro ao fazer login.",
           "error"
         );
+
         return;
       }
 
-      localStorage.setItem("radarnow_token", dados.token);
+      localStorage.setItem(
+        "radarnow_token",
+        dados.token
+      );
+
       localStorage.setItem(
         "radarnow_usuario",
-        JSON.stringify(dados.usuario)
+        JSON.stringify(
+          dados.usuario
+        )
       );
 
       showToast(
@@ -69,7 +111,10 @@ function Login() {
         replace: true,
       });
     } catch (error) {
-      console.error("Erro no login:", error);
+      console.error(
+        "Erro no login:",
+        error
+      );
 
       showToast(
         "Não foi possível conectar ao servidor.",
@@ -80,34 +125,55 @@ function Login() {
     }
   }
 
-  async function enviarGoogleParaBackend(accessToken) {
+  async function enviarGoogleParaBackend(
+    accessToken
+  ) {
     try {
-      setCarregandoGoogle(true);
+      setCarregandoGoogle(
+        true
+      );
 
-      const resposta = await fetch(`${API_URL}/api/auth/google`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          access_token: accessToken,
-        }),
-      });
+      const resposta =
+        await fetch(
+          `${API_URL}/api/auth/google`,
+          {
+            method: "POST",
 
-      const dados = await resposta.json();
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify({
+              access_token:
+                accessToken,
+            }),
+          }
+        );
+
+      const dados =
+        await resposta.json();
 
       if (!resposta.ok) {
         showToast(
-          dados.erro || "Erro ao entrar com Google.",
+          dados.erro ||
+            "Erro ao entrar com Google.",
           "error"
         );
+
         return;
       }
 
-      localStorage.setItem("radarnow_token", dados.token);
+      localStorage.setItem(
+        "radarnow_token",
+        dados.token
+      );
+
       localStorage.setItem(
         "radarnow_usuario",
-        JSON.stringify(dados.usuario)
+        JSON.stringify(
+          dados.usuario
+        )
       );
 
       showToast(
@@ -129,24 +195,29 @@ function Login() {
         "error"
       );
     } finally {
-      setCarregandoGoogle(false);
+      setCarregandoGoogle(
+        false
+      );
     }
   }
 
-  const loginGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      enviarGoogleParaBackend(
-        tokenResponse.access_token
-      );
-    },
+  const loginGoogle =
+    useGoogleLogin({
+      onSuccess: (
+        tokenResponse
+      ) => {
+        enviarGoogleParaBackend(
+          tokenResponse.access_token
+        );
+      },
 
-    onError: () => {
-      showToast(
-        "Não foi possível entrar com Google.",
-        "error"
-      );
-    },
-  });
+      onError: () => {
+        showToast(
+          "Não foi possível entrar com Google.",
+          "error"
+        );
+      },
+    });
 
   function entrarComApple() {
     showToast(
@@ -158,12 +229,17 @@ function Login() {
   return (
     <main className="login-page">
       <section className="login-header">
-        <span>Radar Now</span>
+        <span>
+          Radar Now
+        </span>
 
-        <h1>Entre na sua conta</h1>
+        <h1>
+          Entre na sua conta
+        </h1>
 
         <p>
-          Veja como estão os lugares em tempo real.
+          Veja como estão os lugares
+          em tempo real.
         </p>
       </section>
 
@@ -184,7 +260,9 @@ function Login() {
               placeholder="seuemail@email.com"
               value={email}
               onChange={(event) =>
-                setEmail(event.target.value)
+                setEmail(
+                  event.target.value
+                )
               }
               autoComplete="off"
               required
@@ -199,12 +277,18 @@ function Login() {
             <Lock size={18} />
 
             <input
-              type={mostrarSenha ? "text" : "password"}
+              type={
+                mostrarSenha
+                  ? "text"
+                  : "password"
+              }
               name="login-senha"
               placeholder="Sua senha"
               value={senha}
               onChange={(event) =>
-                setSenha(event.target.value)
+                setSenha(
+                  event.target.value
+                )
               }
               autoComplete="current-password"
               required
@@ -215,7 +299,8 @@ function Login() {
               className="mostrar-senha-btn"
               onClick={() =>
                 setMostrarSenha(
-                  (valorAtual) => !valorAtual
+                  (valorAtual) =>
+                    !valorAtual
                 )
               }
               aria-label={
@@ -249,28 +334,38 @@ function Login() {
           type="submit"
           className="login-btn"
           disabled={
-            carregando || carregandoGoogle
+            carregando ||
+            carregandoGoogle
           }
         >
-          {carregando ? "Entrando..." : "Entrar"}
+          {carregando
+            ? "Entrando..."
+            : "Entrar"}
 
           <ArrowRight size={18} />
         </button>
 
         <div className="social-divider">
-          <span>ou continue com</span>
+          <span>
+            ou continue com
+          </span>
         </div>
 
         <div className="social-buttons">
           <button
             type="button"
             className="social-btn social-google-btn"
-            onClick={() => loginGoogle()}
+            onClick={() =>
+              loginGoogle()
+            }
             disabled={
-              carregandoGoogle || carregando
+              carregandoGoogle ||
+              carregando
             }
           >
-            <span className="google-icon">G</span>
+            <span className="google-icon">
+              G
+            </span>
 
             {carregandoGoogle
               ? "Entrando..."
@@ -280,12 +375,16 @@ function Login() {
           <button
             type="button"
             className="social-btn"
-            onClick={entrarComApple}
+            onClick={
+              entrarComApple
+            }
             disabled={
-              carregando || carregandoGoogle
+              carregando ||
+              carregandoGoogle
             }
           >
             <Apple size={18} />
+
             Apple
           </button>
         </div>
@@ -293,8 +392,36 @@ function Login() {
 
       <p className="login-footer">
         Ainda não tem conta?{" "}
-        <Link to="/cadastro">Criar conta</Link>
+
+        <Link to="/cadastro">
+          Criar conta
+        </Link>
       </p>
+
+      <nav
+        className="login-legal-links"
+        aria-label="Informações legais e suporte"
+      >
+        <Link to="/privacidade">
+          Privacidade
+        </Link>
+
+        <span aria-hidden="true">
+          •
+        </span>
+
+        <Link to="/termos">
+          Termos de Uso
+        </Link>
+
+        <span aria-hidden="true">
+          •
+        </span>
+
+        <Link to="/suporte">
+          Suporte
+        </Link>
+      </nav>
     </main>
   );
 }

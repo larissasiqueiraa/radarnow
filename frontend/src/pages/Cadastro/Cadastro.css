@@ -15,15 +15,29 @@
 
 .cadastro-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(94, 231, 223, 0.08), transparent 28%),
-    radial-gradient(circle at top left, rgba(155, 124, 255, 0.12), transparent 30%),
-    #070711;
-  color: #ffffff;
-  padding: 24px 20px;
-  font-family: Inter, system-ui, sans-serif;
   max-width: 430px;
   margin: 0 auto;
+  padding: 24px 20px 40px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(94, 231, 223, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top left,
+      rgba(155, 124, 255, 0.12),
+      transparent 30%
+    ),
+    #070711;
+
+  color: #ffffff;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
 }
 
 .cadastro-header {
@@ -33,6 +47,7 @@
 
 .cadastro-header span {
   color: #9b7cff;
+
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 1px;
@@ -41,39 +56,52 @@
 
 .cadastro-header h1 {
   margin: 14px 0 10px;
+
   color: #ffffff;
+
   font-size: 34px;
   line-height: 1.05;
 }
 
 .cadastro-header p {
   margin: 0;
+
   color: #c7c7d8;
+
   line-height: 1.5;
 }
 
 .cadastro-form {
   display: flex;
   flex-direction: column;
+
   gap: 18px;
 }
 
 .cadastro-form label {
   color: #ffffff;
+
   font-weight: 800;
   font-size: 14px;
 }
 
 .input-box {
-  margin-top: 9px;
   min-height: 54px;
+  margin-top: 9px;
+  padding: 0 16px;
+
   border-radius: 18px;
+
   background: #11111e;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
   display: flex;
   align-items: center;
+
   gap: 12px;
-  padding: 0 16px;
 }
 
 .input-box svg {
@@ -82,10 +110,14 @@
 
 .input-box input {
   flex: 1;
+  min-width: 0;
+
   border: none;
   outline: none;
+
   background: transparent;
   color: #ffffff;
+
   font-size: 14px;
   font-family: inherit;
 }
@@ -94,77 +126,141 @@
   color: #77778c;
 }
 
+.cadastro-consentimento {
+  margin: 0;
+
+  color: #8f8fa4;
+
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  font-weight: 400;
+}
+
+.cadastro-consentimento a {
+  color: #c5b8ff;
+
+  text-decoration: none;
+  font-weight: 700;
+}
+
 .cadastro-btn {
-  margin-top: 8px;
   min-height: 56px;
+  margin-top: 8px;
+
   border: none;
   border-radius: 18px;
-  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+
+  background:
+    linear-gradient(
+      135deg,
+      #9b7cff,
+      #5ee7df
+    );
+
   color: #070711;
+
   font-weight: 900;
   font-size: 15px;
   font-family: inherit;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 10px;
+
   cursor: pointer;
+}
+
+.cadastro-btn:disabled,
+.social-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .social-divider {
   position: relative;
-  text-align: center;
+
   margin-top: 10px;
+
+  text-align: center;
 }
 
 .social-divider::before {
   content: "";
+
   position: absolute;
-  left: 0;
-  right: 0;
   top: 50%;
+  right: 0;
+  left: 0;
+
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
 .social-divider span {
   position: relative;
-  background: #070711;
+
   padding: 0 12px;
+
+  background: #070711;
   color: #8f8fa4;
+
   font-size: 13px;
 }
 
 .social-buttons {
   display: flex;
+
   gap: 12px;
 }
 
 .social-btn {
   flex: 1;
+
   min-height: 54px;
+
   border-radius: 18px;
+
   background: #11111e;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
   color: #ffffff;
+
   font-weight: 700;
   font-size: 14px;
   font-family: inherit;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 8px;
+
   cursor: pointer;
 }
 
+.google-icon {
+  font-weight: 900;
+}
+
 .cadastro-footer {
-  margin-top: 26px;
-  text-align: center;
+  margin: 26px 0 0;
+
   color: #aaaac0;
+
+  text-align: center;
 }
 
 .cadastro-footer a {
   color: #7fffd4;
+
   font-weight: 800;
   text-decoration: none;
 }
@@ -173,20 +269,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
   margin-bottom: 6px;
 }
 
 .avatar-upload {
   width: 96px;
   height: 96px;
+
+  margin-bottom: 10px;
+
   border-radius: 28px;
-  background: linear-gradient(135deg, #9b7cff, #5ee7df);
+
+  background:
+    linear-gradient(
+      135deg,
+      #9b7cff,
+      #5ee7df
+    );
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
   overflow: hidden;
-  margin-bottom: 10px;
 }
 
 .avatar-upload input {
@@ -196,11 +303,13 @@
 .avatar-upload img {
   width: 100%;
   height: 100%;
+
   object-fit: cover;
 }
 
 .avatar-placeholder {
   color: #070711;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -208,82 +317,108 @@
 
 .avatar-upload-area span {
   color: #aaaac0;
+
   font-size: 13px;
 }
 
-.google-login-box {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.google-login-box > div {
-  width: 100% !important;
-}
-
-.google-login-box iframe {
-  width: 100% !important;
-}
-
-/* Remove o fundo branco do preenchimento automático do navegador */
 .input-box input:-webkit-autofill,
 .input-box input:-webkit-autofill:hover,
 .input-box input:-webkit-autofill:focus,
 .input-box input:-webkit-autofill:active {
-  -webkit-text-fill-color: #ffffff !important;
-  caret-color: #ffffff;
-  -webkit-box-shadow: 0 0 0 1000px #11111e inset !important;
-  box-shadow: 0 0 0 1000px #11111e inset !important;
   border-radius: 0;
-  transition: background-color 9999s ease-in-out 0s;
+
+  -webkit-text-fill-color:
+    #ffffff !important;
+
+  caret-color: #ffffff;
+
+  -webkit-box-shadow:
+    0 0 0 1000px
+    #11111e inset !important;
+
+  box-shadow:
+    0 0 0 1000px
+    #11111e inset !important;
+
+  transition:
+    background-color
+    9999s ease-in-out 0s;
 }
 
-/* Impede mudança visual ao clicar ou preencher */
 .input-box input:focus,
 .input-box input:active {
+  border: none;
+  outline: none;
+
   background: transparent;
   color: #ffffff;
-  outline: none;
-  border: none;
+
   box-shadow: none;
 }
 
-/* Corrige o preenchimento automático no Firefox */
 .input-box input:autofill {
   background: #11111e;
   color: #ffffff;
-  box-shadow: 0 0 0 1000px #11111e inset;
+
+  box-shadow:
+    0 0 0 1000px
+    #11111e inset;
 }
 
 .mostrar-senha-btn {
   flex-shrink: 0;
+
   width: 34px;
   height: 34px;
   padding: 0;
+
   border: none;
   outline: none;
   border-radius: 50%;
+
   background: transparent;
   color: #8f8fa4;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition:
-    color 0.2s ease,
-    background 0.2s ease;
-}
 
-.mostrar-senha-btn:hover {
-  color: #7fffd4;
-  background: rgba(127, 255, 212, 0.08);
+  cursor: pointer;
 }
 
 .mostrar-senha-btn:focus-visible {
   color: #7fffd4;
-  outline: 2px solid rgba(127, 255, 212, 0.45);
+
+  outline:
+    2px solid
+    rgba(127, 255, 212, 0.45);
 }
 
 .mostrar-senha-btn svg {
   color: inherit;
+}
+
+.cadastro-legal-links {
+  margin: 20px auto 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  font-size: 12px;
+}
+
+.cadastro-legal-links a {
+  color: #8f8fa4;
+
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.cadastro-legal-links span {
+  color:
+    rgba(255, 255, 255, 0.18);
 }
