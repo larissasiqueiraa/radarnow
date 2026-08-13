@@ -312,14 +312,7 @@
   min-height: 112px !important;
 
   padding: 3px !important;
-  border-radius: 50% !important;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8b7cff,
-      #5ee7df
-    ) !important;
+  border-radius: 50% !important;;
 }
 
 .avatar-upload .rn-avatar-content {
