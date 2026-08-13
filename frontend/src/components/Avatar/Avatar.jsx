@@ -1,12 +1,6 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import {
-  User,
-} from "lucide-react";
+import { User } from "lucide-react";
 
 import "./Avatar.css";
 
@@ -21,40 +15,21 @@ const CORES_AVATAR = [
   ["#ff8c7b", "#c95353"],
 ];
 
-function criarNumeroDoTexto(
-  texto = ""
-) {
+function criarNumeroDoTexto(texto = "") {
   return String(texto)
     .split("")
     .reduce(
-      (total, caractere) =>
-        (
-          total * 31 +
-          caractere.charCodeAt(0)
-        ) >>> 0,
-      0
+      (total, caractere) => (total * 31 + caractere.charCodeAt(0)) >>> 0,
+      0,
     );
 }
 
-function obterInicial(
-  nome,
-  usuario
-) {
-  const texto =
-    nome ||
-    usuario ||
-    "";
+function obterInicial(nome, usuario) {
+  const texto = nome || usuario || "";
 
-  const textoLimpo =
-    String(texto)
-      .replace(/^@/, "")
-      .trim();
+  const textoLimpo = String(texto).replace(/^@/, "").trim();
 
-  return textoLimpo
-    ? textoLimpo
-        .charAt(0)
-        .toUpperCase()
-    : "";
+  return textoLimpo ? textoLimpo.charAt(0).toUpperCase() : "";
 }
 
 function Avatar({
@@ -65,64 +40,40 @@ function Avatar({
   className = "",
   mostrarIconeSemUsuario = true,
 }) {
-  const [
-    erroNaFoto,
-    setErroNaFoto,
-  ] = useState(false);
+  const [erroNaFoto, setErroNaFoto] = useState(false);
 
   useEffect(() => {
     setErroNaFoto(false);
   }, [foto]);
 
-  const inicial =
-    obterInicial(
-      nome,
-      usuario
-    );
+  const inicial = obterInicial(nome, usuario);
 
   const cores = useMemo(() => {
-    const identificador =
-      usuario ||
-      nome ||
-      "radarnow";
+    const identificador = String(usuario || nome || "radarnow")
+      .replace(/^@/, "")
+      .trim()
+      .toLowerCase();
 
-    const indice =
-      criarNumeroDoTexto(
-        identificador
-      ) %
-      CORES_AVATAR.length;
+    const indice = criarNumeroDoTexto(identificador) % CORES_AVATAR.length;
 
-    return CORES_AVATAR[
-      indice
-    ];
+    return CORES_AVATAR[indice];
   }, [usuario, nome]);
 
-  const mostrarFoto =
-    Boolean(foto) &&
-    !erroNaFoto;
+  const mostrarFoto = Boolean(foto) && !erroNaFoto;
 
   const estilo = {
-    "--avatar-size":
-      `${tamanho}px`,
+    "--avatar-size": `${tamanho}px`,
 
-    "--avatar-cor-inicial":
-      cores[0],
+    "--avatar-cor-inicial": cores[0],
 
-    "--avatar-cor-final":
-      cores[1],
+    "--avatar-cor-final": cores[1],
   };
 
   return (
     <span
-      className={
-        `rn-avatar ${className}`.trim()
-      }
+      className={`rn-avatar ${className}`.trim()}
       style={estilo}
-      aria-label={
-        nome
-          ? `Avatar de ${nome}`
-          : "Avatar do usuário"
-      }
+      aria-label={nome ? `Avatar de ${nome}` : "Avatar do usuário"}
     >
       <span className="rn-avatar-content">
         {mostrarFoto ? (
@@ -130,24 +81,16 @@ function Avatar({
             src={foto}
             alt=""
             className="rn-avatar-image"
-            onError={() =>
-              setErroNaFoto(true)
-            }
+            onError={() => setErroNaFoto(true)}
           />
         ) : inicial ? (
-          <span
-            className="rn-avatar-initial"
-            aria-hidden="true"
-          >
+          <span className="rn-avatar-initial" aria-hidden="true">
             {inicial}
           </span>
         ) : mostrarIconeSemUsuario ? (
           <User
             className="rn-avatar-icon"
-            size={Math.max(
-              18,
-              tamanho * 0.42
-            )}
+            size={Math.max(18, tamanho * 0.42)}
             aria-hidden="true"
           />
         ) : null}
