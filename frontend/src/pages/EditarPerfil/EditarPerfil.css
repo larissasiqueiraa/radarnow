@@ -304,3 +304,40 @@
     0 6px 18px
     rgba(0, 0, 0, 0.35);
 }
+
+.avatar-upload .rn-avatar {
+  width: 112px !important;
+  height: 112px !important;
+  min-width: 112px !important;
+  min-height: 112px !important;
+
+  padding: 3px !important;
+  border-radius: 50% !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b7cff,
+      #5ee7df
+    ) !important;
+}
+
+.avatar-upload .rn-avatar-content {
+  width: 100%;
+  height: 100%;
+  border-radius: 50% !important;
+}
+
+.avatar-upload .rn-avatar-initial {
+  width: 100%;
+  height: 100%;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff !important;
+  font-size: 47px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
