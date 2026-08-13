@@ -244,3 +244,63 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+.avatar-upload {
+  position: relative;
+
+  width: 112px;
+  height: 112px;
+
+  margin-bottom: 10px;
+  padding: 3px;
+
+  border: none !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  overflow: visible;
+}
+
+.avatar-upload .rn-avatar {
+  width: 106px;
+  height: 106px;
+  min-width: 106px;
+  min-height: 106px;
+
+  border-radius: 50% !important;
+  overflow: hidden;
+}
+
+.avatar-upload .rn-avatar-content {
+  border-radius: 50% !important;
+}
+
+.avatar-camera {
+  position: absolute;
+  right: -2px;
+  bottom: 2px;
+  z-index: 2;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+  border-radius: 50%;
+
+  background: #11111e;
+  border: 2px solid #070711;
+  color: #c7c7e8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 6px 18px
+    rgba(0, 0, 0, 0.35);
+}
