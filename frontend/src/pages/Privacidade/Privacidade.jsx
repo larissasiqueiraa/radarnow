@@ -50,237 +50,331 @@ function Privacidade() {
 
         <section className="privacidade-card">
           <p>
-            O Radar Now respeita sua
-            privacidade e está
-            comprometido com a proteção
-            dos seus dados pessoais.
             Esta Política de Privacidade
-            explica quais informações
-            são tratadas, como elas são
-            utilizadas e quais são os
-            seus direitos.
+            descreve como o Radar Now
+            coleta, utiliza, armazena e
+            protege dados pessoais
+            durante o uso do aplicativo.
+            Também apresenta os direitos
+            dos titulares e os canais
+            disponíveis para contato.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            1. Dados que coletamos
+            1. Responsável pelo tratamento
           </h2>
 
           <p>
-            Dependendo de como você
-            utiliza o Radar Now, podemos
-            tratar as seguintes
-            informações:
+            O Radar Now é administrado
+            por Larissa Siqueira,
+            responsável pelas decisões
+            relacionadas ao tratamento
+            dos dados pessoais realizado
+            por meio da plataforma.
+          </p>
+
+          <p>
+            Solicitações relacionadas à
+            privacidade e à proteção de
+            dados podem ser enviadas para:
+          </p>
+
+          <a href="mailto:contato.radarnow@gmail.com">
+            contato.radarnow@gmail.com
+          </a>
+        </section>
+
+        <section className="privacidade-section">
+          <h2>
+            2. Dados tratados
+          </h2>
+
+          <p>
+            Os dados tratados dependem
+            das funcionalidades utilizadas
+            e das permissões concedidas
+            pelo usuário.
           </p>
 
           <ul>
             <li>
-              Nome, nome de usuário e
-              endereço de e-mail;
+              Dados de cadastro, como
+              nome, nome de usuário,
+              endereço de e-mail e foto
+              de perfil;
             </li>
 
             <li>
-              Foto de perfil;
-            </li>
-
-            <li>
-              Identificador da conta
-              Google, quando esse método
-              de acesso for utilizado;
+              Dados de autenticação,
+              incluindo identificadores
+              fornecidos pelo Google ou
+              por outros métodos de
+              acesso disponíveis;
             </li>
 
             <li>
               Localização aproximada ou
-              precisa, mediante
-              autorização do
-              dispositivo;
+              precisa, quando autorizada
+              no dispositivo;
             </li>
 
             <li>
-              Lugares favoritados;
+              Informações relacionadas ao
+              uso da conta, como lugares
+              favoritados e avaliações;
             </li>
 
             <li>
-              Avaliações, comentários e
-              atualizações de status;
+              Conteúdo enviado
+              voluntariamente, incluindo
+              comentários, atualizações,
+              fotos e vídeos;
             </li>
 
             <li>
-              Fotos e vídeos enviados
-              voluntariamente;
-            </li>
-
-            <li>
-              Informações técnicas
-              necessárias para segurança,
-              funcionamento e diagnóstico
-              de falhas.
+              Dados técnicos necessários
+              para o funcionamento e a
+              segurança da plataforma,
+              como registros de acesso,
+              endereço IP, informações do
+              navegador ou dispositivo e
+              registros de erros.
             </li>
           </ul>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            2. Como utilizamos os dados
+            3. Finalidades do tratamento
           </h2>
 
           <p>
-            Os dados poderão ser
+            Os dados pessoais podem ser
             utilizados para:
           </p>
 
           <ul>
             <li>
               Criar, autenticar e
-              administrar sua conta;
+              administrar contas;
             </li>
 
             <li>
-              Exibir lugares próximos e
-              informações relevantes
-              para sua região;
+              Disponibilizar recursos de
+              perfil, favoritos,
+              avaliações e publicações;
             </li>
 
             <li>
-              Permitir avaliações,
-              favoritos, fotos, vídeos e
-              atualizações em tempo real;
+              Exibir lugares próximos,
+              calcular distâncias e
+              oferecer funcionalidades de
+              localização e mapa;
             </li>
 
             <li>
-              Personalizar sua
-              experiência no aplicativo;
+              Apresentar fotos, vídeos,
+              comentários e atualizações
+              compartilhadas pela
+              comunidade;
             </li>
 
             <li>
-              Prevenir fraudes, abusos e
-              acessos não autorizados;
+              Manter a segurança,
+              prevenir fraudes e combater
+              usos indevidos;
             </li>
 
             <li>
-              Corrigir erros e melhorar
-              o funcionamento do Radar
-              Now;
+              Diagnosticar falhas,
+              aprimorar funcionalidades e
+              melhorar a experiência de
+              uso;
             </li>
 
             <li>
-              Cumprir obrigações legais
-              e proteger os direitos dos
-              usuários e da plataforma.
+              Atender solicitações dos
+              usuários e cumprir
+              obrigações legais ou
+              regulatórias.
             </li>
           </ul>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            3. Localização
+            4. Bases legais
           </h2>
 
           <p>
-            O Radar Now pode solicitar
-            acesso à localização do
-            dispositivo para apresentar
-            lugares próximos, calcular
-            distâncias e oferecer
-            recursos relacionados ao
-            mapa.
+            O tratamento dos dados
+            pessoais ocorre de acordo com
+            as bases legais previstas na
+            Lei Geral de Proteção de Dados
+            Pessoais — LGPD, conforme
+            aplicável a cada situação.
           </p>
 
           <p>
-            O acesso somente ocorre com
-            a sua autorização e pode ser
-            desativado a qualquer momento
-            nas configurações do
-            dispositivo. Alguns recursos
-            podem ficar limitados sem
-            essa permissão.
+            Entre essas bases estão a
+            execução dos serviços
+            solicitados pelo usuário, o
+            cumprimento de obrigações
+            legais, o exercício regular de
+            direitos, o legítimo interesse
+            relacionado à segurança e à
+            melhoria da plataforma e o
+            consentimento, quando
+            necessário.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            4. Conteúdo publicado
+            5. Localização
           </h2>
 
           <p>
-            Avaliações, comentários,
-            fotos, vídeos, nome de usuário
-            e atualizações publicadas
-            podem ficar visíveis para
-            outras pessoas no Radar Now.
+            Mediante autorização, o Radar
+            Now pode acessar a localização
+            do dispositivo para apresentar
+            lugares próximos, estimar
+            distâncias e fornecer recursos
+            relacionados ao mapa.
           </p>
 
           <p>
-            Não publique informações
-            pessoais, imagens ou
-            conteúdos que você não deseja
+            A permissão pode ser alterada
+            ou revogada a qualquer momento
+            nas configurações do
+            dispositivo. A desativação
+            poderá limitar funcionalidades
+            que dependam da localização.
+          </p>
+        </section>
+
+        <section className="privacidade-section">
+          <h2>
+            6. Conteúdo público
+          </h2>
+
+          <p>
+            Nome de usuário, foto de
+            perfil, avaliações,
+            comentários, fotos, vídeos e
+            atualizações publicados podem
+            ficar visíveis para outros
+            usuários, inclusive pessoas
+            que utilizem determinadas
+            áreas do Radar Now sem estar
+            autenticadas.
+          </p>
+
+          <p>
+            O usuário deve evitar publicar
+            dados pessoais próprios ou de
+            terceiros que não deseje
             tornar públicos.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            5. Compartilhamento
+            7. Compartilhamento de dados
           </h2>
 
           <p>
-            O Radar Now não vende seus
+            O Radar Now não comercializa
             dados pessoais.
           </p>
 
           <p>
-            Algumas informações poderão
-            ser processadas por
-            prestadores necessários ao
-            funcionamento do aplicativo,
-            como serviços de hospedagem,
-            banco de dados,
-            autenticação, mapas e
-            informações sobre lugares.
+            Informações podem ser
+            compartilhadas com prestadores
+            necessários ao funcionamento
+            da plataforma, incluindo
+            serviços de hospedagem,
+            armazenamento, banco de dados,
+            autenticação, mapas,
+            localização e informações
+            sobre estabelecimentos.
           </p>
 
           <p>
-            Esses serviços recebem
-            somente as informações
-            necessárias para executar
-            suas respectivas funções e
-            possuem políticas próprias
-            de privacidade.
+            O compartilhamento também
+            poderá ocorrer para cumprir
+            determinações legais,
+            regulatórias ou judiciais,
+            responder a autoridades
+            competentes e proteger
+            direitos, segurança e
+            integridade da plataforma e
+            de seus usuários.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            6. Armazenamento e segurança
+            8. Transferência internacional
           </h2>
 
           <p>
-            Adotamos medidas técnicas e
-            administrativas para reduzir
-            riscos de perda, alteração,
+            Alguns prestadores utilizados
+            pelo Radar Now podem armazenar
+            ou processar informações em
+            outros países.
+          </p>
+
+          <p>
+            Nessas situações, são adotadas
+            medidas razoáveis para que o
+            tratamento ocorra de acordo
+            com a legislação aplicável e
+            com padrões adequados de
+            proteção de dados.
+          </p>
+        </section>
+
+        <section className="privacidade-section">
+          <h2>
+            9. Armazenamento e segurança
+          </h2>
+
+          <p>
+            Os dados são mantidos pelo
+            período necessário para
+            prestar os serviços, manter a
+            segurança da plataforma,
+            cumprir obrigações legais e
+            exercer direitos em processos
+            administrativos, judiciais ou
+            arbitrais.
+          </p>
+
+          <p>
+            São adotadas medidas técnicas
+            e administrativas destinadas
+            a reduzir riscos de perda,
+            destruição, alteração,
             divulgação ou acesso não
-            autorizado aos dados.
-          </p>
-
-          <p>
-            Nenhum sistema é totalmente
-            livre de riscos. Por isso,
-            recomendamos que você proteja
-            sua senha e não compartilhe
-            suas credenciais de acesso.
+            autorizado. Apesar dessas
+            medidas, nenhum sistema é
+            completamente isento de
+            riscos.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            7. Exclusão da conta
+            10. Exclusão da conta
           </h2>
 
           <p>
-            Você pode excluir sua conta
-            diretamente pelo aplicativo,
-            acessando:
+            A conta pode ser excluída
+            diretamente no aplicativo
+            pelo seguinte caminho:
           </p>
 
           <p className="privacidade-path">
@@ -289,96 +383,144 @@ function Privacidade() {
           </p>
 
           <p>
-            A exclusão remove
-            permanentemente a conta e os
-            dados associados, respeitadas
-            eventuais obrigações legais
-            de retenção.
+            A exclusão remove a conta e os
+            dados associados de forma
+            permanente, ressalvadas as
+            informações que precisem ser
+            conservadas para cumprimento
+            de obrigação legal, prevenção
+            de fraudes ou exercício
+            regular de direitos.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            8. Seus direitos
+            11. Direitos dos titulares
           </h2>
 
           <p>
-            Conforme a legislação
-            aplicável, incluindo a Lei
-            Geral de Proteção de Dados
-            Pessoais — LGPD, você poderá
-            solicitar:
+            Nos termos da LGPD, o titular
+            poderá solicitar, conforme
+            aplicável:
           </p>
 
           <ul>
             <li>
-              Confirmação do tratamento
-              de dados;
+              Confirmação da existência de
+              tratamento;
             </li>
 
             <li>
-              Acesso aos dados;
+              Acesso aos dados pessoais;
             </li>
 
             <li>
-              Correção de informações
-              incompletas ou
-              desatualizadas;
+              Correção de dados
+              incompletos, inexatos ou
+              desatualizados;
             </li>
 
             <li>
-              Exclusão ou anonimização,
-              quando aplicável;
+              Anonimização, bloqueio ou
+              eliminação de dados
+              desnecessários, excessivos
+              ou tratados em
+              desconformidade;
             </li>
 
             <li>
-              Informações sobre o
+              Informações sobre entidades
+              com as quais houve
               compartilhamento;
             </li>
 
             <li>
-              Revogação do consentimento,
-              quando essa for a base
-              utilizada.
+              Portabilidade, quando
+              aplicável e regulamentada;
+            </li>
+
+            <li>
+              Revogação do consentimento
+              e eliminação dos dados
+              tratados com essa base,
+              observadas as exceções
+              legais;
+            </li>
+
+            <li>
+              Revisão de decisões tomadas
+              unicamente com base em
+              tratamento automatizado,
+              quando aplicável.
             </li>
           </ul>
+
+          <p>
+            Para proteger o titular,
+            poderá ser solicitada a
+            confirmação de identidade
+            antes do atendimento.
+          </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            9. Crianças e adolescentes
+            12. Crianças e adolescentes
           </h2>
 
           <p>
             O Radar Now não é direcionado
-            a crianças. Caso seja
-            identificado o tratamento
-            indevido de dados de menores,
-            poderão ser tomadas medidas
-            para remoção das informações
-            e da respectiva conta.
+            a crianças e não busca coletar
+            conscientemente seus dados
+            pessoais.
+          </p>
+
+          <p>
+            Caso seja identificada uma
+            conta ou publicação envolvendo
+            tratamento inadequado de dados
+            de crianças ou adolescentes,
+            poderão ser adotadas medidas
+            para proteção do titular,
+            remoção do conteúdo ou
+            exclusão da conta.
           </p>
         </section>
 
         <section className="privacidade-section">
           <h2>
-            10. Alterações nesta política
+            13. Serviços de terceiros
           </h2>
 
           <p>
-            Esta Política de Privacidade
-            poderá ser atualizada para
-            refletir mudanças no
-            aplicativo, na legislação ou
-            nas práticas de tratamento
-            de dados.
+            O aplicativo pode conter
+            integrações ou links para
+            serviços de terceiros. O
+            tratamento realizado
+            diretamente por esses serviços
+            é regido por suas próprias
+            políticas de privacidade.
+          </p>
+        </section>
+
+        <section className="privacidade-section">
+          <h2>
+            14. Atualizações desta política
+          </h2>
+
+          <p>
+            Esta Política poderá ser
+            atualizada para refletir
+            alterações legais,
+            operacionais ou tecnológicas.
           </p>
 
           <p>
-            A data da atualização mais
-            recente estará sempre
-            indicada no início desta
-            página.
+            A versão vigente estará
+            disponível nesta página,
+            acompanhada da data de sua
+            última atualização.
           </p>
         </section>
 
@@ -387,13 +529,12 @@ function Privacidade() {
 
           <div>
             <h2>
-              Entre em contato
+              Contato sobre privacidade
             </h2>
 
             <p>
-              Para dúvidas ou
-              solicitações relacionadas
-              à privacidade:
+              Para exercer seus direitos
+              ou esclarecer dúvidas:
             </p>
 
             <a href="mailto:contato.radarnow@gmail.com">

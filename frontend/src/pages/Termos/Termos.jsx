@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 
 import {
+  Link,
   useNavigate,
 } from "react-router-dom";
 
@@ -50,297 +51,438 @@ function Termos() {
 
         <section className="termos-intro">
           <p>
-            Estes Termos de Uso regulam
-            o acesso e a utilização do
-            Radar Now. Ao criar uma conta
-            ou utilizar o aplicativo,
-            você declara que leu e
+            Estes Termos de Uso
+            estabelecem as condições para
+            acesso e utilização do Radar
+            Now. Ao utilizar a plataforma
+            ou criar uma conta, o usuário
+            declara que leu, compreendeu e
             concorda com estas condições.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            1. Sobre o Radar Now
+            1. Identificação
           </h2>
 
           <p>
             O Radar Now é uma plataforma
-            colaborativa que permite
-            descobrir lugares e consultar
-            informações compartilhadas
-            pela comunidade, incluindo
-            avaliações, movimento,
-            ambiente, fotos, vídeos e
-            atualizações em tempo real.
+            digital administrada por
+            Larissa Siqueira.
           </p>
 
           <p>
-            Algumas informações sobre
-            estabelecimentos podem ser
-            fornecidas por serviços
-            externos e estar sujeitas a
-            alterações.
+            Dúvidas, solicitações ou
+            comunicações relacionadas à
+            plataforma podem ser enviadas
+            para:
+          </p>
+
+          <a href="mailto:contato.radarnow@gmail.com">
+            contato.radarnow@gmail.com
+          </a>
+        </section>
+
+        <section className="termos-section">
+          <h2>
+            2. Finalidade da plataforma
+          </h2>
+
+          <p>
+            O Radar Now permite descobrir
+            lugares e consultar
+            informações relacionadas ao
+            seu movimento, ambiente,
+            localização e experiência dos
+            usuários.
+          </p>
+
+          <p>
+            A plataforma também permite
+            que usuários cadastrados
+            publiquem avaliações,
+            comentários, fotos, vídeos e
+            atualizações sobre os lugares
+            disponíveis.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            2. Cadastro e acesso
+            3. Cadastro e conta
           </h2>
 
           <p>
             Algumas funcionalidades podem
-            ser utilizadas sem cadastro.
-            Para publicar conteúdo,
-            favoritar lugares ou utilizar
-            determinados recursos, poderá
-            ser necessário criar uma
-            conta.
+            ser acessadas sem cadastro.
+            Recursos como publicação de
+            conteúdo, favoritos e
+            gerenciamento de perfil podem
+            exigir uma conta.
           </p>
 
           <p>
-            Você é responsável por manter
-            seus dados corretos e por
-            proteger sua senha e suas
-            credenciais de acesso.
+            Ao realizar o cadastro, o
+            usuário compromete-se a
+            fornecer informações
+            verdadeiras, completas e
+            atualizadas.
           </p>
 
           <p>
-            Não é permitido utilizar a
-            conta de outra pessoa nem
-            fornecer informações falsas
-            com a intenção de se passar
-            por terceiros.
-          </p>
-        </section>
-
-        <section className="termos-section">
-          <h2>
-            3. Conteúdo publicado
-          </h2>
-
-          <p>
-            Você continua responsável
-            pelas avaliações,
-            comentários, fotos, vídeos e
-            demais conteúdos que
-            publicar.
+            O usuário é responsável pela
+            confidencialidade de suas
+            credenciais e pelas atividades
+            realizadas em sua conta.
+            Suspeitas de acesso indevido
+            devem ser comunicadas ao Radar
+            Now.
           </p>
 
           <p>
-            Ao publicar conteúdo no Radar
-            Now, você autoriza sua
-            exibição dentro do aplicativo
-            para o funcionamento da
-            plataforma.
-          </p>
-
-          <p>
-            Você declara possuir os
-            direitos ou autorizações
-            necessários sobre o conteúdo
-            publicado e concorda em não
-            violar direitos de imagem,
-            privacidade, propriedade
-            intelectual ou outros direitos
-            de terceiros.
+            É proibido criar contas com a
+            finalidade de se passar por
+            outra pessoa, enganar usuários
+            ou contornar restrições
+            aplicadas pela plataforma.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            4. Condutas proibidas
+            4. Conteúdo dos usuários
           </h2>
 
           <p>
-            Não é permitido publicar ou
-            utilizar o Radar Now para:
+            O usuário permanece titular e
+            responsável pelo conteúdo que
+            publicar, incluindo
+            avaliações, comentários,
+            fotografias, vídeos e
+            atualizações.
+          </p>
+
+          <p>
+            Ao publicar conteúdo, o
+            usuário concede ao Radar Now
+            autorização gratuita, não
+            exclusiva e válida enquanto o
+            conteúdo estiver disponível
+            na plataforma para armazená-lo,
+            reproduzi-lo, adaptá-lo ao
+            formato técnico necessário e
+            exibi-lo dentro dos serviços
+            do Radar Now.
+          </p>
+
+          <p>
+            O usuário declara possuir os
+            direitos e autorizações
+            necessários para realizar a
+            publicação, inclusive quando o
+            conteúdo apresentar imagem,
+            voz, marca, obra ou informação
+            pertencente a terceiros.
+          </p>
+
+          <p>
+            A autorização concedida não
+            transfere ao Radar Now a
+            propriedade do conteúdo
+            publicado.
+          </p>
+        </section>
+
+        <section className="termos-section">
+          <h2>
+            5. Regras de conduta
+          </h2>
+
+          <p>
+            Ao utilizar o Radar Now, não é
+            permitido:
           </p>
 
           <ul>
             <li>
-              Praticar atos ilegais,
-              fraudulentos ou
-              enganosos;
+              Publicar conteúdo ilegal,
+              fraudulento, enganoso ou
+              deliberadamente falso;
             </li>
 
             <li>
-              Publicar ameaças,
-              perseguição, assédio,
-              discriminação ou discurso
-              de ódio;
+              Praticar ameaça, assédio,
+              perseguição, discriminação
+              ou discurso de ódio;
             </li>
 
             <li>
-              Compartilhar conteúdo
-              sexual, violento ou
-              inadequado;
+              Publicar conteúdo sexual,
+              extremamente violento ou
+              inadequado para a
+              plataforma;
             </li>
 
             <li>
-              Divulgar dados pessoais de
-              terceiros sem autorização;
-            </li>
-
-            <li>
-              Publicar avaliações falsas,
-              spam ou informações
-              deliberadamente incorretas;
+              Expor dados pessoais,
+              imagens ou informações
+              privadas de terceiros sem
+              autorização;
             </li>
 
             <li>
               Violar direitos autorais,
-              marcas, direitos de imagem
-              ou outros direitos;
+              marcas, direitos de imagem,
+              privacidade ou outros
+              direitos de terceiros;
+            </li>
+
+            <li>
+              Publicar spam, publicidade
+              não autorizada, avaliações
+              manipuladas ou conteúdo
+              repetitivo;
+            </li>
+
+            <li>
+              Utilizar robôs, scripts ou
+              outros métodos automatizados
+              para coletar dados, criar
+              interações artificiais ou
+              prejudicar a plataforma;
             </li>
 
             <li>
               Tentar acessar contas,
-              servidores ou áreas
-              restritas sem autorização;
+              sistemas, servidores ou
+              informações sem
+              autorização;
             </li>
 
             <li>
-              Utilizar sistemas
-              automatizados para
-              prejudicar, copiar ou
-              sobrecarregar a plataforma;
+              Introduzir código malicioso
+              ou realizar qualquer ação
+              capaz de comprometer a
+              segurança ou a
+              disponibilidade do serviço;
             </li>
 
             <li>
-              Incentivar atividades
-              perigosas ou que possam
-              causar danos.
+              Utilizar o Radar Now para
+              incentivar atos ilegais,
+              perigosos ou que coloquem
+              outras pessoas em risco.
             </li>
           </ul>
         </section>
 
         <section className="termos-section">
           <h2>
-            5. Moderação e remoção
+            6. Moderação e medidas aplicáveis
           </h2>
 
           <p>
-            Conteúdos ou contas que
-            violem estes Termos poderão
-            ser removidos, limitados ou
-            suspensos.
+            O Radar Now poderá analisar
+            conteúdos e atividades para
+            verificar o cumprimento destes
+            Termos, da legislação e das
+            regras da plataforma.
           </p>
 
           <p>
-            Quando necessário, o Radar
-            Now poderá preservar
-            informações ou colaborar com
-            autoridades competentes para
-            cumprir obrigações legais e
-            proteger usuários e
-            terceiros.
+            Em caso de violação, poderão
+            ser adotadas medidas como
+            remoção de conteúdo, limitação
+            de funcionalidades, suspensão
+            ou exclusão da conta, conforme
+            a natureza e a gravidade da
+            ocorrência.
+          </p>
+
+          <p>
+            Conteúdos potencialmente
+            ilegais ou que violem direitos
+            podem ser comunicados pelo
+            e-mail:
+          </p>
+
+          <a href="mailto:contato.radarnow@gmail.com">
+            contato.radarnow@gmail.com
+          </a>
+        </section>
+
+        <section className="termos-section">
+          <h2>
+            7. Informações sobre lugares
+          </h2>
+
+          <p>
+            Informações sobre
+            estabelecimentos podem ser
+            fornecidas por usuários,
+            proprietários dos locais ou
+            serviços de terceiros.
+          </p>
+
+          <p>
+            Movimento, ambiente, horários,
+            endereço, preços, avaliações e
+            demais informações podem sofrer
+            alterações ou apresentar
+            imprecisões.
+          </p>
+
+          <p>
+            O conteúdo disponibilizado
+            possui caráter informativo. O
+            usuário deve confirmar
+            informações relevantes
+            diretamente com o
+            estabelecimento antes de tomar
+            decisões ou se deslocar.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            6. Informações dos lugares
-          </h2>
-
-          <p>
-            As informações exibidas podem
-            ser enviadas por usuários,
-            estabelecimentos ou serviços
-            externos. Embora busquemos
-            manter os dados atualizados,
-            não garantimos que horários,
-            movimento, preços, endereço,
-            avaliações ou outras
-            informações estejam sempre
-            completos ou corretos.
-          </p>
-
-          <p>
-            Antes de se deslocar ou tomar
-            uma decisão, recomendamos
-            confirmar informações
-            importantes diretamente com
-            o estabelecimento.
-          </p>
-        </section>
-
-        <section className="termos-section">
-          <h2>
-            7. Localização e mapas
+            8. Localização, mapas e rotas
           </h2>
 
           <p>
             Recursos de localização,
-            distância, rota e mapas são
-            oferecidos como auxílio e
-            podem apresentar imprecisões.
+            distância, mapas e rotas são
+            oferecidos como ferramentas
+            auxiliares e podem apresentar
+            imprecisões ou indisponibilidade
+            temporária.
           </p>
 
           <p>
             O usuário deve observar as
-            condições reais do local e
-            seguir as normas de trânsito
-            e segurança aplicáveis.
+            condições reais do ambiente,
+            seguir as normas de trânsito e
+            adotar os cuidados necessários
+            à sua segurança.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            8. Serviços de terceiros
+            9. Serviços de terceiros
           </h2>
 
           <p>
-            O Radar Now pode utilizar ou
-            apresentar informações
-            provenientes de serviços de
-            terceiros, como autenticação,
-            mapas, localização,
-            hospedagem e dados de
+            O funcionamento do Radar Now
+            pode depender de serviços de
+            terceiros, incluindo
+            autenticação, hospedagem,
+            armazenamento, localização,
+            mapas e informações sobre
             estabelecimentos.
           </p>
 
           <p>
-            Esses serviços possuem termos
-            e políticas próprias e podem
-            sofrer interrupções ou
-            alterações fora do controle
+            Esses serviços são regidos por
+            termos próprios e podem sofrer
+            alterações, limitações ou
+            interrupções fora do controle
             do Radar Now.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            9. Disponibilidade
+            10. Propriedade intelectual
           </h2>
 
           <p>
-            Buscamos manter o aplicativo
-            disponível e seguro, mas
-            poderão ocorrer interrupções
-            temporárias para manutenção,
-            atualização, falhas técnicas
-            ou situações externas.
+            A marca Radar Now, sua
+            identidade visual, interfaces,
+            textos institucionais,
+            elementos gráficos, código e
+            demais componentes próprios da
+            plataforma são protegidos pela
+            legislação aplicável.
           </p>
 
           <p>
-            Funcionalidades poderão ser
-            alteradas, adicionadas ou
-            removidas para melhorar o
-            serviço ou atender exigências
-            técnicas e legais.
+            Não é permitida sua cópia,
+            reprodução, distribuição,
+            modificação ou utilização
+            comercial sem autorização
+            prévia, exceto nos casos
+            permitidos por lei.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            10. Exclusão da conta
+            11. Disponibilidade do serviço
           </h2>
 
           <p>
-            Você pode excluir sua conta
-            pelo seguinte caminho:
+            O Radar Now busca manter a
+            plataforma disponível, segura
+            e atualizada. Entretanto, o
+            serviço poderá ser
+            temporariamente interrompido
+            para manutenção, correções,
+            atualizações, falhas técnicas
+            ou eventos fora de controle.
+          </p>
+
+          <p>
+            Funcionalidades poderão ser
+            alteradas, substituídas ou
+            descontinuadas para aprimorar
+            o serviço, atender exigências
+            legais ou preservar a
+            segurança da plataforma.
+          </p>
+        </section>
+
+        <section className="termos-section">
+          <h2>
+            12. Responsabilidades
+          </h2>
+
+          <p>
+            Cada usuário é responsável
+            pelo uso que fizer da
+            plataforma, pelo conteúdo que
+            publicar e pelas consequências
+            decorrentes de suas ações.
+          </p>
+
+          <p>
+            O Radar Now não participa da
+            prestação dos serviços
+            oferecidos pelos
+            estabelecimentos exibidos nem
+            garante a qualidade,
+            disponibilidade ou segurança
+            desses serviços.
+          </p>
+
+          <p>
+            Nada nestes Termos exclui ou
+            limita direitos e
+            responsabilidades que não
+            possam ser legalmente
+            afastados.
+          </p>
+        </section>
+
+        <section className="termos-section">
+          <h2>
+            13. Exclusão da conta
+          </h2>
+
+          <p>
+            O usuário pode excluir sua
+            conta diretamente pelo
+            aplicativo:
           </p>
 
           <p className="termos-path">
@@ -349,65 +491,78 @@ function Termos() {
           </p>
 
           <p>
-            A exclusão é permanente e
-            remove a conta e os dados
-            associados, respeitadas as
-            hipóteses legais de
-            conservação de informações.
+            A exclusão é permanente e não
+            poderá ser desfeita. As
+            informações poderão ser
+            preservadas somente nas
+            hipóteses permitidas ou
+            exigidas pela legislação.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            11. Privacidade
+            14. Privacidade
           </h2>
 
           <p>
-            O tratamento de dados
-            pessoais é explicado na
-            Política de Privacidade do
-            Radar Now, disponível dentro
-            do aplicativo e em:
+            As regras relativas à coleta,
+            utilização, armazenamento e
+            proteção dos dados pessoais
+            estão descritas na Política de
+            Privacidade.
           </p>
 
-          <a href="/privacidade">
-            radarnow.vercel.app/privacidade
-          </a>
+          <Link to="/privacidade">
+            Consultar Política de Privacidade
+          </Link>
         </section>
 
         <section className="termos-section">
           <h2>
-            12. Alterações nos termos
+            15. Alterações destes termos
           </h2>
 
           <p>
             Estes Termos poderão ser
             atualizados para refletir
-            mudanças no aplicativo, na
-            legislação ou nas práticas
-            da plataforma.
+            mudanças legais, técnicas ou
+            operacionais.
           </p>
 
           <p>
-            A data da versão mais recente
-            será indicada no início desta
-            página.
+            A versão vigente permanecerá
+            disponível nesta página com a
+            indicação da data da última
+            atualização. Quando uma
+            alteração exigir nova
+            concordância, o usuário será
+            informado de forma adequada.
           </p>
         </section>
 
         <section className="termos-section">
           <h2>
-            13. Legislação aplicável
+            16. Legislação aplicável
           </h2>
 
           <p>
             Estes Termos são regidos pela
             legislação brasileira,
-            respeitados os direitos
-            assegurados pela legislação
-            aplicável, inclusive as normas
-            de proteção de dados e de
-            defesa do consumidor.
+            respeitadas as normas de
+            proteção de dados, defesa do
+            consumidor e demais direitos
+            aplicáveis.
+          </p>
+
+          <p>
+            Eventuais conflitos serão
+            tratados pelo foro competente
+            definido pela legislação,
+            preservados os direitos do
+            consumidor quanto à escolha de
+            seu domicílio quando
+            aplicável.
           </p>
         </section>
 
@@ -416,12 +571,12 @@ function Termos() {
 
           <div>
             <h2>
-              Dúvidas sobre os termos
+              Contato
             </h2>
 
             <p>
-              Entre em contato pelo
-              e-mail:
+              Para dúvidas sobre estes
+              Termos de Uso:
             </p>
 
             <a href="mailto:contato.radarnow@gmail.com">
