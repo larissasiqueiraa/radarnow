@@ -120,8 +120,8 @@ function Sobre() {
             </span>
           </Link>
 
-          <a
-            href="mailto:contato.radarnow@gmail.com"
+          <Link
+            to="/suporte"
             className="sobre-link"
           >
             <div>
@@ -135,7 +135,7 @@ function Sobre() {
             <span aria-hidden="true">
               ›
             </span>
-          </a>
+          </Link>
         </section>
 
         <section className="sobre-footer-message">
